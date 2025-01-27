@@ -16,5 +16,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate([ 'nombre' => 'Super Usuario']);
         Role::firstOrCreate([ 'nombre' => 'Administrador']);
         Role::firstOrCreate([ 'nombre' => 'Invitado']);
+        
     }
 }
