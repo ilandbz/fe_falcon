@@ -17,10 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
-            SexoSeeder::class,
-            TipoDocumentoSeeder::class,
-            GrupoMenuSeeder::class,
-            MenuSeeder::class,
 
         ]);
     }
