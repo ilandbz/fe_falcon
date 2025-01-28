@@ -58,7 +58,8 @@
     <script src="falcon316/anchorjs/anchor.min.js"></script>
     <script src="falcon316/is/is.min.js"></script>
     <script src="falcon316/echarts/echarts.min.js"></script>
-    <script src="falcon316/fontawesome/all.min.js"></script>
+    <script src="fontawesome672/js/all.min.js"></script>
+    {{-- <script src="falcon316/fontawesome/all.min.js"></script> --}}
     <script src="falcon316/lodash/lodash.min.js"></script>
     <script src="falcon316/list.js/list.min.js"></script>
     <script src="falcon316/assets/js/theme.js"></script>

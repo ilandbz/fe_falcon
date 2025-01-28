@@ -25,7 +25,7 @@ trait LoginTrait
                     return response()->json($success,200);
                 } else {
                     return response()->json([
-                        'errors' => ['name' => 'Usuario Suspendido']
+                        'errors' => ['username' => 'Usuario Suspendido']
                     ],422);
                 }
             }
@@ -37,7 +37,7 @@ trait LoginTrait
         }
         else {
             return response([
-                'errors' => [ 'name' => 'Nombre de Usuario no válido']
+                'errors' => [ 'username' => 'Nombre de Usuario no válido']
             ], 422);
         }
     }

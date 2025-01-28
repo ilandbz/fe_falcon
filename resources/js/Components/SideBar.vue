@@ -62,12 +62,68 @@ const {
     </a>
 
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
-      <li class="nav-item px-2">
-        <div class="theme-control-toggle fa-icon-wait"><input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark"><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to light theme"><span class="fas fa-sun fs-0"></span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to dark theme"><span class="fas fa-moon fs-0"></span></label></div>
+      <li class="nav-item">
+        <a class="nav-link" id="navbarDropdownAgencia" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
+          Huanuco
+        </a>
+        <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg" aria-labelledby="navbarDropdownAgencia">
+          <div class="card card-notification shadow-none">
+            <div class="card-header">
+              <div class="row justify-content-between align-items-center">
+                <div class="col-auto">
+                  <h6 class="card-header-title mb-0">Agencias</h6>
+                </div>
+              </div>
+            </div>
+            <div class="scrollbar-overlay" style="max-height:19rem">
+              <div class="list-group list-group-flush fw-normal fs--1">
+                <div class="list-group-item">
+                  <a class="notification notification-flush notification-unread" href="#!">
+                    <div class="notification-avatar">
+                      <i class="fa-solid fa-location-dot mx-3" style="font-size: 1rem; color: blue;"></i>
+                    </div>
+                    <div class="notification-body">
+                      Tingo Maria
+                    </div>
+                  </a>
+                </div>
+                <div class="list-group-item">
+                  <a class="notification notification-flush notification-unread" href="#!">
+                    <div class="notification-avatar">
+                      <i class="fa-solid fa-location-dot mx-3" style="font-size: 1rem; color: blue;"></i>
+                    </div>
+                    <div class="notification-body">
+                      Panao
+                    </div>
+                  </a>
+                </div>
+                <div class="list-group-item">
+                  <a class="notification notification-flush notification-unread" href="#!">
+                    <div class="notification-avatar">
+                      <i class="fa-solid fa-location-dot mx-3" style="font-size: 1rem; color: blue;"></i>
+                    </div>
+                    <div class="notification-body">
+                      Huanuco 2
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </li>
 
+      <li class="nav-item px-2">
+        <div class="theme-control-toggle fa-icon-wait">
+          <input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark"><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Modificar"><span class="fas fa-sun fs-0"></span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Cambiar de Tema"><span class="fas fa-moon fs-0"></span></label>
+        </div>
+      </li>
+
+
       <li class="nav-item dropdown">
-        <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll"><span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span></a>
+        <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
+          <span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
+        </a>
         <div class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg" aria-labelledby="navbarDropdownNotification">
           <div class="card card-notification shadow-none">
             <div class="card-header">
