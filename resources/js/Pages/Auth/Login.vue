@@ -15,7 +15,9 @@ const {errors, loginUsuario } = useAutenticacion();
 <template>
     <div class="row min-vh-100 bg-100">
         <div class="col-6 d-none d-lg-block position-relative">
-        <div class="bg-holder" style="background-image:url(/logo.png);background-position: 50% 20%;"></div>
+            <div class="bg-holder d-flex align-items-center justify-content-center" style="background-image:url(/imagenes/textura.jpg); height: 100vh;">
+                <img class="img-fluid rounded" src="banner.jpg" alt="Logo">
+            </div>
         <!--/.bg-holder-->
         </div>
         <div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5">

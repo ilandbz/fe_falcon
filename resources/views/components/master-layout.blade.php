@@ -9,12 +9,12 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>UNIDAD DE SEGUROS</title>
+    <title>FINANCIERA TU AMIGO EMPRENDEDOR</title>
 
     <!-- ===============================================-->
     <!--    Favicons-->
     <!-- ===============================================-->
-    <link rel="shortcut icon" type="image/x-icon" href="logo.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="logo.png">
     <meta name="theme-color" content="#ffffff">
 
     <!-- ===============================================-->
