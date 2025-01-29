@@ -132,12 +132,14 @@ class UserController extends Controller
         $menu = [];
         $role = $usuario->role;
 
+
         $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
             $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
                   ->whereHas('roles', function ($roleQuery) use ($role) {
                       $roleQuery->where('roles.id', $role->id);
                   });
         }])
+        
         ->whereHas('menus.roles', function ($query) use ($role) {
             $query->where('roles.id', $role->id);
         })

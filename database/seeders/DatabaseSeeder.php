@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Agencia;
+use App\Models\GrupoMenu;
 use App\Models\Menu;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +20,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             AgenciaSeeder::class,
+            GrupoMenuSeeder::class,
+            MenuSeeder::class
         ]);
     }
 }

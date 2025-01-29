@@ -20,5 +20,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate([ 'nombre' => 'Cliente']);
         Role::firstOrCreate([ 'nombre' => 'Gerente Zonal']);
         Role::firstOrCreate([ 'nombre' => 'Gerente Agencia']);
+        Role::firstOrCreate([ 'nombre' => 'Gestor de Cobranza']);
     }
 }

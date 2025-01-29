@@ -14,7 +14,7 @@ const { menus } = toRefs(props);
       <div class="toggle-icon-wrapper">
         <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Navegacion"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
       </div><a class="navbar-brand" href="/">
-        <div class="d-flex align-items-center py-3"><img class="me-2" src="logo.jpg" alt="" width="30"><span class="font-sans-serif">UNI.SEG</span></div>
+        <div class="d-flex align-items-center py-3"><img class="me-2" src="banner.jpg" alt="" width="220px"></div>
       </a>
     </div>
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">

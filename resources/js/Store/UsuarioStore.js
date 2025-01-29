@@ -14,9 +14,6 @@ export const useUsuarioStore = defineStore("usuario", {
             const user_id = localStorage.getItem('userSession') ? 
                 JSON.parse( JSON.stringify(jwtDecode(localStorage.getItem('userSession')).user)) 
                 : null;
-            // this.usuario = await axios.get('usuario-session-data/',{params:{id:user_id}}).then(
-            //         (respuesta) => respuesta.data
-            //     )
             try {
                 const response = await axios.get('usuario-session-data/', { params: { id: user_id } });
                 this.usuario = response.data.usuario;

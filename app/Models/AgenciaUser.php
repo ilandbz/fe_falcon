@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MenuRole extends Model
+class AgenciaUser extends Model
 {
     //
 }
