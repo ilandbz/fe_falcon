@@ -127,29 +127,36 @@ class UserController extends Controller
     public function mostrarDatoUsuario(Request $request)
     {
         $usuario=User::with(
-            'role:id,nombre' 
+            'roles' 
             )->where('id',$request->id)->first();
         $menu = [];
-        $role = $usuario->role;
-
-
-        $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
-            $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
-                  ->whereHas('roles', function ($roleQuery) use ($role) {
-                      $roleQuery->where('roles.id', $role->id);
-                  });
-        }])
+        $roles = $usuario->roles;
         
-        ->whereHas('menus.roles', function ($query) use ($role) {
-            $query->where('roles.id', $role->id);
-        })
-        ->get();
+        if($roles->count()==1){
+            $role = $roles->first();
+            $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
+                $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
+                      ->whereHas('roles', function ($roleQuery) use ($role) {
+                          $roleQuery->where('roles.id', $role->id);
+                      });
+            }])
+            ->whereHas('menus.roles', function ($query) use ($role) {
+                $query->where('roles.id', $role->id);
+            })
+            ->get();
+            $menu = array_merge($menu, $menusPorRol->toArray());
+            return response()->json([
+                'usuario' => $usuario,
+                'menus' => $menu
+            ],200);            
+        }else{
+            return response()->json([
+                'usuario' => $usuario,
+                'roles' => $usuario->roles,
+            ],200);     
+        }
 
 
-        $menu = array_merge($menu, $menusPorRol->toArray());
-        return response()->json([
-            'usuario' => $usuario,
-            'menus' => $menu
-        ],200);
+
     }
 }

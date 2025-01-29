@@ -20,9 +20,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admin'),
         ]);
         $roleId = Role::where('nombre', 'Super Usuario')->value('id');
-
         $superusuario->roles()->sync([$roleId]);
-
         $usuarios = [
             [
                 'name' => 'KESPIRITU', 
@@ -34,7 +32,6 @@ class UserSeeder extends Seeder
                 ],
             ],
         ];
-        
         foreach ($usuarios as $usuario) {
             $user = User::firstOrCreate(
                 [
