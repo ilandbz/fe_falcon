@@ -15,19 +15,41 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::firstOrNew(['name' => 'ilandbz']);
-        if (!$user->exists) {
-            $user->password = Hash::make('123456');
-            $user->role_id = Role::where('nombre', 'Super Usuario')->value('id');
-            $user->save();
+        $superusuario = User::firstOrCreate([
+            'name' => 'admin',
+            'password' => Hash::make('admin'),
+        ]);
+        $roleId = Role::where('nombre', 'Super Usuario')->value('id');
+
+        $superusuario->roles()->sync([$roleId]);
+
+        $usuarios = [
+            [
+                'name' => 'KESPIRITU', 
+                'dni' => '44992550', 
+                'roles' => [
+                    'Operaciones',
+                    'Cobranza Huanuco',
+                    'Gerente Agencia'
+                ],
+            ],
+        ];
+        
+        foreach ($usuarios as $usuario) {
+            $user = User::firstOrCreate(
+                [
+                    'name' => $usuario['name'],
+                    'dni' => $usuario['dni'],
+                    'password' => Hash::make($usuario['dni']),
+                ]
+            );
+        
+            // Obtener IDs de los roles en una sola consulta
+            $roleIds = Role::whereIn('nombre', $usuario['roles'])->pluck('id');
+        
+            // Asignar roles al usuario
+            $user->roles()->sync($roleIds);
         }
 
-        $adminUser = User::firstOrNew(['name' => 'KESPIRITU']);
-        
-        if (!$adminUser->exists) {
-            $adminUser->password = Hash::make('123456');
-            $adminUser->role_id = Role::where('nombre', 'Operaciones')->value('id');
-            $adminUser->save();
-        }
     }
 }

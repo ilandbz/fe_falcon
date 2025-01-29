@@ -35,7 +35,6 @@ class MenuSeeder extends Seeder
                 'grupo_id'  => GrupoMenu::where('titulo', 'Configuracion')->value('id'),
                 'orden' => 6,
             ],
-
         ];
         $menuIds = [];
         foreach($menuspadres as $row){

@@ -13,13 +13,20 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::firstOrCreate([ 'nombre' => 'Super Usuario']);
-        Role::firstOrCreate([ 'nombre' => 'Operaciones']);
-        Role::firstOrCreate([ 'nombre' => 'Cobranza']);
-        Role::firstOrCreate([ 'nombre' => 'Asesor']);
-        Role::firstOrCreate([ 'nombre' => 'Cliente']);
-        Role::firstOrCreate([ 'nombre' => 'Gerente Zonal']);
-        Role::firstOrCreate([ 'nombre' => 'Gerente Agencia']);
-        Role::firstOrCreate([ 'nombre' => 'Gestor de Cobranza']);
+        $roles = [
+            'Super Usuario',
+            'Operaciones',
+            'Cobranza',
+            'Cobranza Huanuco',
+            'Asesor',
+            'Cliente',
+            'Gerente Zonal',
+            'Gerente Agencia',
+            'Gestor de Cobranza'
+        ];
+        
+        foreach ($roles as $role) {
+            Role::firstOrCreate(['nombre' => mb_strtoupper($role)]);
+        }
     }
 }
