@@ -2,7 +2,7 @@ import { onMounted, provide, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUsuarioStore } from '@/Store';
 import { jwtDecode } from 'jwt-decode'
-
+import axios from 'axios'
 export default function useDatosSession() {
 
     const user_id = localStorage.getItem('userSession') ? JSON.parse( JSON.stringify(jwtDecode(localStorage.getItem('userSession')).user)) : null
@@ -10,15 +10,15 @@ export default function useDatosSession() {
 
     const usuarioStore = useUsuarioStore();
     const  menuactivo = ref();
-    const { usuario, menus, roles } = storeToRefs(usuarioStore)
+    const { usuario, menus, roles, role } = storeToRefs(usuarioStore)
 
-    const { cargarDatosSession, modificarFoto, cargarMenus} = useUsuarioStore()
+    const { cargarDatosSession, modificarFoto, cargarMenus, actualizarDatosSession, cambiarRole} = useUsuarioStore()
 
     const obtenerUsuarioSesion = async() => {
         if(user_id != null)
         {
             await cargarDatosSession();
-            cargarMenus();
+            //cargarMenus();
         }
     }
 
@@ -29,11 +29,12 @@ export default function useDatosSession() {
     const cambiarFoto = async(foto) => {
         modificarFoto(foto);
     }
-    const obtenerMenupadreActivo = async(slug) => {
-        let respuesta = await axios.get('obtener-menu-slug',{params:{slug:slug}})
-        menuactivo.value = respuesta.data
-    }
+    // const obtenerMenupadreActivo = async(slug) => {
+    //     let respuesta = await axios.get('obtener-menu-slug',{params:{slug:slug}})
+    //     menuactivo.value = respuesta.data
+    // }
+
     return {
-        usuario, menus, cambiarFoto, obtenerMenupadreActivo, menuactivo, roles
+        usuario, menus, cambiarFoto, menuactivo, roles, role, cambiarRole
     }
 }

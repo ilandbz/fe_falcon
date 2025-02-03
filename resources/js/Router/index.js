@@ -10,13 +10,8 @@ import Principal from '@/Pages/Principal.vue'
 import Login from '@/Pages/Auth/Login.vue'
 import Menu from '@/Pages/Menu/Inicio.vue'
 import Usuario from '@/Pages/Usuario/Inicio.vue'
-import Paciente from '@/Pages/Pacientes/Inicio.vue'
 import Medicina from '@/Pages/Medicina/Inicio.vue'
 import Servicio from '@/Pages/Servicio/Inicio.vue'
-import Procedimiento from '@/Pages/Procedimiento/Inicio.vue'
-import Insumo from '@/Pages/Insumo/Inicio.vue'
-import Atencion from '@/Pages/Atencion/Inicio.vue'
-import Diagnostico from '@/Pages/Diagnostico/Inicio.vue'
 import ReporteMedicamento from '@/Pages/Reportes/Medicamento/Inicio.vue'
 import ReporteProcedimiento from '@/Pages/Reportes/Procedimiento/Inicio.vue'
 import ReporteInsumo from '@/Pages/Reportes/Insumo/Inicio.vue'
@@ -44,10 +39,6 @@ const routes = [
         meta: {layout: LayoutDefault}
     },
     {
-        path: '/gestion-pacientes',name: 'Paciente', component: Paciente,
-        meta: {layout: LayoutDefault}
-    }, 
-    {
         path: '/gestion-medicina',name: 'Medicina', component: Medicina,
         meta: {layout: LayoutDefault}
     }, 
@@ -55,30 +46,12 @@ const routes = [
         path: '/gestion-servicios',name: 'Servicio', component: Servicio,
         meta: {layout: LayoutDefault}
     }, 
-    {
-        path: '/gestion-procedimientos',name: 'Procedimiento', component: Procedimiento,
-        meta: {layout: LayoutDefault}
-    }, 
-    {
-        path: '/gestion-insumos',name: 'Insumo', component: Insumo,
-        meta: {layout: LayoutDefault}
-    },
-    {
-        path: '/gestion-atencion',name: 'Atencion', component: Atencion,
-        meta: {layout: LayoutDefault}
-    },    
-    {
-        path: '/gestion-diagnostico',name: 'Diagnostico', component: Diagnostico,
-        meta: {layout: LayoutDefault}
-    },        
+  
     {
         path: '/reporte-medicamentos',name: 'ReporteMedicamento', component: ReporteMedicamento,
         meta: {layout: LayoutDefault}
     },
-    {
-        path: '/reporte-procedimiento',name: 'ReporteProcedimiento', component: ReporteProcedimiento,
-        meta: {layout: LayoutDefault}
-    },          
+     
     {
         path: '/reporte-servicio',name: 'ReporteServicio', component: ReporteServicio,
         meta: {layout: LayoutDefault}

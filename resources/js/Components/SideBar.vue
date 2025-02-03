@@ -1,11 +1,13 @@
 <script setup>
-import { toRefs, ref } from 'vue';
+import { toRefs, ref, onMounted } from 'vue';
 import { useAutenticacion } from '@/Composables/autenticacion';
 import useHelper from '@/Helpers';
 import useUsuario from '@/Composables/Usuario';
+const  emit  =defineEmits(['cambiarRole'])
 const props = defineProps({
     usuario: Object,
-    roles: Array
+    roles: Array,
+    role: Object,
 });
 const form = ref({
   current_password : '',
@@ -13,7 +15,7 @@ const form = ref({
   password_confirmation : '',
   errors : []
 });
-const { usuario, roles } = toRefs(props);
+const { usuario, roles, role, agencia } = toRefs(props);
 const {
     errors, respuesta, cambiarClave
 } = useUsuario();
@@ -50,62 +52,49 @@ const {
         Toast.fire({icon:'success', title:respuesta.value.mensaje})
     }
   }
+  const cambiarRol = (id) => {
+    emit('cambiarRole', id)
+  }
+
 </script>
 <template>
-
   <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand">
     <button class="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3" type="button"
     data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse"
     aria-expanded="false" aria-label="Navegacion"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
     <a class="navbar-brand me-1 me-sm-3" href="/">
-      <div class="d-flex align-items-center"><img class="me-2" src="logo.jpg" alt="" width="40"><span class="font-sans-serif">Unidad Seguros</span></div>
+      <div class="d-flex align-items-center"><img class="me-2" src="logo.jpg" alt="" width="40"><span class="font-sans-serif">Financiera Emprender</span></div>
     </a>
-
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
-      <li class="nav-item">
-        <a class="nav-link" id="navbarDropdownAgencia" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
+
+      <li class="nav-item dropdown" v-if="usuario.agencias?.length>1">
+        <a class="nav-link px-0 fa-icon-wait" title="Seleccionar Agencia" id="navbarDropdownAgencia" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
           Huanuco
         </a>
-        <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg" aria-labelledby="navbarDropdownAgencia">
+        <div class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg" aria-labelledby="navbarDropdownAgencia">
           <div class="card card-notification shadow-none">
             <div class="card-header">
               <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
-                  <h6 class="card-header-title mb-0">Agencias</h6>
+                  <h6 class="card-header-title mb-0">Agencia {{ agencia }}</h6>
                 </div>
               </div>
             </div>
-            <div class="scrollbar-overlay" style="max-height:19rem">
+            <div class="" style="max-height:19rem">
               <div class="list-group list-group-flush fw-normal fs--1">
-                <div class="list-group-item">
-                  <a class="notification notification-flush notification-unread" href="#!">
-                    <div class="notification-avatar">
-                      <i class="fa-solid fa-location-dot mx-3" style="font-size: 1rem; color: blue;"></i>
-                    </div>
-                    <div class="notification-body">
-                      Tingo Maria
-                    </div>
-                  </a>
-                </div>
-                <div class="list-group-item">
-                  <a class="notification notification-flush notification-unread" href="#!">
-                    <div class="notification-avatar">
-                      <i class="fa-solid fa-location-dot mx-3" style="font-size: 1rem; color: blue;"></i>
-                    </div>
-                    <div class="notification-body">
-                      Panao
-                    </div>
-                  </a>
-                </div>
-                <div class="list-group-item">
-                  <a class="notification notification-flush notification-unread" href="#!">
-                    <div class="notification-avatar">
-                      <i class="fa-solid fa-location-dot mx-3" style="font-size: 1rem; color: blue;"></i>
-                    </div>
-                    <div class="notification-body">
-                      Huanuco 2
-                    </div>
-                  </a>
+                <div class="list-group-item" v-for="ag in usuario.agencias">
+                  <div v-if="ag.id!=usuario.agencia.id">
+                    <a class="notification notification-flush notification-unread" href="#!">
+                      <div class="notification-avatar">
+                        <div class="avatar avatar-l me-3">
+                          <div class="avatar-name rounded-circle"><span>Ag</span></div>
+                        </div>
+                      </div>
+                      <div class="notification-body">
+                        <p class="mb-1">{{ ag.nombre }}</p>
+                      </div>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -118,8 +107,6 @@ const {
           <input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark"><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Modificar"><span class="fas fa-sun fs-0"></span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Cambiar de Tema"><span class="fas fa-moon fs-0"></span></label>
         </div>
       </li>
-
-
       <li class="nav-item dropdown">
         <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
           <span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
@@ -182,7 +169,42 @@ const {
           </div>
         </div>
       </li>
+      <li class="nav-item dropdown" v-if="usuario.roles?.length>1">
+        <a class="nav-link px-0 fa-icon-wait" title="Seleccionar Rol" id="navbarDropdownRole" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
+          <span class="far fa-address-card" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
+        </a>
+        <div class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg" aria-labelledby="navbarDropdownRole">
+          <div class="card card-notification shadow-none">
+            <div class="card-header">
+              <div class="row justify-content-between align-items-center">
+                <div class="col-auto">
+                  <h6 class="card-header-title mb-0">Cambiar Rol</h6>
+                </div>
+              </div>
+            </div>
+            <div class="" style="max-height:19rem">
+              <div class="list-group list-group-flush fw-normal fs--1">
+                <div class="list-group-item" v-for="rol in usuario.roles">
+                  <div v-if="rol.id!=role.id">
+                    <a class="notification notification-flush notification-unread" href="#!" @click="cambiarRol(rol.id)">
+                      <div class="notification-avatar">
+                        <div class="avatar avatar-2xl me-3">
+                          <div class="avatar-name rounded-circle"><span>Rol</span></div>
+                        </div>
+                      </div>
+                      <div class="notification-body">
+                        <p class="mb-1">{{ rol.nombre }}</p>
+                      </div>
+                    </a>
+                  </div>
 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
       <li class="nav-item dropdown"><a class="nav-link pe-0 ps-2" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <div class="avatar avatar-xl">
             <img class="rounded-circle" src="imagenes/ironman.png" alt="">
@@ -191,7 +213,7 @@ const {
         <div class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
           <div class="bg-white dark__bg-1000 rounded-2 py-2">
             <a class="dropdown-item fw-bold text-info" href="#!">User : <span>{{ usuario.name }}</span></a>
-            <a class="dropdown-item fw-bold text-warning" href="#!"><span>{{ usuario.role?.nombre }}</span></a>
+            <a class="dropdown-item fw-bold text-warning" href="#!"><span>{{ role.nombre }}</span></a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#agencias" data-bs-toggle="modal" v-if="usuario.agencias?.length>0">Agencias</a>
             <a class="dropdown-item" href="#perfilModal" data-bs-toggle="modal">Perfil</a>
@@ -234,8 +256,14 @@ const {
             <div class="row">
               <div class="col-lg-12">
                 <h4 class="mb-1">{{ usuario.username }}</h4>
-                <h4 class="mb-1"> {{usuario.persona?.apellido_paterno+' '+usuario.persona?.apellido_materno+', '+usuario.persona?.nombres}}<span data-bs-toggle="tooltip" data-bs-placement="right" aria-label="Verified" data-bs-original-title="Verified"><svg class="svg-inline--fa fa-check-circle fa-w-16 text-primary" data-fa-transform="shrink-4 down-2" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;"><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small> Font Awesome fontawesome.com --></span></h4>
-                <h5 class="fs-0 fw-normal">{{usuario.role?.nombre}}</h5>
+                <h4 class="mb-1"> {{usuario.persona?.apellido_paterno+' '+usuario.persona?.apellido_materno+', '+usuario.persona?.nombres}}<span data-bs-toggle="tooltip" data-bs-placement="right" aria-label="Verified" data-bs-original-title="Verified">
+                  <svg class="svg-inline--fa fa-check-circle fa-w-16 text-primary" data-fa-transform="shrink-4 down-2" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;"><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" transform="translate(-256 -256)"></path></g></g></svg>
+                  <!-- <small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small> Font Awesome fontawesome.com --></span></h4>
+                <h5 class="fs-0 fw-normal">
+                  {{usuario.role?.nombre}}
+                  <i class="fa-users-gear"></i>
+                </h5>
                 <p class="text-500">{{usuario.persona?.email}}</p>
                 <p class="text-500">DNI: {{usuario.persona?.numero_dni}}</p>
                 <div class="border-bottom border-dashed my-4 d-lg-none"></div>

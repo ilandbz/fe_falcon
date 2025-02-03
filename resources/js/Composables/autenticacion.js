@@ -2,7 +2,6 @@ import axios from 'axios';
 import { ref,provide } from 'vue';
 import useHelper from '@/Helpers';
 
-
 export const useAutenticacion = () => {
     const errors = ref('');
     const {Swal } = useHelper();
@@ -12,13 +11,6 @@ export const useAutenticacion = () => {
             const respuesta = await axios.post('login',data)
             if(respuesta.data)
             {
-                // Swal.fire({
-                //     position: 'center',
-                //     icon: 'success',
-                //     title: 'Acceso Correcto',
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // })
                 localStorage.setItem('userSession',respuesta.data);
                 window.location.href = '/';
             }
@@ -35,9 +27,11 @@ export const useAutenticacion = () => {
         if(respuesta.data.ok==1)
         {
             localStorage.removeItem('userSession')
+            localStorage.removeItem('idrole')
             window.location.href="/login"
         }
     }
+
 
 
     return {

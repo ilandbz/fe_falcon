@@ -9,6 +9,7 @@ use App\Models\AgenciaUsuario;
 use App\Models\GrupoMenu;
 use App\Models\Menu;
 use App\Models\Persona;
+use App\Models\Role;
 use App\Models\RoleUsuario;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -94,7 +95,7 @@ class UserController extends Controller
         $buscar = mb_strtoupper($request->buscar);
         $paginacion = $request->paginacion;
         return User::whereRaw("upper(name) like ?", ['%'.strtoupper($buscar).'%'])
-        ->with('role:id,nombre')
+        ->with('roles')
         ->where('es_activo', 1)
         ->paginate($paginacion);
     }
@@ -103,7 +104,7 @@ class UserController extends Controller
         $buscar = mb_strtoupper($request->buscar);
         $paginacion = $request->paginacion;
         return User::whereRaw("upper(name) like ?", ['%'.strtoupper($buscar).'%'])
-        ->with('role:id,nombre')
+        ->with('roles')
         ->where('es_activo', 0)
         ->paginate($paginacion);
     }
@@ -112,7 +113,7 @@ class UserController extends Controller
         $buscar = mb_strtoupper($request->buscar);
         $paginacion = $request->paginacion;
         return User::whereRaw("upper(name) like ?", ['%'.strtoupper($buscar).'%'])
-        ->with('role:id,nombre')
+        ->with('roles')
         ->paginate($paginacion);
     }
     public function destroy(Request $request){
@@ -124,16 +125,18 @@ class UserController extends Controller
         ],200);
     }
 
-    public function mostrarDatoUsuario(Request $request)
-    {
+    public function mostrarDatoUsuario(Request $request) {
         $usuario=User::with(
-            'roles' 
+            'roles' ,
+            'agencias'
             )->where('id',$request->id)->first();
         $menu = [];
         $roles = $usuario->roles;
-        
+        $agencia = $usuario->agencias->first();
+        $usuario->setAttribute('agencia', $agencia);
         if($roles->count()==1){
             $role = $roles->first();
+            $usuario->setAttribute('role', $role);
             $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
                 $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
                       ->whereHas('roles', function ($roleQuery) use ($role) {
@@ -147,16 +150,52 @@ class UserController extends Controller
             $menu = array_merge($menu, $menusPorRol->toArray());
             return response()->json([
                 'usuario' => $usuario,
-                'menus' => $menu
-            ],200);            
+                'menus' => $menu,
+            ],200);           
         }else{
             return response()->json([
                 'usuario' => $usuario,
-                'roles' => $usuario->roles,
             ],200);     
         }
-
-
-
     }
+    public function obtenerMenusPorRole(Request $request){
+        $menu = [];
+        $role = Role::where('id',$request->role_id)->first();
+        $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
+            $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
+                  ->whereHas('roles', function ($roleQuery) use ($role) {
+                      $roleQuery->where('roles.id', $role->id);
+                  });
+        }])
+        ->whereHas('menus.roles', function ($query) use ($role) {
+            $query->where('roles.id', $role->id);
+        })
+        ->get();
+        $menu = array_merge($menu, $menusPorRol->toArray());
+        return response()->json([
+            'menus' => $menu
+        ],200); 
+    }
+    
+    // public function seleccionarRol(Request $request){
+    //     $usuario = User::where('id',$request->user_id)->first();
+    //     $role = Role::where('id',$request->role_id)->first();
+    //     $usuario->setAttribute('role', $role);
+    //     $menu = [];
+    //     $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
+    //         $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
+    //               ->whereHas('roles', function ($roleQuery) use ($role) {
+    //                   $roleQuery->where('roles.id', $role->id);
+    //               });
+    //     }])
+    //     ->whereHas('menus.roles', function ($query) use ($role) {
+    //         $query->where('roles.id', $role->id);
+    //     })
+    //     ->get();
+    //     $menu = array_merge($menu, $menusPorRol->toArray());
+    //     return response()->json([
+    //         'usuario' => $usuario,
+    //         'menus' => $menu
+    //     ],200);  
+    // }
 }

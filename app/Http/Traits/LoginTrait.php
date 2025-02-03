@@ -20,7 +20,12 @@ trait LoginTrait
                 if(auth()->attempt($credenciales)){
                     $user = auth()->user();
                     $usuario = User::where('id',$user->id)->first();
-                    $success['user'] = $usuario->id;
+ 
+                    $user->load('roles');
+
+                    $success['user'] = $user->id;
+                    $success['roleid'] = $usuario->roles->first()->id ?? 10;// si no encuentra el rol el primero sera invitado
+                    
                     $success=JWT::encode($success,env('VITE_SECRET_KEY'), 'HS256');
                     return response()->json($success,200);
                 } else {
@@ -40,5 +45,13 @@ trait LoginTrait
                 'errors' => [ 'username' => 'Nombre de Usuario no válido']
             ], 422);
         }
+    }
+    public function cambiarRole(Request $request){
+        $user = auth()->user();
+
+        $success['user'] = $user->id;
+        $success['roleid'] = $request->id;
+        $success=JWT::encode($success,env('VITE_SECRET_KEY'), 'HS256');
+        return response()->json($success,200);
     }
 }

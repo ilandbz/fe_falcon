@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agencia;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,14 +22,27 @@ class UserSeeder extends Seeder
         ]);
         $roleId = Role::where('nombre', 'Super Usuario')->value('id');
         $superusuario->roles()->sync([$roleId]);
+
+
+        // $roleIds = Role::pluck('id');
+        // $superusuario->roles()->sync($roleIds);
+        
+
         $usuarios = [
+
             [
                 'name' => 'KESPIRITU', 
                 'dni' => '44992550', 
                 'roles' => [
                     'Operaciones',
                     'Cobranza Huanuco',
-                    'Gerente Agencia'
+                    'Gerente Agencia',
+                ],
+                'agencias' => [
+                    'Huanuco',
+                    'Tingo Maria',
+                    'Huánuco 2',
+                    'Panao',
                 ],
             ],
         ];
@@ -41,12 +55,13 @@ class UserSeeder extends Seeder
                 ]
             );
         
-            // Obtener IDs de los roles en una sola consulta
             $roleIds = Role::whereIn('nombre', $usuario['roles'])->pluck('id');
-        
-            // Asignar roles al usuario
+            $agenciaIds = Agencia::whereIn('nombre', $usuario['agencias'])->pluck('id');
             $user->roles()->sync($roleIds);
+            $user->agencias()->sync($agenciaIds);
         }
+
+
 
     }
 }

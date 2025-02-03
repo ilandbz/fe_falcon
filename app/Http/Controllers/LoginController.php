@@ -23,4 +23,7 @@ class LoginController extends Controller
             'mensaje' =>'Sessión cerrada Satisfactoriamiente'
         ], 200);
     }
+    public function cambiarRol(Request $request){
+        return $this->cambiarRole($request);
+    }
 }

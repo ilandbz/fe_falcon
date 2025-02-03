@@ -1,10 +1,12 @@
 <script setup>
 import { toRefs, ref, onMounted } from 'vue';
+
 const props = defineProps({
     menus: Array
 });
 
 const { menus } = toRefs(props);
+
 
 
 </script>

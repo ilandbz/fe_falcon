@@ -286,7 +286,12 @@
                                     <tr v-else v-for="(usuario,index) in usuarios.data" :key="usuario.id">
                                         <td class="text-center">{{ index + usuarios.from }}</td>
                                         <td>{{ usuario.name }}</td>
-                                        <td>{{ usuario.role.nombre }}</td>
+                                        <td>
+                                            <span class="badge bg-primary" v-for="role in usuario.roles">
+                                                {{ role.nombre }}
+                                                &nbsp;
+                                            </span>
+                                        </td>
                                         <td>
                                             <span
                                                 :class="{'badge bg-success': usuario.es_activo === 1, 'badge bg-secondary': usuario.es_activo !== 1}"

@@ -22,7 +22,8 @@ class RoleSeeder extends Seeder
             'Cliente',
             'Gerente Zonal',
             'Gerente Agencia',
-            'Gestor de Cobranza'
+            'Gestor de Cobranza',
+            'Invitado',
         ];
         
         foreach ($roles as $role) {
