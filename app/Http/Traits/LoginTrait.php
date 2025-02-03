@@ -48,7 +48,16 @@ trait LoginTrait
     public function cambiarRole(Request $request){
         $user = auth()->user();
         $success['user'] = $user->id;
-        $success['roleid'] = $request->id;
+        $success['roleid'] = $request->id; 
+        $success['agenciaid'] = $request->agenciaid;
+        $success=JWT::encode($success,env('VITE_SECRET_KEY'), 'HS256');
+        return response()->json($success,200);
+    }
+    public function cambiarAgencia(Request $request){
+        $user = auth()->user();
+        $success['user'] = $user->id;
+        $success['agenciaid'] = $request->id;
+        $success['roleid'] = $request->roleid; 
         $success=JWT::encode($success,env('VITE_SECRET_KEY'), 'HS256');
         return response()->json($success,200);
     }

@@ -32,9 +32,9 @@ class AgenciaController extends Controller
     }
     public function obtener(Request $request)
     {
-        $role = Agencia::where('id', $request->id)->first();
+        $agencia = Agencia::where('id', $request->id)->first();
         return response()->json([
-            'role' => $role,
+            'agencia' => $agencia,
         ],200);     
     }
     /**

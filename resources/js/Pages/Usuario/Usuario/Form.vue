@@ -76,6 +76,12 @@ onMounted(() => {
                                         }}</small>
                             </div>
                             <div class="mb-3">
+                                <label for="name" class="form-label">DNI</label>
+                                <input type="text" class="form-control" v-model="form.dni" :class="{ 'is-invalid': form.errors.dni }" placeholder="00000000">
+                                <small class="text-danger" v-for="error in form.errors.dni" :key="error">{{ error
+                                        }}</small>
+                            </div>
+                            <div class="mb-3">
                                 <label for="name" class="form-label">Rol</label>
                                 <select v-model="form.role_id" class="form-control"
                                     :class="{ 'is-invalid': form.errors.role_id }">

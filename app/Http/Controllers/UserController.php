@@ -21,9 +21,10 @@ class UserController extends Controller
     public function store(StoreUserRequest $request){
         $usuario = User::create([
             'name'          => $request->username,
-            'role_id'       => $request->role_id,
+            'dni'           => $request->dni,
             'password'      => Hash::make($request->username),
         ]);
+        $usuario->roles()->sync([$request->role_id]);
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Usuario Registrado satisfactoriamente'

@@ -10,9 +10,9 @@ export default function useDatosSession() {
 
     const usuarioStore = useUsuarioStore();
     const  menuactivo = ref();
-    const { usuario, menus, roles, role } = storeToRefs(usuarioStore)
+    const { usuario, menus, roles, role, agencia } = storeToRefs(usuarioStore)
 
-    const { cargarDatosSession, modificarFoto, cargarMenus, actualizarDatosSession, cambiarRole} = useUsuarioStore()
+    const { cargarDatosSession, modificarFoto, cambiarAgencia, cambiarRole} = useUsuarioStore()
 
     const obtenerUsuarioSesion = async() => {
         if(user_id != null)
@@ -29,12 +29,8 @@ export default function useDatosSession() {
     const cambiarFoto = async(foto) => {
         modificarFoto(foto);
     }
-    // const obtenerMenupadreActivo = async(slug) => {
-    //     let respuesta = await axios.get('obtener-menu-slug',{params:{slug:slug}})
-    //     menuactivo.value = respuesta.data
-    // }
 
     return {
-        usuario, menus, cambiarFoto, menuactivo, roles, role, cambiarRole
+        usuario, menus, cambiarFoto, menuactivo, roles, role, cambiarRole, cambiarAgencia, agencia
     }
 }

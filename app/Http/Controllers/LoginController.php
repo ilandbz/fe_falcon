@@ -26,4 +26,7 @@ class LoginController extends Controller
     public function cambiarRol(Request $request){
         return $this->cambiarRole($request);
     }
+    public function cambAgencia(Request $request){
+        return $this->cambiarAgencia($request);
+    }    
 }

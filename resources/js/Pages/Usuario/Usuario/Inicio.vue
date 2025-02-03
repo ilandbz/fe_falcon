@@ -26,6 +26,7 @@
     const form = ref({
         id:'',
         username : '',
+        dni: '',
         role_id : '',
         errors:[]
 

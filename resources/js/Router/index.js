@@ -18,9 +18,7 @@ import ReporteInsumo from '@/Pages/Reportes/Insumo/Inicio.vue'
 import ReporteServicio from '@/Pages/Reportes/Servicio/Inicio.vue'
 import Produccion from '@/Pages/Reportes/Produccion/Inicio.vue'
 import Observadas from '@/Pages/Reportes/Observadas/Inicio.vue'
-import Establecimiento from '@/Pages/Establecimiento/Inicio.vue'
 import BrutaNeta from '@/Pages/Reportes/ProduccionMinsa/Inicio.vue'
-import InsumoProcedimiento from '@/Pages/Procedimiento/insumo/Inicio.vue'
 const routes = [
     {
         path: '/', name:'Principal', component: Principal ,
@@ -61,10 +59,6 @@ const routes = [
         meta: {layout: LayoutDefault}
     },
     {
-        path: '/establecimiento',name: 'Establecimiento', component: Establecimiento,
-        meta: {layout: LayoutDefault}
-    },
-    {
         path: '/reporte-produccion',name: 'ReporteProduccion', component: Produccion,
         meta: {layout: LayoutDefault}
     }, 
@@ -76,10 +70,7 @@ const routes = [
         path: '/produccion-bruta-neta',name: 'ReporteProduccionNB', component: BrutaNeta,
         meta: {layout: LayoutDefault}
     },
-    {
-        path: '/insumo-procedimiento',name: 'InsumoProcedimiento', component: InsumoProcedimiento,
-        meta: {layout: LayoutDefault}
-    },    
+  
 ]
 
 export default createRouter({

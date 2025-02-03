@@ -3,11 +3,12 @@ import { toRefs, ref, onMounted } from 'vue';
 import { useAutenticacion } from '@/Composables/autenticacion';
 import useHelper from '@/Helpers';
 import useUsuario from '@/Composables/Usuario';
-const  emit  =defineEmits(['cambiarRole'])
+const  emit  =defineEmits(['cambiarRole', 'cambiarAgencia'])
 const props = defineProps({
     usuario: Object,
     roles: Array,
     role: Object,
+    agencia: Object
 });
 const form = ref({
   current_password : '',
@@ -53,9 +54,11 @@ const {
     }
   }
   const cambiarRol = (id) => {
-    emit('cambiarRole', id)
+    emit('cambiarRole', id, agencia.value.id)
   }
-
+  const cambiaAgencia = (id) => {
+    emit('cambiarAgencia', id, role.value.id)
+  }
 </script>
 <template>
   <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand">
@@ -69,22 +72,22 @@ const {
 
       <li class="nav-item dropdown" v-if="usuario.agencias?.length>1">
         <a class="nav-link px-0 fa-icon-wait" title="Seleccionar Agencia" id="navbarDropdownAgencia" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
-          Huanuco
+          {{ agencia.nombre }}
         </a>
         <div class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg" aria-labelledby="navbarDropdownAgencia">
           <div class="card card-notification shadow-none">
             <div class="card-header">
               <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
-                  <h6 class="card-header-title mb-0">Agencia {{ agencia }}</h6>
+                  <h6 class="card-header-title mb-0">Agencia</h6>
                 </div>
               </div>
             </div>
             <div class="" style="max-height:19rem">
               <div class="list-group list-group-flush fw-normal fs--1">
                 <div class="list-group-item" v-for="ag in usuario.agencias">
-                  <div v-if="ag.id!=usuario.agencia.id">
-                    <a class="notification notification-flush notification-unread" href="#!">
+                  <div v-if="ag.id!=agencia.id">
+                    <a class="notification notification-flush notification-unread" href="#!" @click="cambiaAgencia(ag.id)">
                       <div class="notification-avatar">
                         <div class="avatar avatar-l me-3">
                           <div class="avatar-name rounded-circle"><span>Ag</span></div>
