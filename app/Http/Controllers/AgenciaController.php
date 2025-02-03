@@ -30,7 +30,13 @@ class AgenciaController extends Controller
         $role = Agencia::where('id', $request->id)->first();
         return $role;
     }
-
+    public function obtener(Request $request)
+    {
+        $role = Agencia::where('id', $request->id)->first();
+        return response()->json([
+            'role' => $role,
+        ],200);     
+    }
     /**
      * Update the specified resource in storage.
      */

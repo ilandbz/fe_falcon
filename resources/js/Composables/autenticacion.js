@@ -27,7 +27,6 @@ export const useAutenticacion = () => {
         if(respuesta.data.ok==1)
         {
             localStorage.removeItem('userSession')
-            localStorage.removeItem('idrole')
             window.location.href="/login"
         }
     }

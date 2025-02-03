@@ -17,6 +17,7 @@ export const useUsuarioStore = defineStore("usuario", {
             const ls = localStorage.getItem('userSession');
             const user_id = ls ? JSON.parse( JSON.stringify(jwtDecode(ls).user)) : null;
             const role_id = ls ? JSON.parse( JSON.stringify(jwtDecode(ls).roleid)) : null;
+            const agencia_id = ls ? JSON.parse( JSON.stringify(jwtDecode(ls).agenciaid)) : null;
             try {
                 const response = await axios.get('usuario-session-data/', { params: { id: user_id } });
                 const response2 = await axios.get('mostrar-role', { params: { id: role_id } });

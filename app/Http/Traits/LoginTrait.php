@@ -20,12 +20,11 @@ trait LoginTrait
                 if(auth()->attempt($credenciales)){
                     $user = auth()->user();
                     $usuario = User::where('id',$user->id)->first();
- 
-                    $user->load('roles');
-
+                    $usuario->load('roles');
+                    $usuario->load('agencias');
                     $success['user'] = $user->id;
                     $success['roleid'] = $usuario->roles->first()->id ?? 10;// si no encuentra el rol el primero sera invitado
-                    
+                    $success['agenciaid'] = $usuario->agencias->first()->id ?? 0;
                     $success=JWT::encode($success,env('VITE_SECRET_KEY'), 'HS256');
                     return response()->json($success,200);
                 } else {
@@ -48,7 +47,6 @@ trait LoginTrait
     }
     public function cambiarRole(Request $request){
         $user = auth()->user();
-
         $success['user'] = $user->id;
         $success['roleid'] = $request->id;
         $success=JWT::encode($success,env('VITE_SECRET_KEY'), 'HS256');
