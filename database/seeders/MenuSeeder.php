@@ -25,7 +25,7 @@ class MenuSeeder extends Seeder
                 'icono' => 'fas fa-user-friends',
                 'padre_id' => null,
                 'grupo_id'  => GrupoMenu::where('titulo', 'Configuracion')->value('id'),
-                'orden' => 5,
+                'orden' => 1,
             ],
             [
                 'nombre' => 'Menús',
@@ -33,8 +33,16 @@ class MenuSeeder extends Seeder
                 'icono' => 'fas fa-list',
                 'padre_id' => null,
                 'grupo_id'  => GrupoMenu::where('titulo', 'Configuracion')->value('id'),
-                'orden' => 6,
+                'orden' => 2,
             ],
+            [
+                'nombre' => 'Agencias',
+                'slug' => 'gestion-agncias',
+                'icono' => 'fas fa-building',
+                'padre_id' => null,
+                'grupo_id'  => GrupoMenu::where('titulo', 'Configuracion')->value('id'),
+                'orden' => 3,
+            ],            
         ];
         $menuIds = [];
         foreach($menuspadres as $row){

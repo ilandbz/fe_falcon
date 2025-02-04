@@ -41,6 +41,8 @@ Route::group(['prefix' => 'usuario', 'middleware' => 'auth'], function () {
     Route::post('guardar', [UserController::class, 'store']);
     Route::get('cambiar-estado',[UserController::class,'cambiarEstado']);
     Route::post('cambiar-clave',[UserController::class,'cambiarclaveperfil']);
+    Route::post('eliminar-role',[UserController::class,'eliminarRole']);
+    Route::post('eliminar-agencia',[UserController::class,'eliminarAgencia']);
 });
 
 //ROLE

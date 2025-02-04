@@ -25,6 +25,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'username'              => 'required|unique:users,name,',
+            'dni'                   => 'required|digits:8',    
             'role_id'               => 'required',
         ];
     }
@@ -37,7 +38,7 @@ class StoreUserRequest extends FormRequest
             'digits' => 'Ingrese Máximo :digits numeros',
             'string' => 'Ingrese caracteres alfanuméricos',
             'numeric' => 'Ingrese solo numeros',
-            'username.unique'    => 'El valor ya existe en la base de datos',
+            'username.unique'    => 'El username ya existe en la base de datos',
             'email'         => 'No es un email valido'
 
         ];

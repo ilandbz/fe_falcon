@@ -8,7 +8,8 @@
   const {
         usuarios, errors, usuario, respuesta,
         obtenerUsuarios, obtenerUsuario, eliminarUsuario,
-        resetClaveUsuario, cambiarEstado
+        resetClaveUsuario, cambiarEstado, eliminarRole,
+        eliminarAgencia, carpetaFotos
     } = useUsuario();
     const show_tipo = ref("Habilitados")
     const titleHeader = ref({
@@ -25,16 +26,23 @@
     });
     const form = ref({
         id:'',
+        apepat:'',
+        apemat:'',
+        primernombre:'',
+        otrosnombres:'',
         username : '',
         dni: '',
         role_id : '',
+        foto : carpetaFotos+'default.png',
         errors:[]
 
     });
     const limpiar = () => {
         form.value.id = '';
         form.value.username = '';
+        form.value.dni = '';
         form.value.role_id = '';
+        form.value.foto = carpetaFotos+'default.png';
         form.value.errors = [];
         errors.value = [];
     };
@@ -44,7 +52,8 @@
         {
             form.value.id=usuario.value.id;
             form.value.username=usuario.value.name;
-            form.value.role_id=usuario.value.role_id;
+            form.value.dni=usuario.value.dni;
+            form.value.foto=carpetaFotos+usuario.value.dni+'.webp';
         }
     }
     const editar = (id) => {
@@ -168,6 +177,65 @@
         }
         return pagesArray
     }
+    const eliminaRol = async(roleid, userid) => {
+        Swal.fire({
+            title: '¿Estás seguro de Eliminar el Rol?',
+            text: "Usuario",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminalo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminaRole(roleid, userid)
+            }
+        })
+    }
+    const eliminaAgencia = async(roleid, userid) => {
+        Swal.fire({
+            title: '¿Estás seguro de Eliminar el Rol?',
+            text: "Usuario",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminalo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminaAg(roleid, userid)
+            }
+        })
+    }
+    const eliminaRole = async(roleid, userid) => {
+        await eliminarRole(roleid, userid)
+        form.value.errors = []
+        if(errors.value)
+        {
+            form.value.errors = errors.value
+        }
+        if(respuesta.value.ok==1){
+            form.value.errors = []
+            Toast.fire({icon:'success', title:respuesta.value.mensaje})
+            listarUsuarios(usuarios.value.current_page)
+        }
+    }
+
+    const eliminaAg = async(agenciaid, userid) => {
+        await eliminarAgencia(agenciaid, userid)
+        form.value.errors = []
+        if(errors.value)
+        {
+            form.value.errors = errors.value
+        }
+        if(respuesta.value.ok==1){
+            form.value.errors = []
+            Toast.fire({icon:'success', title:respuesta.value.mensaje})
+            listarUsuarios(usuarios.value.current_page)
+        }
+    }
+
+    
     // CARGA
     onMounted(() => {
         defineTitle(titleHeader.value.titulo)
@@ -265,33 +333,51 @@
                 <div class="row">
                     <div class="col-md-12 mb-1">
                         <div class="table-responsive">         
-                            <table class="table table-bordered table-hover table-sm table-striped">
+                            <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="5" class="text-center">Usuarios {{ show_tipo }}</th>
+                                        <th colspan="7" class="text-center">Usuarios {{ show_tipo }}</th>
                                     </tr>
                                     <tr>
                                         <th class="text-center">#</th>
                                         <th>Name</th>
+                                        <th>DNI</th>
                                         <th>Rol</th>
+                                        <th>Agencia</th>
                                         <th>Estado</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-if="usuarios.total == 0">
-                                        <td class="text-danger text-center" colspan="5">
+                                        <td class="text-danger text-center" colspan="7">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
                                     <tr v-else v-for="(usuario,index) in usuarios.data" :key="usuario.id">
                                         <td class="text-center">{{ index + usuarios.from }}</td>
                                         <td>{{ usuario.name }}</td>
+                                        <td>{{ usuario.dni }}</td>
                                         <td>
-                                            <span class="badge bg-primary" v-for="role in usuario.roles">
-                                                {{ role.nombre }}
-                                                &nbsp;
-                                            </span>
+                                            <div v-for="role in usuario.roles">
+                                                <span class="badge bg-primary">
+                                                    {{ role.nombre }}&nbsp;&nbsp;
+                                                    <span class="text-danger" title="Eliminar Rol" @click.prevent="eliminaRol(role.id, usuario.id)">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </span>
+                                                </span>&nbsp;
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div v-for="agencia in usuario.agencias">
+                                                <span class="badge bg-primary">
+                                                    {{ agencia.nombre }}&nbsp;&nbsp;
+                                                    <span class="text-danger" title="Eliminar Agencia" @click.prevent="eliminaAgencia(agencia.id, usuario.id)">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </span>                                                    
+                                                </span>&nbsp;
+                                            </div>
                                         </td>
                                         <td>
                                             <span

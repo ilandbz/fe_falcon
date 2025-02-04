@@ -12,13 +12,20 @@ use App\Models\Persona;
 use App\Models\Role;
 use App\Models\RoleUsuario;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\File;
 class UserController extends Controller
 {
     public function store(StoreUserRequest $request){
+        $file = $request->file('foto');
+        if ($file) {
+            $nombre_archivo = $request->dni.".webp";
+            //$nombre_archivo = $request->dni.".".mb_strtolower($file->extension());
+            Storage::disk('fotos')->put($nombre_archivo,File::get($file));
+        }
         $usuario = User::create([
             'name'          => $request->username,
             'dni'           => $request->dni,
@@ -80,10 +87,15 @@ class UserController extends Controller
     }
 
     public function update(UpdateUserRequest $request){
+        $file = $request->file('foto');
+        if ($file) {
+            $nombre_archivo = $request->dni.".webp";
+            Storage::disk('fotos')->put($nombre_archivo,File::get($file));
+        }
         $user = User::findOrFail($request->id);
         $user->update([
             'name'          => $request->username,
-            'role_id'       => $request->role_id,
+            'dni'       => $request->dni,
         ]);
         $user->save();
         return response()->json([
@@ -97,6 +109,7 @@ class UserController extends Controller
         $paginacion = $request->paginacion;
         return User::whereRaw("upper(name) like ?", ['%'.strtoupper($buscar).'%'])
         ->with('roles')
+        ->with('agencias')
         ->where('es_activo', 1)
         ->paginate($paginacion);
     }
@@ -119,6 +132,9 @@ class UserController extends Controller
     }
     public function destroy(Request $request){
         $user = User::where('id', $request->id)->first();
+        if (Storage::disk('fotos')->exists($user->dni.'.webp')) {
+            Storage::disk('fotos')->delete($user->dni.'.webp');
+        }
         $user->delete();
         return response()->json([
             'ok' => 1,
@@ -177,26 +193,20 @@ class UserController extends Controller
             'menus' => $menu
         ],200); 
     }
-    
-    // public function seleccionarRol(Request $request){
-    //     $usuario = User::where('id',$request->user_id)->first();
-    //     $role = Role::where('id',$request->role_id)->first();
-    //     $usuario->setAttribute('role', $role);
-    //     $menu = [];
-    //     $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
-    //         $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
-    //               ->whereHas('roles', function ($roleQuery) use ($role) {
-    //                   $roleQuery->where('roles.id', $role->id);
-    //               });
-    //     }])
-    //     ->whereHas('menus.roles', function ($query) use ($role) {
-    //         $query->where('roles.id', $role->id);
-    //     })
-    //     ->get();
-    //     $menu = array_merge($menu, $menusPorRol->toArray());
-    //     return response()->json([
-    //         'usuario' => $usuario,
-    //         'menus' => $menu
-    //     ],200);  
-    // }
+    public function eliminarRole(Request $request){
+        $user = User::find($request->user_id);
+        $user->roles()->detach($request->role_id);
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Rol eliminado satisfactoriamente'
+        ],200);
+    }
+    public function eliminarAgencia(Request $request){
+        $user = User::find($request->user_id);
+        $user->agencias()->detach($request->agencia_id);
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Agencia eliminado satisfactoriamente'
+        ],200);
+    }
 }

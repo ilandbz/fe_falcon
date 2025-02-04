@@ -5,8 +5,7 @@ export default function useUsuario() {
     const usuarios = ref([])
     const errors = ref('')
     const usuario = ref({})
-
-    const usuario2 = ref({})
+    const carpetaFotos =  '/storage/fotos/';
     const respuesta = ref([])
 
     const obtenerUsuario = async(id) => {
@@ -102,9 +101,22 @@ export default function useUsuario() {
             }
         }
     }
+    const eliminarRole = async(roleid, userid) => {
+       const respond = await axios.post('usuario/eliminar-role', {role_id:roleid, user_id:userid},getConfigHeader())
+        if(respond.data.ok==1){
+            respuesta.value = respond.data
+        }
+    }
+    const eliminarAgencia = async(agenciaid, userid) => {
+       const respond = await axios.post('usuario/eliminar-agencia', {agencia_id:agenciaid, user_id:userid},getConfigHeader())
+        if(respond.data.ok==1){
+            respuesta.value = respond.data
+        }
+    }    
     return {
         errors, usuarios, usuario, obtenerUsuario, obtenerUsuarios, 
         agregarUsuario, actualizarUsuario, eliminarUsuario, respuesta,
-        resetClaveUsuario, cambiarEstado, cambiarClave
+        resetClaveUsuario, cambiarEstado, cambiarClave, eliminarRole,
+        eliminarAgencia, carpetaFotos
     }
 }

@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'username'              => 'required|unique:users,name,'.$this->id,
-            'role_id'               => 'required',
+            'dni'                   => 'required|digits:8',
         ];
     }
 
