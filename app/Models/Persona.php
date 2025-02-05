@@ -13,7 +13,7 @@ class Persona extends Model
         'primernombre',
         'otrosnombres',
         'fecha_nac',
-        'distrito_nac',
+        'ubigeo_nac',
         'genero',
         'celular',
         'email',

@@ -4,6 +4,7 @@ use App\Http\Controllers\AgenciaController;
 use App\Http\Controllers\GrupoMenuController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UserController;
@@ -43,6 +44,11 @@ Route::group(['prefix' => 'usuario', 'middleware' => 'auth'], function () {
     Route::post('cambiar-clave',[UserController::class,'cambiarclaveperfil']);
     Route::post('eliminar-role',[UserController::class,'eliminarRole']);
     Route::post('eliminar-agencia',[UserController::class,'eliminarAgencia']);
+});
+//PERSONA
+Route::group(['prefix' => 'persona', 'middleware' => 'auth'], function () {
+    Route::get('mostrar-por-dni', [PersonaController::class, 'mostrarPorDni']);
+
 });
 
 //ROLE

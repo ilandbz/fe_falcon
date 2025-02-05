@@ -63,10 +63,13 @@ class User extends Authenticatable
     //      return $this->roles()->first();
     //  }
 
-
-
     public function agencias(): BelongsToMany
     {
         return $this->belongsToMany(Agencia::class);
+    }
+
+    public function persona(): BelongsTo
+    {
+        return $this->belongsTo(Persona::class, 'dni', 'dni');
     }
 }

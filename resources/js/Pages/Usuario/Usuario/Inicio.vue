@@ -53,6 +53,10 @@
             form.value.id=usuario.value.id;
             form.value.username=usuario.value.name;
             form.value.dni=usuario.value.dni;
+            form.value.apepat=usuario.value.persona.ape_pat;
+            form.value.apemat=usuario.value.persona.ape_mat;
+            form.value.primernombre=usuario.value.persona.primernombre;
+            form.value.otrosnombres=usuario.value.persona.otrosnombres;
             form.value.foto=carpetaFotos+usuario.value.dni+'.webp';
         }
     }

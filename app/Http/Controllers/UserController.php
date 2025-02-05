@@ -21,6 +21,14 @@ class UserController extends Controller
 {
     public function store(StoreUserRequest $request){
         $file = $request->file('foto');
+        Persona::firstOrcreate([
+            'dni'           => $request->dni,
+            ],[
+            'ape_pat'       => $request->apepat,
+            'ape_mat'       => $request->apemat,
+            'primernombre'  => $request->primernombre,
+            'otrosnombres'  => $request->otrosnombres,
+        ]);
         if ($file) {
             $nombre_archivo = $request->dni.".webp";
             //$nombre_archivo = $request->dni.".".mb_strtolower($file->extension());
@@ -82,7 +90,7 @@ class UserController extends Controller
         ],200);
     }
     public function show(Request $request){
-        $user = User::where('id', $request->id)->first();
+        $user = User::with('persona:dni,ape_pat,ape_mat,primernombre,otrosnombres')->where('id', $request->id)->first();
         return $user;
     }
 

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('ubicacions', function (Blueprint $table) {
             $table->id();
-            $table->Integer('codigo');
             $table->string('tipo', 30)->nullable()->default('NDF'); // NDF = No Definido
-            $table->unsignedInteger('distrito');
+            $table->char('ubigeo', 6);
             $table->string('tipovia', 35)->nullable()->default('S/N'); // Jr, Av, etc.
             $table->string('nombrevia', 90)->nullable();
             $table->string('nro', 25)->nullable()->default('S/N');

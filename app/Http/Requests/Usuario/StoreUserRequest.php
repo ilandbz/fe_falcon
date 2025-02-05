@@ -25,7 +25,11 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'username'              => 'required|unique:users,name,',
-            'dni'                   => 'required|digits:8',    
+            'dni'                   => 'required|digits:8',
+            'apepat'                => 'required|string|max:100',
+            'apemat'                => 'required|string|max:100',
+            'primernombre'         => 'required|string|max:100',
+            'otrosnombres'         => 'required|string|max:100',
             'role_id'               => 'required',
         ];
     }

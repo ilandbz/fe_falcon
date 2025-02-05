@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('personas', function (Blueprint $table) {
             $table->id();
-            $table->char('dni', 8);
+            $table->char('dni', 8)->unique();
             $table->string('ape_pat', 60);
             $table->string('ape_mat', 60);
             $table->string('primernombre', 70);
             $table->string('otrosnombres', 70);
-            $table->date('fecha_nac');
-            $table->unsignedInteger('distrito_nac');
-            $table->char('genero', 1);
+            $table->date('fecha_nac')->default('2000-01-01');
+            $table->char('ubigeo_nac',6)->nullable();
+            $table->char('genero', 1)->default('M');
             $table->char('celular', 11)->nullable();
             $table->string('email', 70)->nullable();
             $table->char('ruc', 11)->nullable();

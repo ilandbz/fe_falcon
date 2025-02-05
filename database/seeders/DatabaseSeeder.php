@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             AgenciaSeeder::class,
             UserSeeder::class,
             GrupoMenuSeeder::class,
-            MenuSeeder::class
+            MenuSeeder::class,
+            UbigeoSeeder::class,
         ]);
     }
 }
