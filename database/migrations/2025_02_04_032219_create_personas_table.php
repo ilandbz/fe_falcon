@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('primernombre', 70);
             $table->string('otrosnombres', 70);
             $table->date('fecha_nac')->default('2000-01-01');
-            $table->char('ubigeo_nac',6)->nullable();
+            $table->char('ubigeo_nac',6)->nullable()->default('090101');
             $table->char('genero', 1)->default('M');
             $table->char('celular', 11)->nullable();
             $table->string('email', 70)->nullable();
