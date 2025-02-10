@@ -10,15 +10,17 @@ import Principal from '@/Pages/Principal.vue'
 import Login from '@/Pages/Auth/Login.vue'
 import Menu from '@/Pages/Menu/Inicio.vue'
 import Usuario from '@/Pages/Usuario/Inicio.vue'
-import Medicina from '@/Pages/Medicina/Inicio.vue'
-import Servicio from '@/Pages/Servicio/Inicio.vue'
-import ReporteMedicamento from '@/Pages/Reportes/Medicamento/Inicio.vue'
-import ReporteProcedimiento from '@/Pages/Reportes/Procedimiento/Inicio.vue'
-import ReporteInsumo from '@/Pages/Reportes/Insumo/Inicio.vue'
-import ReporteServicio from '@/Pages/Reportes/Servicio/Inicio.vue'
-import Produccion from '@/Pages/Reportes/Produccion/Inicio.vue'
-import Observadas from '@/Pages/Reportes/Observadas/Inicio.vue'
-import BrutaNeta from '@/Pages/Reportes/ProduccionMinsa/Inicio.vue'
+import Agencia from '@/Pages/Agencia/Inicio.vue'
+import Cliente from '@/Pages/Cliente/Inicio.vue';
+import Creditos from '@/Pages/Credito/Inicio.vue';
+import Asesor from '@/Pages/Asesor/Inicio.vue';
+import Pagos from '@/Pages/Pagos/Inicio.vue';
+import CobranzaCampo from '@/Pages/CobranzaCampo/Inicio.vue';
+import Desembolso from '@/Pages/Desembolso/Inicio.vue';
+import HabilitarAsesor from '@/Pages/HabilitarAsesor/Inicio.vue';
+import Tickets from '@/Pages/Tickets/Inicio.vue';
+import Registros from '@/Pages/Registros/Inicio.vue';
+import Devolucion from '@/Pages/Devolucion/Inicio.vue';
 const routes = [
     {
         path: '/', name:'Principal', component: Principal ,
@@ -36,41 +38,72 @@ const routes = [
         path: '/gestion-usuarios',name: 'Usuarios', component: Usuario,
         meta: {layout: LayoutDefault}
     },
+
     {
-        path: '/gestion-medicina',name: 'Medicina', component: Medicina,
-        meta: {layout: LayoutDefault}
-    }, 
-    {
-        path: '/gestion-servicios',name: 'Servicio', component: Servicio,
-        meta: {layout: LayoutDefault}
-    }, 
-  
-    {
-        path: '/reporte-medicamentos',name: 'ReporteMedicamento', component: ReporteMedicamento,
+        path: '/gestion-agencias',name: 'GestionAgencias', component: Agencia,
         meta: {layout: LayoutDefault}
     },
-     
+
     {
-        path: '/reporte-servicio',name: 'ReporteServicio', component: ReporteServicio,
-        meta: {layout: LayoutDefault}
+        path: '/gestion-cliente',
+        name: 'Cliente',
+        component: Cliente,
+        meta: { layout: LayoutDefault }
     },
     {
-        path: '/reporte-insumo',name: 'ReporteInsumo', component: ReporteInsumo,
-        meta: {layout: LayoutDefault}
+        path: '/gestion-creditos',
+        name: 'Creditos',
+        component: Creditos,
+        meta: { layout: LayoutDefault }
     },
     {
-        path: '/reporte-produccion',name: 'ReporteProduccion', component: Produccion,
-        meta: {layout: LayoutDefault}
-    }, 
-    {
-        path: '/fuas-observadas',name: 'ReporteObservadas', component: Observadas,
-        meta: {layout: LayoutDefault}
+        path: '/gestion-asesor',
+        name: 'Asesor',
+        component: Asesor,
+        meta: { layout: LayoutDefault }
     },
     {
-        path: '/produccion-bruta-neta',name: 'ReporteProduccionNB', component: BrutaNeta,
-        meta: {layout: LayoutDefault}
+        path: '/gestion-pagos',
+        name: 'Pagos',
+        component: Pagos,
+        meta: { layout: LayoutDefault }
     },
-  
+    {
+        path: '/gestion-cobranza-campo',
+        name: 'CobranzaCampo',
+        component: CobranzaCampo,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/gestion-desembolso',
+        name: 'Desembolso',
+        component: Desembolso,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/habilitar-asesor',
+        name: 'HabilitarAsesor',
+        component: HabilitarAsesor,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/gestion-tickets',
+        name: 'Tickets',
+        component: Tickets,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/gestion-registros',
+        name: 'Registros',
+        component: Registros,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/gestion-devolucion',
+        name: 'Devolucion',
+        component: Devolucion,
+        meta: { layout: LayoutDefault }
+    }
 ]
 
 export default createRouter({

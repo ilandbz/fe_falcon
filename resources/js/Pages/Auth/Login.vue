@@ -34,10 +34,7 @@ const {errors, loginUsuario } = useAutenticacion();
                         <p class="opacity-75 text-white">TU SOCIO EN LOS NEGOCIOS</p>
                     </div>
                     </div>
-                    <div class="mt-3 mb-4 mt-md-4 mb-md-5" data-bs-theme="light">
-                    <p class="text-white">¿No tienes una cuenta?<br><a class="text-decoration-underline link-light" href="register.html">Regístrate aquí</a></p>
-                    <p class="mb-0 mt-4 mt-md-5 fs--1 fw-semi-bold text-white opacity-75">Lee nuestros <a class="text-decoration-underline text-white" href="#">términos</a> y <a class="text-decoration-underline text-white" href="#">condiciones</a></p>
-                    </div>
+
                 </div>
                 <div class="col-md-7 d-flex flex-center">
                     <div class="p-4 p-md-5 flex-grow-1">
@@ -63,25 +60,10 @@ const {errors, loginUsuario } = useAutenticacion();
                             <small class="text-danger" v-for="error in errors.password"
                                 :key="error">{{ error }}</small>
                         </div>
-                        <div class="row flex-between-center">
-                        <div class="col-auto">
-                            <div class="form-check mb-0">
-                            <input class="form-check-input" type="checkbox" id="remember" checked>
-                            <label class="form-check-label mb-0" for="remember">Recordarme</label>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <a class="fs--1" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
-                        </div>
-                        </div>
                         <div class="mb-3">
                         <button class="btn btn-primary d-block w-100 mt-3" type="submit">Iniciar Sesión</button>
                         </div>
                     </form>
-                    <div class="position-relative mt-4">
-                        <hr>
-                        <div class="divider-content-center">o inicia sesión con</div>
-                    </div>
 
                     </div>
                 </div>

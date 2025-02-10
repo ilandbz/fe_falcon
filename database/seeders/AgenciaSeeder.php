@@ -14,10 +14,10 @@ class AgenciaSeeder extends Seeder
     public function run(): void
     {
         $agencias = [
-            ['nombre' => 'Huánuco'],
-            ['nombre' => 'Tingo Maria'],
-            ['nombre' => 'Huánuco 2'],
-            ['nombre' => 'Panao'],
+            ['nombre' => 'HUANUCO'],
+            ['nombre' => 'TINGO MARIA'],
+            ['nombre' => 'HUANUCO2'],
+            ['nombre' => 'PANAO'],
         ];
 
         foreach($agencias as $grupo){

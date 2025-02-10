@@ -21,6 +21,13 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
+        ],  
+        'personas' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/fotos/personas'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
         ],    
     ],
 

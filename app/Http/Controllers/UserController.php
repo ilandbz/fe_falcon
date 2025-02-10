@@ -127,6 +127,7 @@ class UserController extends Controller
         $paginacion = $request->paginacion;
         return User::whereRaw("upper(name) like ?", ['%'.strtoupper($buscar).'%'])
         ->with('roles')
+        ->with('agencias')
         ->where('es_activo', 0)
         ->paginate($paginacion);
     }
@@ -136,6 +137,7 @@ class UserController extends Controller
         $paginacion = $request->paginacion;
         return User::whereRaw("upper(name) like ?", ['%'.strtoupper($buscar).'%'])
         ->with('roles')
+        ->with('agencias')
         ->paginate($paginacion);
     }
     public function destroy(Request $request){
@@ -216,5 +218,21 @@ class UserController extends Controller
             'ok' => 1,
             'mensaje' => 'Agencia eliminado satisfactoriamente'
         ],200);
+    }
+    public function obtenerPorTipo(Request $request){
+        $role_id=$request->role_id;
+        $agencia_id=$request->agencia_id;
+        $users = User::where('es_activo', 1)
+        ->whereHas('roles', function ($query) use ($role_id) {
+            $query->where('roles.id', $role_id);
+        })
+        ->when($agencia_id != 0, function ($query) use ($agencia_id) {
+            $query->whereHas('agencias', function ($query) use ($agencia_id) {
+                $query->where('agencias.id', $agencia_id);
+            });
+        })
+        ->get();
+        return $users;
+        //return response()->json($users);
     }
 }

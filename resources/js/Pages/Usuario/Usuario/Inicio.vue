@@ -43,6 +43,10 @@
         form.value.dni = '';
         form.value.role_id = '';
         form.value.foto = carpetaFotos+'default.png';
+        form.value.apepat = '';
+        form.value.apemat = '';
+        form.value.primernombre = '';
+        form.value.otrosnombres = '';
         form.value.errors = [];
         errors.value = [];
     };

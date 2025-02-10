@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Agencia;
 use App\Models\GrupoMenu;
 use App\Models\Menu;
+use App\Models\TipoGerente;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,10 +20,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             AgenciaSeeder::class,
-            UserSeeder::class,
             GrupoMenuSeeder::class,
             MenuSeeder::class,
             UbigeoSeeder::class,
+            UbicacionSeeder::class,
+            PersonaSeeder::class,
+            UserSeeder::class,
+            TipoEntidadSeeder::class,
+            TipoGerenteSeeder::class,
+            TipoActivoSeeder::class,
+            TipoActividadSeeder::class,
+            ProfesionSeeder::class,
         ]);
     }
 }

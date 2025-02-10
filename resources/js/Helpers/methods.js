@@ -1,5 +1,5 @@
 export const defineTitle = (title) => {
-    document.title =title + ' | UNIDAD DE SEGUROS'
+    document.title =title + ' | FINANCIERA EMPRENDER'
 }
 
 export const getdataParamsPagination = ( data) => {

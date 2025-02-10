@@ -884,7 +884,7 @@
 090102;Chinchao;Huanuco;Huanuco;14,099;795.78;-9.8019;-76.0689
 090103;Churubamba;Huanuco;Huanuco;28,908;507.31;-9.8258;-76.1375
 090104;Margos;Huanuco;Huanuco;10,021;206.57;-10.0061;-76.5214
-090105;Quisqui;Huanuco;Huanuco;8,392;172.74;-9.9231;-76.3561
+090105;Quisqui (Kichki);Huanuco;Huanuco;8,392;172.74;-9.9231;-76.3561
 090106;San Francisco de Cayran;Huanuco;Huanuco;5,575;146.24;-9.9822;-76.2847
 090107;San Pedro de Chaulan;Huanuco;Huanuco;8,121;266.36;-10.0581;-76.4822
 090108;Santa Maria del Valle;Huanuco;Huanuco;20,984;446.63;-9.8628;-76.1703
@@ -1816,7 +1816,7 @@
 230302;Matapalo;Zarumilla;Tumbes;2,529;392.29;-3.6839;-80.1997
 230303;Papayal;Zarumilla;Tumbes;5,348;193.53;-3.5736;-80.2333
 230304;Aguas Verdes;Zarumilla;Tumbes;24,781;46.06;-3.4814;-80.2461
-240101;Callao;Callao;Callao;410,795;45.65;-12.0603;-77.1492
+240101;Callao;PROV. CONST. DEL CALLAO;Callao;410,795;45.65;-12.0603;-77.1492
 240102;Bellavista;Callao;Callao;72625;4.56;-12.0625;-77.1317
 240103;La Punta;Callao;Callao;3184;18.38;-12.0717;-77.1692
 240104;Carmen de La Legua;Callao;Callao;40,833;2.12;-12.0461;-77.0969

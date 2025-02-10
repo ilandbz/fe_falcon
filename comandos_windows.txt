@@ -1,0 +1,47 @@
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Egreso" /E /I /H /C /Y
+
+
+
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Credito" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\CreditoDetalleCalendario" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\CreditoPagoCuota" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\CreditoKardex" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Junta" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\JuntaDetalleCalendario" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\JuntaPagoCuota" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\JuntaKardex" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\JuntaDevolucion" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Balance" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\BalanceDetalle" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\BalanceDetalleInventario" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\BalanceDeudaEntidadFinanciera" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\BalancePerdidasGanancias" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\EgresoTipo" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Egreso" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\EgresoGastosFamiliares" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\EgresoGastosNegocio" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\ActivoTipo" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Activo" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\ActivoDetalle" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\ActivoMuebleMaquinaria" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Evaluacion" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\CuentaEmpleado" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\CierreCaja" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\HistoriaCaja" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Desembolso" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Empleado" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\Feriado" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\PagoSueldo" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\PagoMora" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\MoraCosto" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\SeguroCosto" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\SeguroDesgravamen" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\PropuestaCredito" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\GarantiaCliente" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\MetasLogro" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\VentasPerdidasGanancias" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\VentasDetallePerdidasGanancias" /E /I /H /C /Y
+xcopy "app\Http\Requests\Cargo" "app\Http\Requests\KardexCampo" /E /I /H /C /Y
+
+
+

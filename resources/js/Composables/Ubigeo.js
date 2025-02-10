@@ -7,20 +7,21 @@ export default function useUbigeo() {
     const distritos = ref([])
     const errors = ref('')
     const respuesta = ref([])
-    const obtenerDepartamentos = async()=>{
-        let respuesta = await axios.get('ubigeo/departamentos',getConfigHeader())
-        departamentos.value = respuesta.data        
-    }
-    const obtenerProvincias = async(departamento_id) => {
-        const respond = await axios.get('ubigeo/provincias?departamento_id='+departamento_id,getConfigHeader())
-        provincias.value = respond.data  
-    }
-    const obtenerDistritos = async(provincia_id) => {
-        const respond = await axios.get('ubigeo/distritos?provincia_id='+provincia_id,getConfigHeader())
+    const registro = ref([])
+    const obtenerDistritos = async(data) => {
+        const respond = await axios.get('ubigeo/lista-distritos'+getdataParamsPagination(data),getConfigHeader())
         distritos.value = respond.data  
+    }
+    const obtenerUbigeo = async(ubigeo) => {
+        try {
+            let respond = await axios.get('ubigeo/obtener?ubigeo='+ubigeo,getConfigHeader())
+            registro.value = respond.data
+        } catch (error) {
+            errors.value = error.response.data
+        }
     }    
     return {
-        errors, provincias, departamentos, distritos, obtenerDepartamentos, obtenerProvincias, obtenerDistritos,
-        respuesta
+        errors, distritos, obtenerDistritos,
+        respuesta, obtenerUbigeo, registro
     }
 }

@@ -4,12 +4,12 @@ import { getConfigHeader, getdataParamsPagination } from '@/Helpers'
 export default function useAgencia() {
     const agencias = ref([])
     const errors = ref('')
-    const menu = ref({})
+    const agencia = ref({})
     const respuesta = ref([])
     
     const obtenerAgencia = async(id) => {
         let respuesta = await axios.get('agencia/mostrar?id='+id,getConfigHeader())
-        menu.value = respuesta.data
+        agencia.value = respuesta.data
     }
     const listaAgencias = async()=>{
         let respuesta = await axios.get('agencia/todos',getConfigHeader())
@@ -50,7 +50,7 @@ export default function useAgencia() {
             }
         }
     }
-    const eliminarMenu = async(id) => {
+    const eliminarAgencia = async(id) => {
         const respond = await axios.post('agencia/eliminar', {id:id},getConfigHeader())
         if(respond.data.ok==1)
         {
@@ -58,7 +58,7 @@ export default function useAgencia() {
         }
     }
     return {
-        errors, agencias, listaAgencias, menu, obtenerAgencia, obtenerAgencias, 
-        agregarAgencia, actualizarAgencia, eliminarMenu, respuesta
+        errors, agencias, listaAgencias, agencia, obtenerAgencia, obtenerAgencias, 
+        agregarAgencia, actualizarAgencia, eliminarAgencia, respuesta
     }
 }

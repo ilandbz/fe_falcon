@@ -16,6 +16,10 @@ export default function useUsuario() {
         let respuesta = await axios.get('usuario/listar-'+data.show_tipo + getdataParamsPagination(data),getConfigHeader())
         usuarios.value =respuesta.data
     }
+    const obtenerUsuariosTipoAgencia = async(role_id, agencia_id) => {
+        let respuesta = await axios.get('usuario/users-tipo-agencia?role_id='+ role_id + '&agencia_id=' + agencia_id,getConfigHeader())
+        usuarios.value =respuesta.data
+    }
     const agregarUsuario = async(data) => {
         errors.value = ''
         try {
@@ -112,11 +116,12 @@ export default function useUsuario() {
         if(respond.data.ok==1){
             respuesta.value = respond.data
         }
-    }    
+    }
+    
     return {
         errors, usuarios, usuario, obtenerUsuario, obtenerUsuarios, 
         agregarUsuario, actualizarUsuario, eliminarUsuario, respuesta,
         resetClaveUsuario, cambiarEstado, cambiarClave, eliminarRole,
-        eliminarAgencia, carpetaFotos
+        eliminarAgencia, carpetaFotos, obtenerUsuariosTipoAgencia
     }
 }
