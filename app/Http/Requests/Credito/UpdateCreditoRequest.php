@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Cargo;
+namespace App\Http\Requests\Credito;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCargoRequest extends FormRequest
+class UpdateCreditoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

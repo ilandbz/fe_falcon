@@ -66,10 +66,13 @@ const {
     data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse"
     aria-expanded="false" aria-label="Navegacion"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
     <a class="navbar-brand me-1 me-sm-3" href="/">
-      <div class="d-flex align-items-center"><img class="me-2" src="logo.jpg" alt="" width="40"><span class="font-sans-serif">Financiera Emprender</span></div>
+      <div class="d-flex align-items-center"><img class="me-2" src="logo.jpg" alt="" width="40">
+        <span class="font-sans-serif">
+        Financiera Emprender
+        </span>
+      </div>
     </a>
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
-
       <li class="nav-item dropdown" v-if="usuario.agencias?.length>1">
         <a class="nav-link px-0 fa-icon-wait" title="Seleccionar Agencia" id="navbarDropdownAgencia" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hide-on-body-scroll="data-hide-on-body-scroll">
           {{ agencia.nombre }}
@@ -119,7 +122,7 @@ const {
             <div class="card-header">
               <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
-                  <h6 class="card-header-title mb-0">Notificaciones</h6>
+                  <h6 class="card-header-title mb-0">Notificacionesasdasd</h6>
                 </div>
               </div>
             </div>

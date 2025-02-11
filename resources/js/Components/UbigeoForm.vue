@@ -63,7 +63,7 @@ const { form, regUbigeo2 } = toRefs(props)
 </script>
 <template>
     <div class="modal fade" id="modalUbigeo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalUbigeoLabel" aria-hidden="true">
+        aria-labelledby="modalUbigeoLabel">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -164,7 +164,7 @@ const { form, regUbigeo2 } = toRefs(props)
                                             <td>{{ distrito.provincia }}</td>
                                             <td>{{ distrito.departamento }}</td>
                                             <td>
-                                                <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="seleccionar(distrito)">
+                                                <button class="btn btn-warning btn-sm" title="Seleccionar" @click.prevent="seleccionar(distrito)">
                                                     <i class="fas fa-check"></i>
                                                 </button>&nbsp;
                                             </td>

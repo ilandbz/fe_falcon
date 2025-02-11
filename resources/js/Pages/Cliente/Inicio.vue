@@ -4,8 +4,10 @@
   import useHelper from '@/Helpers';  
   import useCliente from '@/Composables/Cliente.js';
   import ClienteForm from './Form.vue'
-  const { openModal, Toast, Swal } = useHelper();
-  const {
+  import useDatosSession from '@/Composables/session';
+    const { agencia } = useDatosSession();
+    const { openModal, Toast, Swal } = useHelper();
+    const {
         clientes, errors, cliente, respuesta,
         obtenerClientes, obtenerCliente, eliminarCliente
         
@@ -29,7 +31,7 @@
         genero:'',
         estado_civil:'',
         ruc:'',
-        agencia_id: '',
+        agencia_id: agencia.value?.id,
         foto : '/storage/fotos/default.png',
         conyugue_id: '',
         aval_id: '',
@@ -68,7 +70,7 @@
         form.value.otrosnombres = '';
         form.value.fecha_nac = '';
         form.value.ubigeo = '';
-        form.value.agencia_id = '';
+        form.value.agencia_id = agencia.value?.id;
         form.value.usuario_id = '';
         form.value.conyugue_id = '';
         form.value.aval_id = '';
@@ -85,8 +87,8 @@
         await obtenerCliente(id);
         if (cliente.value) {
             form.value.id = cliente.value.id;
-            form.value.apepat=cliente.value.persona.ape_pat;
-            form.value.apemat=cliente.value.persona.ape_mat;
+            form.value.ape_pat=cliente.value.persona.ape_pat;
+            form.value.ape_mat=cliente.value.persona.ape_mat;
             form.value.primernombre=cliente.value.persona.primernombre;
             form.value.otrosnombres=cliente.value.persona.otrosnombres;
             form.value.fecha_nac=cliente.value.persona.fecha_nac;

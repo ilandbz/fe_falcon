@@ -5,26 +5,90 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Cliente\StoreClienteRequest;
 use App\Http\Requests\Cliente\UpdateClienteRequest;
 use App\Models\Cliente;
+use App\Models\Conyugue;
+use App\Models\Persona;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 class ClienteController extends Controller
 {
     public function store(StoreClienteRequest $request)
     {
         $request->validated();
-        if($request->padre_id !='' || $request->padre_id != null){
-            $orden = Cliente::maximoHijoId($request->padre_id);
-        }else{
-            $orden = Cliente::maximoPadreId();
+        $existeDni = Cliente::whereHas('persona', function ($query) use ($request) {
+            $query->where('dni', $request->dni);
+        })->exists(); 
+        if ($existeDni) {
+            return response()->json([
+                'errors' => [
+                    'dni' => 'El DNI ya está registrado'
+                ]
+            ], 422);
         }
-        $menu = Cliente::create([
-            'nombre'    => $request->nombre,
-            'slug'      => $request->slug,
-            'icono'     => $request->icono,
-            'padre_id'  => $request->padre_id ,
-            'grupo_id'  => $request->grupo_id ,
-            'orden'     => $orden
+        $file = $request->file('foto');
+        if ($file) {
+            $nombre_archivo = $request->dni.".webp";
+            Storage::disk('personas')->put($nombre_archivo,File::get($file));
+        }
+        $esconyugue = $request->estado_civil=='Casado' || $request->estado_civil=='Conviviente';
+        if ($esconyugue && empty($request->conyugue_id)) {
+            return response()->json([
+                'errors' => [
+                    'dniconyugue' => ['DNI conyugue es necesario']
+                ]
+            ], 422);
+        }        
+        $domicilio = Ubicacion::create([
+            'tipo'             => $request->tipodomicilio ?? 'NDF',
+            'ubigeo'           => $request->ubigeodomicilio,
+            'tipovia'          => $request->tipovia ?? 'S/N',
+            'nombrevia'        => $request->nombrevia,
+            'nro'              => $request->nro ?? 'S/N',
+            'interior'         => $request->interior ?? 'S/N',
+            'mz'               => $request->mz ?? 'S/N',
+            'lote'             => $request->lote ?? 'S/N',
+            'tipozona'         => $request->tipozona,
+            'nombrezona'       => $request->nombrezona,
+            'referencia'       => $request->referencia,
+            'latitud_longitud' => $request->latitud_longitud,
+        ]);
+        $persona = Persona::firstorCreate(['dni' => $request->dni],
+        [
+            'ape_pat' => $request->ape_pat,
+            'ape_mat' => $request->ape_mat,
+            'primernombre' => $request->primernombre,
+            'otrosnombres' => $request->otrosnombres,
+            'fecha_nac' => $request->fecha_nac,
+            'ubigeo_nac' => $request->ubigeo_nac,
+            'genero' => $request->genero,
+            'celular' => $request->celular,
+            'email' => $request->email,
+            'ruc' => $request->ruc,
+            'estado_civil' => $request->estado_civil,
+            'profesion' => $request->profesion,
+            'nacionalidad' => $request->nacionalidad,
+            'grado_instr' => $request->grado_instr,
+            'tipo_trabajador' => $request->tipo_trabajador,
+            'ocupacion' => $request->ocupacion,
+            'institucion_lab' => $request->institucion_lab,
+            'ubicacion_domicilio_id' => $domicilio->id
+        ]);
+        if($esconyugue){
+            Conyugue::Create([
+                'primer_persona_id' => $persona->id,
+                'segunda_persona_id' => $request->conyugue_id,
+            ]);
+        }
+        $cliente = Cliente::create([
+            'id'          => $request->id,
+            'agencia_id'  => $request->agencia_id,
+            'usuario_id'  => $request->usuario_id,
+            'persona_id'  => $persona->id,
+            'dniaval'     => $request->dniaval,
+            'fecha_reg'   => now()->toDateString(), // Asigna la fecha actual
+            'hora_reg'    => now()->toTimeString(), // Asigna la hora actual
         ]);
         return response()->json([
             'ok' => 1,
@@ -33,22 +97,22 @@ class ClienteController extends Controller
     }
     public function show(Request $request)
     {
-        $menu = Cliente::where('id', $request->id)->first();
-        return $menu;
+        $persona = Cliente::where('id', $request->id)->first();
+        return $persona;
     }
     public function update(UpdateClienteRequest $request)
     {
         $request->validated();
 
-        $menu = Cliente::where('id',$request->id)->first();
+        $persona = Cliente::where('id',$request->id)->first();
 
-        $menu->nombre           = $request->nombre;
-        $menu->slug             = $request->slug;
-        $menu->icono            = $request->icono;
-        $menu->padre_id         = $request->padre_id;
-        $menu->grupo_id         = $request->grupo_id;
-        $menu->orden            = $request->orden;
-        $menu->save();
+        $persona->nombre           = $request->nombre;
+        $persona->slug             = $request->slug;
+        $persona->icono            = $request->icono;
+        $persona->padre_id         = $request->padre_id;
+        $persona->grupo_id         = $request->grupo_id;
+        $persona->orden            = $request->orden;
+        $persona->save();
 
         return response()->json([
             'ok' => 1,
@@ -58,8 +122,8 @@ class ClienteController extends Controller
 
     public function destroy(Request $request)
     {
-        $menu = Cliente::where('id', $request->id)->first();
-        $menu->delete();
+        $persona = Cliente::where('id', $request->id)->first();
+        $persona->delete();
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Cliente eliminado satisfactoriamente'
@@ -67,12 +131,12 @@ class ClienteController extends Controller
     }
 
     public function todos(){
-        $menus = Cliente::with([
+        $personas = Cliente::with([
             'usuario:id,name', 
             'agencia:id,nombre',
             'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres'
         ])->get();
-        return $menus;
+        return $personas;
     }
     public function listar(Request $request){
         $buscar = mb_strtoupper($request->buscar);

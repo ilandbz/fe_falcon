@@ -9,7 +9,7 @@ class Ubicacion extends Model
     protected $fillable = [
         'id',
         'tipo',
-        'distrito',
+        'ubigeo',
         'tipovia',
         'nombrevia',
         'nro',
@@ -19,5 +19,8 @@ class Ubicacion extends Model
         'tipozona',
         'nombrezona',
         'referencia',
+        'latitud_longitud',
     ];
+
+
 }
