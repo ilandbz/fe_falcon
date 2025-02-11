@@ -4,6 +4,8 @@
   import useHelper from '@/Helpers';  
   import useCredito from '@/Composables/Credito.js';
   import CreditoForm from './Form.vue'
+  import useDatosSession from '@/Composables/session';
+  const { agencia } = useDatosSession();
     const { openModal, Toast, Swal } = useHelper();
     const {
         creditos, errors, credito, respuesta,
@@ -212,7 +214,7 @@
                     <div class="col-md-5">
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Buscar</span>
-                            <input class="form-control" placeholder="Ingrese nombre, código ciiu" type="text" v-model="dato.buscar"
+                            <input class="form-control" placeholder="Ingrese nombre, código" type="text" v-model="dato.buscar"
                                 @change="buscar" />
                         </div>
                     </div>
@@ -264,29 +266,39 @@
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="8" class="text-center">creditos</th>
+                                        <th colspan="11" class="text-center">Creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
+                                        <th>Cod</th>
                                         <th>DNI</th>
                                         <th>Apellidos y Nombres</th>
+                                        <th>Monto</th>
+                                        <th>Plazo</th>
+                                        <th>Frecuencia</th>
                                         <th>Asesor</th>
                                         <th>Agencia</th>
+                                        <th>Estado</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-if="creditos.total == 0">
-                                        <td class="text-danger text-center" colspan="7">
+                                        <td class="text-danger text-center" colspan="11">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
                                     <tr v-else v-for="(credito,index) in creditos.data" :key="credito.id">
                                         <td>{{ index + creditos.from }}</td>
-                                        <td>{{ credito.persona.dni }}</td>
-                                        <td>{{ credito.apenom }}</td>
-                                        <td>{{ credito.usuario.name }}</td>
+                                        <td>{{ credito.id }}</td>
+                                        <td>{{ credito.cliente.persona.dni }}</td>
+                                        <td>{{ credito.cliente.persona.apenom }}</td>
+                                        <td>{{ 'S/. ' + credito.monto }}</td>
+                                        <td>{{ credito.plazo }}</td>
+                                        <td>{{ credito.frecuencia }}</td>
+                                        <td>{{ credito.asesor.name }}</td>
                                         <td>{{ credito.agencia.nombre }}</td>
+                                        <td>{{ credito.estado }}</td>
                                         <td>
                                             <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(credito.id)">
                                                 <i class="fas fa-edit"></i>

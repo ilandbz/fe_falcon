@@ -55,8 +55,8 @@ class UbicacionSeeder extends Seeder
             })
             ->first();
             $ubicacion = Ubicacion::firstOrCreate(
+                ['id' => $id],
                 [
-                    'id' => $id,
                     'ubigeo' => $ubigeo->ubigeo ?? null,
                     'nombrevia' => $nombrevia,
                     'nro' => $nro,
