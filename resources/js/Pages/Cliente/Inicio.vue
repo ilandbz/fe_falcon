@@ -273,6 +273,7 @@
                                         <th>DNI</th>
                                         <th>Apellidos y Nombres</th>
                                         <th>Asesor</th>
+                                        <th>Estado</th>
                                         <th>Agencia</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -288,6 +289,7 @@
                                         <td>{{ cliente.persona.dni }}</td>
                                         <td>{{ cliente.apenom }}</td>
                                         <td>{{ cliente.usuario.name }}</td>
+                                        <td>{{ cliente.estado }}</td>
                                         <td>{{ cliente.agencia.nombre }}</td>
                                         <td>
                                             <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(cliente.id)">

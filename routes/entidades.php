@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgenciaController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\GrupoMenuController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PacienteController;
@@ -102,4 +103,13 @@ Route::group(['prefix' => 'profesion', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'ubigeo', 'middleware' => 'auth'], function () {
     Route::get('obtener', [UbicacionController::class, 'obtenerPorUbigeo']);
     Route::get('lista-distritos', [UbicacionController::class, 'listarDistritos']);
+});
+//Profesion
+Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
+    Route::get('todos', [CreditoController::class, 'todos']);
+    Route::get('mostrar', [CreditoController::class, 'show']);
+    Route::post('actualizar', [CreditoController::class, 'update']);
+    Route::post('eliminar', [CreditoController::class, 'destroy']);
+    Route::post('guardar', [CreditoController::class, 'store']);
+    Route::get('listar', [CreditoController::class, 'listar']);
 });

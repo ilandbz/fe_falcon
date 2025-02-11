@@ -77,7 +77,6 @@ class CreditoController extends Controller
     public function listar(Request $request){
         $buscar = mb_strtoupper($request->buscar);
         $paginacion = $request->paginacion;
-        return Credito::with(['padre:id,nombre', 'grupo:id,titulo'])->whereRaw('UPPER(nombre) LIKE ?', ['%'.$buscar.'%'])
-            ->paginate($paginacion);
+        return Credito::paginate($paginacion);
     }
 }

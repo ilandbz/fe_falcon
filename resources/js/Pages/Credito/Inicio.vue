@@ -2,16 +2,14 @@
   import { ref, onMounted } from 'vue';
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers';  
-  import useCliente from '@/Composables/Cliente.js';
-  import ClienteForm from './Form.vue'
-  import useDatosSession from '@/Composables/session';
-    const { agencia } = useDatosSession();
+  import useCredito from '@/Composables/Credito.js';
+  import CreditoForm from './Form.vue'
     const { openModal, Toast, Swal } = useHelper();
     const {
-        clientes, errors, cliente, respuesta,
-        obtenerClientes, obtenerCliente, eliminarCliente
+        creditos, errors, credito, respuesta,
+        obtenerCreditos, obtenerCredito, eliminarCredito
         
-    } = useCliente();
+    } = useCredito();
     const dato = ref({
         page:'',
         buscar:'',
@@ -84,40 +82,40 @@
         errors.value = [];
     };
     const obtenerDatos = async (id) => {
-        await obtenerCliente(id);
-        if (cliente.value) {
-            form.value.id = cliente.value.id;
-            form.value.ape_pat=cliente.value.persona.ape_pat;
-            form.value.ape_mat=cliente.value.persona.ape_mat;
-            form.value.primernombre=cliente.value.persona.primernombre;
-            form.value.otrosnombres=cliente.value.persona.otrosnombres;
-            form.value.fecha_nac=cliente.value.persona.fecha_nac;
-            form.value.agencia_id = cliente.value.agencia_id;
-            form.value.usuario_id = cliente.value.usuario_id;
-            form.value.persona_id = cliente.value.persona_id;
-            form.value.dniaval = cliente.value.dniaval;
-            form.value.estado = cliente.value.estado;
-            form.value.fecha_reg = cliente.value.fecha_reg;
-            form.value.hora_reg = cliente.value.hora_reg;
+        await obtenerCredito(id);
+        if (credito.value) {
+            form.value.id = credito.value.id;
+            form.value.ape_pat=credito.value.persona.ape_pat;
+            form.value.ape_mat=credito.value.persona.ape_mat;
+            form.value.primernombre=credito.value.persona.primernombre;
+            form.value.otrosnombres=credito.value.persona.otrosnombres;
+            form.value.fecha_nac=credito.value.persona.fecha_nac;
+            form.value.agencia_id = credito.value.agencia_id;
+            form.value.usuario_id = credito.value.usuario_id;
+            form.value.persona_id = credito.value.persona_id;
+            form.value.dniaval = credito.value.dniaval;
+            form.value.estado = credito.value.estado;
+            form.value.fecha_reg = credito.value.fecha_reg;
+            form.value.hora_reg = credito.value.hora_reg;
         }
     };
     const editar = (id) => {
         limpiar();
         obtenerDatos(id)
         form.value.estadoCrud = 'editar'
-        document.getElementById("modalClienteLabel").innerHTML = 'Editar Cliente';
-        openModal('#modalCliente')
+        document.getElementById("modalcreditoLabel").innerHTML = 'Editar credito';
+        openModal('#modalcredito')
     }
     const nuevo = () => {
         limpiar()
         form.value.estadoCrud = 'nuevo'
-        openModal('#modalCliente')
-        document.getElementById("modalClienteLabel").innerHTML = 'Nuevo Cliente';
+        openModal('#modalcredito')
+        document.getElementById("modalcreditoLabel").innerHTML = 'Nuevo credito';
         //titulo.textContent = 'Editar Datos Personales';
     }
-    const listarClientes = async(page=1) => {
+    const listarCreditos = async(page=1) => {
         dato.value.page= page
-        await obtenerClientes(dato.value)
+        await obtenerCreditos(dato.value)
     }
     const eliminar = (id) => {
         Swal.fire({
@@ -135,7 +133,7 @@
         })
     }
     const elimina = async(id) => {
-        await eliminarCliente(id)
+        await eliminarCredito(id)
         form.value.errors = []
         if(errors.value)
         {
@@ -144,32 +142,32 @@
         if(respuesta.value.ok==1){
             form.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
-            listarClientes(clientes.value.current_page)
+            listarCreditos(creditos.value.current_page)
         }
     }
     // PAGINACION
     const isActived = () => {
-        return clientes.value.current_page
+        return creditos.value.current_page
     }
     const offset = 2;
 
     const buscar = () => {
-        listarClientes()
+        listarCreditos()
     }
     const cambiarPaginacion = () => {
-        listarClientes()
+        listarCreditos()
     }
     const cambiarPagina =(pagina) => {
-        listarClientes(pagina)
+        listarCreditos(pagina)
     }
     const pagesNumber = () => {
-        if(!clientes.value.to){
+        if(!creditos.value.to){
             return []
         }
-        let from = clientes.value.current_page - offset
+        let from = creditos.value.current_page - offset
         if(from < 1) from = 1
         let to = from + (offset*2)
-        if( to >= clientes.value.last_page) to = clientes.value.last_page
+        if( to >= creditos.value.last_page) to = creditos.value.last_page
         let pagesArray = []
         while(from <= to) {
             pagesArray.push(from)
@@ -179,7 +177,7 @@
     }
     // CARGA
     onMounted(() => {
-        listarClientes()
+        listarCreditos()
     })
 </script>
 <template>
@@ -221,17 +219,17 @@
                     <div class="col-md-4 mb-1">
                         <nav>
                             <ul class="pagination">
-                                <li v-if="clientes.current_page >= 2" class="page-item">
+                                <li v-if="creditos.current_page >= 2" class="page-item">
                                     <a href="#" aria-label="Previous" class="page-link"
                                         title="Primera Página"
                                         @click.prevent="cambiarPagina(1)">
                                         <span><i class="fas fa-backward"></i></span>
                                     </a>
                                 </li>
-                                <li v-if="clientes.current_page > 1" class="page-item">
+                                <li v-if="creditos.current_page > 1" class="page-item">
                                     <a href="#" aria-label="Previous" class="page-link"
                                         title="Página Anterior"
-                                        @click.prevent="cambiarPagina(clientes.current_page - 1)">
+                                        @click.prevent="cambiarPagina(creditos.current_page - 1)">
                                         <span><i class="fas fa-angle-left"></i></span>
                                     </a>
                                 </li>
@@ -242,16 +240,16 @@
                                     <a href="#" class="page-link"
                                         @click.prevent="cambiarPagina(page)">{{ page }}</a>
                                 </li>
-                                <li v-if="clientes.current_page < clientes.last_page" class="page-item">
+                                <li v-if="creditos.current_page < creditos.last_page" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
                                         title="Página Siguiente"
-                                        @click.prevent="cambiarPagina(clientes.current_page + 1)">
+                                        @click.prevent="cambiarPagina(creditos.current_page + 1)">
                                         <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
-                                    <li v-if="clientes.current_page <= clientes.last_page-1" class="page-item">
+                                    <li v-if="creditos.current_page <= creditos.last_page-1" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
-                                        @click.prevent="cambiarPagina(clientes.last_page)"
+                                        @click.prevent="cambiarPagina(creditos.last_page)"
                                         title="Última Página">
                                         <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
                                     </a>
@@ -266,7 +264,7 @@
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="8" class="text-center">clientes</th>
+                                        <th colspan="8" class="text-center">creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -278,22 +276,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-if="clientes.total == 0">
+                                    <tr v-if="creditos.total == 0">
                                         <td class="text-danger text-center" colspan="7">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
-                                    <tr v-else v-for="(cliente,index) in clientes.data" :key="cliente.id">
-                                        <td>{{ index + clientes.from }}</td>
-                                        <td>{{ cliente.persona.dni }}</td>
-                                        <td>{{ cliente.apenom }}</td>
-                                        <td>{{ cliente.usuario.name }}</td>
-                                        <td>{{ cliente.agencia.nombre }}</td>
+                                    <tr v-else v-for="(credito,index) in creditos.data" :key="credito.id">
+                                        <td>{{ index + creditos.from }}</td>
+                                        <td>{{ credito.persona.dni }}</td>
+                                        <td>{{ credito.apenom }}</td>
+                                        <td>{{ credito.usuario.name }}</td>
+                                        <td>{{ credito.agencia.nombre }}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(cliente.id)">
+                                            <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(credito.id)">
                                                 <i class="fas fa-edit"></i>
                                             </button>&nbsp;
-                                            <button class="btn btn-danger btn-sm" title="Enviar a Papelera" @click.prevent="eliminar(cliente.id, 'Temporal')">
+                                            <button class="btn btn-danger btn-sm" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
@@ -305,22 +303,22 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5 mb-1">
-                        Mostrando <b>{{clientes.from}}</b> a <b>{{ clientes.to }}</b> de <b>{{ clientes.total}}</b> Registros
+                        Mostrando <b>{{creditos.from}}</b> a <b>{{ creditos.to }}</b> de <b>{{ creditos.total}}</b> Registros
                     </div>
                     <div class="col-md-7 mb-1 text-right">
                         <nav>
                             <ul class="pagination">
-                                <li v-if="clientes.current_page >= 2" class="page-item">
+                                <li v-if="creditos.current_page >= 2" class="page-item">
                                     <a href="#" aria-label="Previous" class="page-link"
                                         title="Primera Página"
                                         @click.prevent="cambiarPagina(1)">
                                         <span><i class="fas fa-backward"></i></span>
                                     </a>
                                 </li>
-                                <li v-if="clientes.current_page > 1" class="page-item">
+                                <li v-if="creditos.current_page > 1" class="page-item">
                                     <a href="#" aria-label="Previous" class="page-link"
                                         title="Página Anterior"
-                                        @click.prevent="cambiarPagina(clientes.current_page - 1)">
+                                        @click.prevent="cambiarPagina(creditos.current_page - 1)">
 
                                         <span><i class="fas fa-angle-left"></i></span>
                                     </a>
@@ -332,16 +330,16 @@
                                     <a href="#" class="page-link"
                                         @click.prevent="cambiarPagina(page)">{{ page }}</a>
                                 </li>
-                                <li v-if="clientes.current_page < clientes.last_page" class="page-item">
+                                <li v-if="creditos.current_page < creditos.last_page" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
                                         title="Página Siguiente"
-                                        @click.prevent="cambiarPagina(clientes.current_page + 1)">
+                                        @click.prevent="cambiarPagina(creditos.current_page + 1)">
                                         <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
-                                    <li v-if="clientes.current_page <= clientes.last_page-1" class="page-item">
+                                    <li v-if="creditos.current_page <= creditos.last_page-1" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
-                                        @click.prevent="cambiarPagina(clientes.last_page)"
+                                        @click.prevent="cambiarPagina(creditos.last_page)"
                                         title="Última Página">
                                         <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
                                     </a>
@@ -354,5 +352,5 @@
         </div>
       </div>
     </div>
-    <ClienteForm :form="form" @onListar="listarClientes" :currentPage="clientes.current_page"></ClienteForm>
+    <creditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page"></creditoForm>
 </template>
