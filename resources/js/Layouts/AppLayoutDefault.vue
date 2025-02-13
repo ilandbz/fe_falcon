@@ -15,7 +15,7 @@ const {usuario, roles, menus, cambiarAgencia, role, cambiarRole, agencia } = use
     <div class="content">
         <side-bar :usuario="usuario" :roles="roles" :role="role" :agencia="agencia"
         @cambiarRole="cambiarRole" @cambiarAgencia="cambiarAgencia"></side-bar>
-        <router-view></router-view>
+        <router-view :agencia="agencia" :role="role"></router-view>
         <footer></footer>
     </div>
 </template>

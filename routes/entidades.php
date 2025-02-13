@@ -14,6 +14,7 @@ use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Route;
+
 Route::group(['prefix' => 'grupo-menu', 'middleware' => 'auth'], function () {
     Route::get('todos', [GrupoMenuController::class, 'todos']);
     Route::get('mostrar', [GrupoMenuController::class, 'show']);
@@ -40,6 +41,7 @@ Route::group(['prefix' => 'cliente', 'middleware' => 'auth'], function () {
     Route::post('eliminar', [ClienteController::class, 'destroy']);
     Route::post('guardar', [ClienteController::class, 'store']);
     Route::get('listar', [ClienteController::class, 'listar']);
+    Route::get('mostrar-dni', [ClienteController::class, 'mostrarPorDni']);
 });
 //USUARIOS
 Route::group(['prefix' => 'usuario', 'middleware' => 'auth'], function () {
@@ -104,7 +106,7 @@ Route::group(['prefix' => 'ubigeo', 'middleware' => 'auth'], function () {
     Route::get('obtener', [UbicacionController::class, 'obtenerPorUbigeo']);
     Route::get('lista-distritos', [UbicacionController::class, 'listarDistritos']);
 });
-//Profesion
+//Credito
 Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::get('todos', [CreditoController::class, 'todos']);
     Route::get('mostrar', [CreditoController::class, 'show']);
@@ -112,4 +114,5 @@ Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::post('eliminar', [CreditoController::class, 'destroy']);
     Route::post('guardar', [CreditoController::class, 'store']);
     Route::get('listar', [CreditoController::class, 'listar']);
+    Route::get('tipo-credito-cliente', [CreditoController::class, 'obtenerTiposCreditoPorCiente']);
 });

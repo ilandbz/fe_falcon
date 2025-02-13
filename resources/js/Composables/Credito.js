@@ -7,7 +7,7 @@ export default function useCredito() {
     const errors = ref('')
     const credito = ref({})
     const respuesta = ref([])
-    
+    const tiposCreditos = ref([])
     const obtenerCredito = async(id) => {
         let respuesta = await axios.get('credito/mostrar?id='+id, getConfigHeader())
         credito.value = respuesta.data
@@ -15,6 +15,10 @@ export default function useCredito() {
     const listaCreditos = async()=>{
         let respuesta = await axios.get('credito/todos', getConfigHeader())
         creditos.value = respuesta.data        
+    }
+    const listaTiposCreditos = async(cliente_id)=>{
+        let respuesta = await axios.get('credito/tipo-credito-cliente?cliente_id='+cliente_id, getConfigHeader())
+        tiposCreditos.value = respuesta.data         
     }
     const obtenerCreditos = async(data) => {
         let respuesta = await axios.get('credito/listar' + getdataParamsPagination(data), getConfigHeader())
@@ -56,8 +60,10 @@ export default function useCredito() {
             respuesta.value = respond.data
         }
     }
+
     return {
         errors, creditos, listaCreditos, credito, obtenerCredito, obtenerCreditos, 
-        agregarCredito, actualizarCredito, eliminarCredito, respuesta
+        agregarCredito, actualizarCredito, eliminarCredito, respuesta, tiposCreditos, 
+        listaTiposCreditos
     }
 }

@@ -37,3 +37,8 @@ export const getConfigHeaderPost = () => {
         }
     }
 }
+export const onlyNumbers=(event)=> {
+    if (!/[0-9]/.test(event.key)) {
+        event.preventDefault();
+    }
+}

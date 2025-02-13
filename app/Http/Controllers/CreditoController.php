@@ -38,13 +38,17 @@ class CreditoController extends Controller
     }
     public function show(Request $request)
     {
-        $credito = Credito::where('id', $request->id)->first();
+        $credito = Credito::with([
+            'cliente:id,estado,persona_id',
+            'agencia:id,nombre',
+            'asesor:id,name',
+            'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+        ])->where('id', $request->id)->first();
         return $credito;
     }
     public function update(UpdateCreditoRequest $request)
     {
         $request->validated();
-
         $credito = Credito::where('id',$request->id)->first();
         $credito->cliente_id     = $request->cliente_id;
         $credito->agencia_id     = $request->agencia_id;
@@ -69,14 +73,32 @@ class CreditoController extends Controller
             'mensaje' => 'Credito modificado satisfactoriamente'
         ],200);
     }
+    public function obtenerTiposCreditoPorCiente(Request $request){
 
+        $estados = Credito::where('cliente_id', $request->cliente_id)
+        ->whereIn('estado', ['DESEMBOLSADO', 'FINALIZADO'])
+        ->pluck('estado')
+        ->toArray();
+    
+        if (in_array('DESEMBOLSADO', $estados)) {
+            return response()->json(['Recurrente Con Saldo', 'Paralelo'], 200);
+        }
+        
+        if (in_array('FINALIZADO', $estados)) {
+            return response()->json(['Recurrente Sin Saldo'], 200);
+        }
+        
+        return response()->json(['Nuevo'], 200);
+
+
+    }
     public function destroy(Request $request)
     {
         $credito = Credito::where('id', $request->id)->first();
         $credito->delete();
         return response()->json([
             'ok' => 1,
-            'mensaje' => 'Cargo eliminado satisfactoriamente'
+            'mensaje' => 'Credito eliminado satisfactoriamente'
         ],200);
     }
 

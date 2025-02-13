@@ -100,6 +100,13 @@ class ClienteController extends Controller
         $persona = Cliente::where('id', $request->id)->first();
         return $persona;
     }
+    public function mostrarPorDni(Request $request){
+        $dni = $request->dni;
+
+        return Cliente::whereHas('persona', function ($q) use ($dni) {
+            $q->where('dni', $dni);
+        })->with('persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres')->first();
+    }
     public function update(UpdateClienteRequest $request)
     {
         $request->validated();

@@ -1,16 +1,20 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, toRefs } from 'vue';
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers';  
   import useCredito from '@/Composables/Credito.js';
   import CreditoForm from './Form.vue'
-  import useDatosSession from '@/Composables/session';
-  const { agencia } = useDatosSession();
-    const { openModal, Toast, Swal } = useHelper();
+  const props = defineProps({
+    agencia: Object,
+    role: Object
+});
+
+const { agencia, role } = toRefs(props);
+    const { openModal, Toast, Swal, formatoFecha } = useHelper();
     const {
         creditos, errors, credito, respuesta,
-        obtenerCreditos, obtenerCredito, eliminarCredito
-        
+        obtenerCreditos, obtenerCredito, eliminarCredito,
+
     } = useCredito();
     const dato = ref({
         page:'',
@@ -19,66 +23,47 @@
     });
     const form = ref({
         id: '',
-        dni:'',
-        ape_pat:'',
-        ape_mat:'',
-        primernombre:'',
-        otrosnombres:'',
-        fecha_nac:'',
-        ubigeo:'',
-        email:'',
-        celular:'',
-        genero:'',
-        estado_civil:'',
-        ruc:'',
-        agencia_id: agencia.value?.id,
-        foto : '/storage/fotos/default.png',
-        conyugue_id: '',
-        aval_id: '',
-        grado_instr: '',
-        profesion:'',
-        usuario_id: '',
-        dniconyugue: '',
-        dniaval:'',
-        tipo_trabajador: '',
-        ocupacion: '',
-        institucion_lab: '',
-        tipodomicilio: '',
-        ubigeodomicilio: '',
-        tipovia:'',
-        nombrevia:'',
-        nro:'',
-        interior:'',
-        mz:'',
-        lote:'',
-        tipozona:'',
-        nombrezona: '',
-        referencia:'',
-        latitud_longitud:'',
-        estado: 'REGISTRADO',
-        fecha_reg: '',
-        hora_reg: '',
+        cliente_id : '',
+        dni_cliente : '',
+        apenom : 'APELLIDOS Y NOMBRES',
+        agencia_id : agencia.id ?? 1,
+        asesor_id : '',
+        estado : 'REGISTRADO',
+        fecha_reg : formatoFecha(null,"YYYY-MM-DD"),
+        tipo : '',
+        monto : '',
+        producto : 'CAPITAL',
+        frecuencia : 'DIARIO',
+        plazo : '30',
+        medioorigen : 'Asesores de Negocio',
+        dondepagara : 'Campo',
+        fuenterecursos : 'PROPIO',
+        tasainteres : 9,
+        total : 0.00,
+        costomora : 0.00,        
         estadoCrud: '',
         errors: []
     });
     const limpiar = () => {
         form.value.id = '';
-        form.value.dni = '';
-        form.value.ape_pat = '';
-        form.value.ape_mat = '';
-        form.value.primernombre = '';
-        form.value.otrosnombres = '';
-        form.value.fecha_nac = '';
-        form.value.ubigeo = '';
-        form.value.agencia_id = agencia.value?.id;
-        form.value.usuario_id = '';
-        form.value.conyugue_id = '';
-        form.value.aval_id = '';
-        form.value.dniaval = '';
-        form.value.dniconyugue = '';
+        form.value.cliente_id = '';
+        form.value.dni_cliente = '',
+        form.value.apenom = 'APELLIDOS Y NOMBRES';
+        form.value.agencia_id = agencia.id ?? 1;
+        form.value.asesor_id = '';
         form.value.estado = 'REGISTRADO';
-        form.value.fecha_reg = '';
-        form.value.hora_reg = '';
+        form.value.fecha_reg = formatoFecha(null,"YYYY-MM-DD"),
+        form.value.tipo = '';
+        form.value.monto = '';
+        form.value.producto = 'CAPITAL';
+        form.value.frecuencia = 'DIARIO';
+        form.value.plazo = '30';
+        form.value.medioorigen = 'Asesores de Negocio';
+        form.value.dondepagara = 'Campo';
+        form.value.fuenterecursos = 'PROPIO';
+        form.value.tasainteres = 0.00;
+        form.value.total = 0.00;
+        form.value.costomora = 0.00;
         form.value.estadoCrud = '';
         form.value.errors = [];
         errors.value = [];
@@ -86,19 +71,26 @@
     const obtenerDatos = async (id) => {
         await obtenerCredito(id);
         if (credito.value) {
+            let cliente = credito.value.cliente;
             form.value.id = credito.value.id;
-            form.value.ape_pat=credito.value.persona.ape_pat;
-            form.value.ape_mat=credito.value.persona.ape_mat;
-            form.value.primernombre=credito.value.persona.primernombre;
-            form.value.otrosnombres=credito.value.persona.otrosnombres;
-            form.value.fecha_nac=credito.value.persona.fecha_nac;
+            form.value.cliente_id = credito.value.cliente_id;
+            form.value.dni_cliente = cliente.persona.dni
+            form.value.apenom = cliente.persona.apenom
             form.value.agencia_id = credito.value.agencia_id;
-            form.value.usuario_id = credito.value.usuario_id;
-            form.value.persona_id = credito.value.persona_id;
-            form.value.dniaval = credito.value.dniaval;
+            form.value.asesor_id = credito.value.asesor_id;
             form.value.estado = credito.value.estado;
             form.value.fecha_reg = credito.value.fecha_reg;
-            form.value.hora_reg = credito.value.hora_reg;
+            form.value.tipo = credito.value.tipo;
+            form.value.monto = credito.value.monto;
+            form.value.producto = credito.value.producto;
+            form.value.frecuencia = credito.value.frecuencia;
+            form.value.plazo = credito.value.plazo;
+            form.value.medioorigen = credito.value.medioorigen;
+            form.value.dondepagara = credito.value.dondepagara;
+            form.value.fuenterecursos = credito.value.fuenterecursos;
+            form.value.tasainteres = credito.value.tasainteres;
+            form.value.total = credito.value.total;
+            form.value.costomora = credito.value.costomora;
         }
     };
     const editar = (id) => {

@@ -12,6 +12,10 @@ export default function useCliente() {
         let respuesta = await axios.get('cliente/mostrar?id='+id, getConfigHeader())
         cliente.value = respuesta.data
     }
+    const obtenerClientePorDni = async(dni) => {
+        let respuesta = await axios.get('cliente/mostrar-dni?dni='+dni, getConfigHeader())
+        cliente.value = respuesta.data
+    }    
     const listaClientes = async()=>{
         let respuesta = await axios.get('cliente/todos', getConfigHeader())
         clientes.value = respuesta.data        
@@ -58,6 +62,6 @@ export default function useCliente() {
     }
     return {
         errors, clientes, listaClientes, cliente, obtenerCliente, obtenerClientes, 
-        agregarCliente, actualizarCliente, eliminarCliente, respuesta
+        agregarCliente, actualizarCliente, eliminarCliente, respuesta, obtenerClientePorDni
     }
 }

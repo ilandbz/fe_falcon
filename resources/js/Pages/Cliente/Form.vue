@@ -8,7 +8,7 @@ import useUsuario from '@/Composables/Usuario.js';
 import useProfesion from '@/Composables/Profesion.js';
 import PersonaForm from './PersonaForm.vue'
 import UbigeoForm from '@/Components/UbigeoForm.vue'
-
+import { onlyNumbers } from '@/Helpers'
 const { hideModal, Toast, openModal } = useHelper();
 const props = defineProps({
     form: Object,
@@ -272,11 +272,6 @@ const crud = {
 }
 const guardar = () => {
     crud[form.value.estadoCrud]()
-}
-const onlyNumbers=(event)=> {
-    if (!/[0-9]/.test(event.key)) {
-        event.preventDefault();
-    }
 }
 const buscarPersona= async(dni)=>{
     await obtenerPorDni(dni)
