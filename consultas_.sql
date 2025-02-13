@@ -1,7 +1,13 @@
 obtener usuarios de cpanel
-SELECT usuario.*, rol.nombre as rol, agencia.nombre as agencia FROM `usuario` 
-left join rolusuario on usuario.codusuario=rolusuario.idusuario join rol on rolusuario.idrol=rol.id
-left join agencia_usuario on usuario.codusuario=agencia_usuario.idusuario join agencia on agencia_usuario.idagencia=agencia.idagencia;
+SELECT usuario.*, 
+       rol.nombre AS rol, 
+       agencia.nombre AS agencia 
+FROM usuario
+LEFT JOIN rolusuario ON usuario.codusuario = rolusuario.idusuario 
+LEFT JOIN rol ON rolusuario.idrol = rol.id
+LEFT JOIN agencia_usuario ON usuario.codusuario = agencia_usuario.idusuario 
+LEFT JOIN agencia ON agencia_usuario.idagencia = agencia.idagencia;
+
 
 obtener clientes : 
 SELECT codcliente, dni, idasesor, dniaval, estado, date(fechareg) as fecha_reg, time(fechareg) as hora_reg, agencia.nombre as agencia FROM `cliente`
