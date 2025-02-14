@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
             TipoActivoSeeder::class,
             TipoActividadSeeder::class,
             ProfesionSeeder::class,
+            PersonaSeeder::class,
+            ClienteSeeder::class,
+            CreditoSeeder::class,
         ]);
     }
 }

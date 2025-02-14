@@ -4,6 +4,7 @@
   import useHelper from '@/Helpers';  
   import useCredito from '@/Composables/Credito.js';
   import CreditoForm from './Form.vue'
+  import EvaluacionForm from './FormEvaluacion.vue'
   const props = defineProps({
     agencia: Object,
     role: Object
@@ -44,6 +45,10 @@ const { agencia, role } = toRefs(props);
         estadoCrud: '',
         errors: []
     });
+    const formEvaluacion = ref({
+        id: '',
+        errors: []
+    })
     const limpiar = () => {
         form.value.id = '';
         form.value.cliente_id = '';
@@ -150,6 +155,16 @@ const { agencia, role } = toRefs(props);
     }
     const cambiarPaginacion = () => {
         listarCreditos()
+    }
+    const buscarCredito = async(id)=>{
+        await obtenerCredito(id)
+    }
+    const evaluacion = (id)=>{
+
+        buscarCredito(id)
+
+        openModal('#modalevaluacion')
+        document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
     const cambiarPagina =(pagina) => {
         listarCreditos(pagina)
@@ -292,12 +307,15 @@ const { agencia, role } = toRefs(props);
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(credito.id)">
+                                            <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Editar" @click.prevent="editar(credito.id)">
                                                 <i class="fas fa-edit"></i>
                                             </button>&nbsp;
-                                            <button class="btn btn-danger btn-sm" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
+                                            <button class="btn btn-danger btn-sm" style="font-size: .65rem;" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
                                                 <i class="fas fa-trash"></i>
-                                            </button>
+                                            </button>&nbsp;
+                                            <button v-if="credito.estado=='REGISTRADO' || credito.estado=='EVALUACION'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                <i class="fas fa-check"></i>
+                                            </button>&nbsp;
                                         </td>
                                     </tr>
                                 </tbody>
@@ -357,4 +375,5 @@ const { agencia, role } = toRefs(props);
       </div>
     </div>
     <creditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page"></creditoForm>
+    <EvaluacionForm :form="formEvaluacion" :credito="credito"></EvaluacionForm>
 </template>

@@ -127,6 +127,6 @@ class CreditoController extends Controller
             })->orwhere('id', $buscar);
         }
     
-        return $query->paginate($paginacion);
+        return $query->orderBy('fecha_reg', 'Desc')->paginate($paginacion);
     }
 }

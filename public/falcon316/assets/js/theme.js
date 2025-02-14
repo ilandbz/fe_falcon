@@ -4695,8 +4695,8 @@ var wizardInit = function wizardInit() {
   var tabProgressBar = document.querySelector('.theme-wizard .progress');
   wizards.forEach(function (wizard) {
     var tabToggleButtonEl = wizard.querySelectorAll('[data-wizard-step]');
-    var inputEmail = wizard.querySelector('[data-wizard-validate-email]');
-    var emailPattern = inputEmail.getAttribute('pattern');
+    //var inputEmail = wizard.querySelector('[data-wizard-validate-email]');
+    //var emailPattern = inputEmail.getAttribute('pattern');
     var inputPassword = wizard.querySelector('[data-wizard-validate-password]');
     var inputConfirmPassword = wizard.querySelector('[data-wizard-validate-confirm-password]');
     var form = wizard.querySelector('[novalidate]');
@@ -4710,70 +4710,70 @@ var wizardInit = function wizardInit() {
       return regexPattern.test(String(value).toLowerCase());
     };
 
-    prevButton.classList.add('d-none'); // on button click tab change
+    //prevButton.classList.add('d-none'); // on button click tab change
 
-    nextButton.addEventListener('click', function () {
-      if ((!(inputEmail.value && validatePattern(emailPattern, inputEmail.value)) || !inputPassword.value || !inputConfirmPassword.value) && form.className.includes('needs-validation')) {
-        form.classList.add('was-validated');
-      } else {
-        count += 1;
-        var tab = new window.bootstrap.Tab(tabToggleButtonEl[count]);
-        tab.show();
-      }
-    });
-    prevButton.addEventListener('click', function () {
-      count -= 1;
-      var tab = new window.bootstrap.Tab(tabToggleButtonEl[count]);
-      tab.show();
-    });
+    // nextButton.addEventListener('click', function () {
+    //   if ((!(inputEmail.value && validatePattern(emailPattern, inputEmail.value)) || !inputPassword.value || !inputConfirmPassword.value) && form.className.includes('needs-validation')) {
+    //     form.classList.add('was-validated');
+    //   } else {
+    //     count += 1;
+    //     var tab = new window.bootstrap.Tab(tabToggleButtonEl[count]);
+    //     tab.show();
+    //   }
+    // });
+    // prevButton.addEventListener('click', function () {
+    //   count -= 1;
+    //   var tab = new window.bootstrap.Tab(tabToggleButtonEl[count]);
+    //   tab.show();
+    // });
 
-    if (tabToggleButtonEl.length) {
-      tabToggleButtonEl.forEach(function (item, index) {
-        /* eslint-disable */
-        item.addEventListener('shown.bs.tab', function (e) {
-          if ((!(inputEmail.value && validatePattern(emailPattern, inputEmail.value)) || !inputPassword.value || !inputConfirmPassword.value) && form.className.includes('needs-validation')) {
-            e.preventDefault();
-            form.classList.add('was-validated');
-            return null;
-            /* eslint-enable */
-          }
+    // if (tabToggleButtonEl.length) {
+    //   tabToggleButtonEl.forEach(function (item, index) {
+    //     /* eslint-disable */
+    //     item.addEventListener('shown.bs.tab', function (e) {
+    //       if ((!(inputEmail.value && validatePattern(emailPattern, inputEmail.value)) || !inputPassword.value || !inputConfirmPassword.value) && form.className.includes('needs-validation')) {
+    //         e.preventDefault();
+    //         form.classList.add('was-validated');
+    //         return null;
+    //         /* eslint-enable */
+    //       }
 
-          count = index; // can't go back tab
+    //       count = index; // can't go back tab
 
-          if (count === tabToggleButtonEl.length - 1) {
-            tabToggleButtonEl.forEach(function (tab) {
-              tab.setAttribute('data-bs-toggle', 'modal');
-              tab.setAttribute('data-bs-target', '#error-modal');
-            });
-          } //add done class
-
-
-          for (var i = 0; i < count; i += 1) {
-            tabToggleButtonEl[i].classList.add('done');
-          } //remove done class
+    //       if (count === tabToggleButtonEl.length - 1) {
+    //         tabToggleButtonEl.forEach(function (tab) {
+    //           tab.setAttribute('data-bs-toggle', 'modal');
+    //           tab.setAttribute('data-bs-target', '#error-modal');
+    //         });
+    //       } //add done class
 
 
-          for (var j = count; j < tabToggleButtonEl.length; j += 1) {
-            tabToggleButtonEl[j].classList.remove('done');
-          } // card footer remove at last step
+    //       for (var i = 0; i < count; i += 1) {
+    //         tabToggleButtonEl[i].classList.add('done');
+    //       } //remove done class
 
 
-          if (count > tabToggleButtonEl.length - 2) {
-            item.classList.add('done');
-            cardFooter.classList.add('d-none');
-          } else {
-            cardFooter.classList.remove('d-none');
-          } // prev-button removing
+    //       for (var j = count; j < tabToggleButtonEl.length; j += 1) {
+    //         tabToggleButtonEl[j].classList.remove('done');
+    //       } // card footer remove at last step
 
 
-          if (count > 0) {
-            prevButton.classList.remove('d-none');
-          } else {
-            prevButton.classList.add('d-none');
-          }
-        });
-      });
-    }
+    //       if (count > tabToggleButtonEl.length - 2) {
+    //         item.classList.add('done');
+    //         cardFooter.classList.add('d-none');
+    //       } else {
+    //         cardFooter.classList.remove('d-none');
+    //       } // prev-button removing
+
+
+    //       if (count > 0) {
+    //         prevButton.classList.remove('d-none');
+    //       } else {
+    //         prevButton.classList.add('d-none');
+    //       }
+    //     });
+    //   });
+    // }
   }); // control wizard progressbar
 
   if (tabPillEl.length) {
