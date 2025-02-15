@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('propuesta_creditos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('credito_id')->constrained('creditos','id')->onDelete('cascade')->onUpdate('cascade');
+            $table->text('unidad_familiar');
+            $table->text('experiencia_cred');
+            $table->text('destino_prest');
+            $table->text('referencias');
             $table->timestamps();
         });
     }

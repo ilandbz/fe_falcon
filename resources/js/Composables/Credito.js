@@ -39,6 +39,7 @@ export default function useCredito() {
             }
         }
     }
+
     const actualizarCredito = async(data) => {
         errors.value = ''
         try {

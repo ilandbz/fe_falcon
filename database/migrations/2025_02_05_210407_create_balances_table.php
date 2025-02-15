@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('balances', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('credito_id')->constrained('creditos')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('credito_id');
+            $table->primary('credito_id');
+            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('total_activo', 9, 2);
             $table->decimal('total_pasivo', 9, 2);
             $table->decimal('patrimonio', 9, 2);

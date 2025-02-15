@@ -6,7 +6,7 @@ import useHelper from '@/Helpers';
 import ClientesSearch from '@/Components/ClientesSearch.vue'
 import useUsuario from '@/Composables/Usuario.js';
 import { onlyNumbers } from '@/Helpers'
-const { hideModal, Toast, openModal } = useHelper();
+const { hideModal, Toast, openModal, Swal } = useHelper();
 
 const props = defineProps({
     form: Object,
@@ -24,8 +24,7 @@ const {
 const {
     obtenerClientePorDni, cliente
 } = useCliente();
-const emit = defineEmits(['onListar']);
-
+const emit = defineEmits(['onListar', 'evaluar']);
 const crud = {
     'nuevo': async () => {
         await agregarCredito(form.value);
@@ -37,6 +36,25 @@ const crud = {
             form.value.errors = [];
             hideModal('#modalcredito');
             Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
+            Swal.fire({
+                title: "<strong>CREDITO</strong>",
+                icon: "info",
+                html: `¿DESEA REALIZAR LA EVALUACION?`,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: `<i class="fa fa-thumbs-up"></i> SI!`,
+                confirmButtonAriaLabel: "SI!",
+                cancelButtonText: `<i class="fa fa-thumbs-down"></i> NO!`,
+                cancelButtonAriaLabel: "NO!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    emit('evaluar', respuesta.value.credito_id);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    console.log("Usuario canceló la evaluación.");
+                }
+            });
             emit('onListar', currentPage.value);
         }
     },
@@ -63,6 +81,7 @@ const guardar = () => {
     crud[form.value.estadoCrud]();
 };
 const buscarCliente = async(dni) =>{
+    form.value.dni_cliente=dni
     await obtenerClientePorDni(dni)
     form.value.apenom = cliente.value.persona.apenom
     await listaTiposCreditos(cliente.value.id)
@@ -131,7 +150,6 @@ onMounted(() => {
                                     {{ error }}
                                 </div>                                                                    
                             </div>  
-                            
                         </div>
                         <div class="mb-3 d-flex gap-3">
                             <div class="input-group has-validation input-group-sm pb-1">
@@ -142,13 +160,13 @@ onMounted(() => {
                                     @keyup.enter="buscarCliente(form.dni_cliente)" placeholder="Monto">
                                     <label for="monto">Monto</label>
                                 </div>
-                                <div class="invalid-feedback" v-for="error in form.errors.dni_cliente" :key="error">
+                                <div class="invalid-feedback" v-for="error in form.errors.monto" :key="error">
                                     {{ error }}
                                 </div>
                             </div>
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <select class="form-select" v-model="form.tipo" @change="cambiarFuente">
+                                    <select class="form-select" v-model="form.tipo" @change="cambiarFuente" :disabled="tiposCreditos.length==0">
                                         <option :value="registro" v-for="registro in tiposCreditos">{{ registro }}</option>
                                     </select>
                                     <label for="tipo">Tipo</label>
@@ -169,8 +187,6 @@ onMounted(() => {
                                     {{ error }}
                                 </div>                                
                             </div>
-
-                            
                         </div>
                         <div class="mb-3 d-flex gap-3">
                             <div class="input-group has-validation input-group-sm pb-1">
@@ -184,7 +200,6 @@ onMounted(() => {
                                         <option v-if="form.fuenterecursos == 'PROPIO'" value="CREDI-6">Credi-6</option>
                                         <option v-if="form.fuenterecursos == 'PROPIO'" value="CREDI-INVERSION">CREDI-INVERSION</option>
                                         <option v-if="form.fuenterecursos == 'PROPIO'" value="CONFIO EN TI">CONFIO EN TI</option>
-
                                         <option v-if="form.fuenterecursos != 'PROPIO'" value="CREDI-INVERSION">Credi-inversion</option>
                                         <option v-if="form.fuenterecursos != 'PROPIO'" value="CREDI-6/CREDI-INVERSION">Credi-6/CREDI-INVERSION</option>
                                     </select>
@@ -271,5 +286,6 @@ onMounted(() => {
             </div>
         </div>
     </form>
-    <ClientesSearch :form="form"></ClientesSearch>
+    <ClientesSearch @cargarPersona="buscarCliente"></ClientesSearch>
+
 </template>

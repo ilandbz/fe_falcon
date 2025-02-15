@@ -3,10 +3,7 @@
   import useHelper from '@/Helpers';  
   import useCliente from '@/Composables/Cliente.js';
     const { hideModal } = useHelper();
-    const props = defineProps({
-        form: Object,
-    });
-    const { form } = toRefs(props)
+    const emit = defineEmits(['cargarPersona']);
     const {
         clientes,
         obtenerClientes, 
@@ -18,9 +15,8 @@
         paginacion: 10
     });
     const seleccionar=(fila)=>{
-        form.value.cliente_id=fila.id
-        form.value.dni_cliente=fila.persona.dni
-        form.value.apenom=fila.apenom
+        emit('cargarPersona', fila.persona.dni);
+
         hideModal('#modalCliente')
     }
 
