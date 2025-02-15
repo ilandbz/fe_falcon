@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgenciaController;
+use App\Http\Controllers\AnalisisCualitativoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\GrupoMenuController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
+use App\Models\AnalisisCualitativo;
 use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Route;
 
@@ -115,4 +117,12 @@ Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::post('guardar', [CreditoController::class, 'store']);
     Route::get('listar', [CreditoController::class, 'listar']);
     Route::get('tipo-credito-cliente', [CreditoController::class, 'obtenerTiposCreditoPorCiente']);
+});
+//analisis cualitativo
+
+Route::group(['prefix' => 'analisis-cualitativo', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [AnalisisCualitativoController::class, 'update']);
+    Route::post('eliminar', [AnalisisCualitativoController::class, 'destroy']);
+    Route::post('guardar', [AnalisisCualitativoController::class, 'store']);
+    Route::get('mostrar-analisis-cualitativo', [AnalisisCualitativoController::class, 'show']);
 });

@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('analisis_cualitativos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('credito_id')->constrained('creditos','id')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('credito_id');
+            $table->primary('credito_id');
+            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('tipogarantia');
             $table->unsignedInteger('cargafamiliar');
             $table->unsignedInteger('riesgoedadmax');
@@ -21,12 +22,12 @@ return new class extends Migration
             $table->unsignedInteger('recorpagoult');
             $table->unsignedInteger('niveldesarr');
             $table->unsignedInteger('tiempo_neg');
-            $table->unsignedInteger('control_integre');
+            $table->unsignedInteger('control_ingegre');
             $table->unsignedInteger('vent_totdec');
             $table->unsignedInteger('compsubsector');
             $table->unsignedInteger('totunidfamiliar');
             $table->unsignedInteger('totunidempresa');
-            $table->unsignedSmallInteger('total');
+            $table->decimal('total', 10, 2);
             $table->timestamps();
         });
     }

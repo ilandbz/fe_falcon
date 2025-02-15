@@ -33,7 +33,8 @@ class CreditoController extends Controller
         ]);
         return response()->json([
             'ok' => 1,
-            'mensaje' => 'Credito Registrado satisfactoriamente'
+            'mensaje' => 'Credito Registrado satisfactoriamente',
+            'credito_id' => $credito->id,
         ],200);
     }
     public function show(Request $request)
@@ -129,4 +130,5 @@ class CreditoController extends Controller
     
         return $query->orderBy('fecha_reg', 'Desc')->paginate($paginacion);
     }
+
 }

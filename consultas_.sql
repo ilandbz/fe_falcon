@@ -3,6 +3,9 @@ SELECT usuario.*, rol.nombre as rol, agencia.nombre as agencia FROM `usuario`
 left join rolusuario on usuario.codusuario=rolusuario.idusuario join rol on rolusuario.idrol=rol.id
 left join agencia_usuario on usuario.codusuario=agencia_usuario.idusuario join agencia on agencia_usuario.idagencia=agencia.idagencia;
 
+
+
+JJARA02
 obtener clientes : 
 SELECT codcliente, dni, idasesor, dniaval, estado, date(fechareg) as fecha_reg, time(fechareg) as hora_reg, agencia.nombre as agencia FROM `cliente`
 join agencia on cliente.idagencia=agencia.idagencia;

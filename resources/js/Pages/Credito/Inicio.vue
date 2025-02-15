@@ -3,6 +3,7 @@
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers';  
   import useCredito from '@/Composables/Credito.js';
+  import useAnalisisCualitativo from '@/Composables/AnalisisCualitativo.js';  
   import CreditoForm from './Form.vue'
   import EvaluacionForm from './FormEvaluacion.vue'
   const props = defineProps({
@@ -15,8 +16,10 @@ const { agencia, role } = toRefs(props);
     const {
         creditos, errors, credito, respuesta,
         obtenerCreditos, obtenerCredito, eliminarCredito,
-
     } = useCredito();
+    const {
+        obtenerAnalisisCredito, analisis
+    } = useAnalisisCualitativo();
     const dato = ref({
         page:'',
         buscar:'',
@@ -45,10 +48,30 @@ const { agencia, role } = toRefs(props);
         estadoCrud: '',
         errors: []
     });
-    const formEvaluacion = ref({
-        id: '',
+    const formAnalisis = ref({
+        credito_id: '',
+        tipogarantia: '',
+        cargafamiliar: '',
+        riesgoedadmax: '',
+        antecedentescred: '',
+        recorpagoult: '',
+        niveldesarr: '',
+        tiempo_neg: '',
+        control_ingegre: '',
+        vent_totdec: '',
+        compsubsector: '',
+        totunidfamiliar: '',
+        totunidempresa: '',
+        total: '',
+        estadoCrud: '',
         errors: []
     })
+    const formBalance = ref({
+        credito_id: '',
+
+        estadoCrud: '',
+        errors: []
+    })    
     const limpiar = () => {
         form.value.id = '';
         form.value.cliente_id = '';
@@ -156,13 +179,48 @@ const { agencia, role } = toRefs(props);
     const cambiarPaginacion = () => {
         listarCreditos()
     }
+    const cargarDatosEvaluacion=(id)=>{
+        if(analisis.value){
+            formAnalisis.value.credito_id = analisis.value.credito_id;
+            formAnalisis.value.tipogarantia = analisis.value.tipogarantia;
+            formAnalisis.value.cargafamiliar = analisis.value.cargafamiliar;
+            formAnalisis.value.riesgoedadmax = analisis.value.riesgoedadmax;
+            formAnalisis.value.antecedentescred = analisis.value.antecedentescred;
+            formAnalisis.value.recorpagoult = analisis.value.recorpagoult;
+            formAnalisis.value.niveldesarr = analisis.value.niveldesarr;
+            formAnalisis.value.tiempo_neg = analisis.value.tiempo_neg;
+            formAnalisis.value.control_integre = analisis.value.control_integre;
+            formAnalisis.value.vent_totdec = analisis.value.vent_totdec;
+            formAnalisis.value.compsubsector = analisis.value.compsubsector;
+            formAnalisis.value.totunidfamiliar = analisis.value.totunidfamiliar;
+            formAnalisis.value.totunidempresa = analisis.value.totunidempresa;
+            formAnalisis.value.total = analisis.value.total;
+            formAnalisis.value.estadoCrud = 'editar';
+        }else{
+            formAnalisis.value.credito_id = id,
+            formAnalisis.value.tipogarantia = '',
+            formAnalisis.value.cargafamiliar = '',
+            formAnalisis.value.riesgoedadmax = '',
+            formAnalisis.value.antecedentescred = '',
+            formAnalisis.value.recorpagoult = '',
+            formAnalisis.value.niveldesarr = '',
+            formAnalisis.value.tiempo_neg = '',
+            formAnalisis.value.control_ingegre = '',
+            formAnalisis.value.vent_totdec = '',
+            formAnalisis.value.compsubsector = '',
+            formAnalisis.value.totunidfamiliar = '',
+            formAnalisis.value.totunidempresa = '',
+            formAnalisis.value.total = '',
+            formAnalisis.value.estadoCrud = 'nuevo';
+        }
+    }
     const buscarCredito = async(id)=>{
         await obtenerCredito(id)
+        await obtenerAnalisisCredito(id)
+        cargarDatosEvaluacion(id)
     }
     const evaluacion = (id)=>{
-
         buscarCredito(id)
-
         openModal('#modalevaluacion')
         document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
@@ -374,6 +432,8 @@ const { agencia, role } = toRefs(props);
         </div>
       </div>
     </div>
-    <creditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page"></creditoForm>
-    <EvaluacionForm :form="formEvaluacion" :credito="credito"></EvaluacionForm>
+    <CreditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page" @evaluar="evaluacion"></CreditoForm>
+    <EvaluacionForm :formAnalisis="formAnalisis"
+    :credito="credito" :analisis="analisis"
+    :formBalance="formBalance"></EvaluacionForm>
 </template>

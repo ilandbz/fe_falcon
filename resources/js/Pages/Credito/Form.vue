@@ -24,8 +24,7 @@ const {
 const {
     obtenerClientePorDni, cliente
 } = useCliente();
-const emit = defineEmits(['onListar']);
-const dni_persona = ref('')
+const emit = defineEmits(['onListar', 'evaluar']);
 const crud = {
     'nuevo': async () => {
         await agregarCredito(form.value);
@@ -50,13 +49,10 @@ const crud = {
                 cancelButtonAriaLabel: "NO!"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Si el usuario hace clic en "SI"
-                    console.log("Usuario confirmó la evaluación.");
-                    // Aquí puedes llamar a una función, por ejemplo: evaluarCredito();
+                    
+                    emit('evaluar', respuesta.value.credito_id);
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Si el usuario hace clic en "NO"
                     console.log("Usuario canceló la evaluación.");
-                    // Aquí puedes manejar la cancelación, si es necesario.
                 }
             });
             emit('onListar', currentPage.value);
