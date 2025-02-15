@@ -811,7 +811,7 @@ onMounted(() => {
                                     </div>
                                 </div>
                                 <div class="mb-3 text-center">
-                                    <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1389.472705542119!2d-76.24521300428613!3d-9.932101491122813!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses-419!2spe!4v1738981027678!5m2!1ses-419!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1389.472705542119!2d-76.24521300428613!3d-9.932101491122813!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses-419!2spe!4v1738981027678!5m2!1ses-419!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                                 </div>
                             </div>
                         </div>                            
