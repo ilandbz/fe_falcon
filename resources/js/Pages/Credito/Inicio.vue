@@ -68,10 +68,19 @@ const { agencia, role } = toRefs(props);
     })
     const formBalance = ref({
         credito_id: '',
-
         estadoCrud: '',
         errors: []
-    })    
+    })
+    const formPerdidas = ref({
+        credito_id: '',
+        estadoCrud: '',
+        errors: []
+    })
+    const formPropuesta = ref({
+        credito_id: '',
+        estadoCrud: '',
+        errors: []
+    })
     const limpiar = () => {
         form.value.id = '';
         form.value.cliente_id = '';
@@ -434,6 +443,9 @@ const { agencia, role } = toRefs(props);
     </div>
     <CreditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page" @evaluar="evaluacion"></CreditoForm>
     <EvaluacionForm :formAnalisis="formAnalisis"
-    :credito="credito" :analisis="analisis"
-    :formBalance="formBalance"></EvaluacionForm>
+    :credito="credito"
+    :analisis="analisis"
+    :formBalance="formBalance"
+    :formPerdidas="formPerdidas"
+    :formPropuesta="formPropuesta"></EvaluacionForm>
 </template>

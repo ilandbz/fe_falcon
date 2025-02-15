@@ -8,6 +8,8 @@ const { hideModal, Toast, openModal } = useHelper();
 const props = defineProps({
     formAnalisis: Object,
     formBalance: Object,
+    formPerdidas: Object,
+    formPropuesta: Object,
     credito: Object,
 });
 const {
@@ -116,7 +118,7 @@ const crud = {
     }
 }
 
-const { formAnalisis, credito, formBalance } = toRefs(props);
+const { formAnalisis, credito, formBalance, formPerdidas, formPropuesta } = toRefs(props);
 
 onMounted(() => {
     
@@ -609,7 +611,6 @@ onMounted(() => {
                                                 <div class="card-header bg-danger text-white">PASIVO</div>
                                                 <div class="card-body">
                                                     <h5 class="mb-4">CORRIENTE</h5>
-
                                                     <div class="row mb-2">
                                                         <div class="col">
                                                             <div class="has-validation">
@@ -636,7 +637,6 @@ onMounted(() => {
                                                             </div>
                                                         </div>                                                         
                                                     </div>
-
                                                     <div class="row mb-2">
                                                         <div class="col">
                                                             <div class="has-validation">
@@ -663,7 +663,6 @@ onMounted(() => {
                                                             </div>                                                            
                                                         </div>
                                                     </div>
-
                                                     <div class="row mb-2">
                                                         <div class="col">
                                                             <div class="has-validation">
@@ -678,9 +677,7 @@ onMounted(() => {
                                                             </div>                                                            
                                                         </div>
                                                     </div>
-
                                                     <h5>NO CORRIENTE</h5>
-
                                                     <div class="row mb-2">
                                                         <div class="col">
                                                             <div class="has-validation">
@@ -797,133 +794,318 @@ onMounted(() => {
                                                 <div class="card-footer">
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane  px-sm-3 px-md-1" role="tabpanel" aria-labelledby="bootstrap-wizard-tab3" id="bootstrap-wizard-tab3">
                                     <h3 class="text-center">Perdidas y Ganancias</h3>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Ventas</label>						
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">S/.</span>
-                                                </div>
-                                                <input type="text" name="ventaspg" id="ventaspg" class="form-control" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['ventas'] ?>" readonly>
-                                                <div class="input-group-append">
-                                                <a href="#epgventascosto" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                        <div class="col">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="input-group has-validation">
+                                                                <span class="input-group-text">S/.</span>
+                                                                <div class="form-floating is-invalid">
+                                                                    <input type="text" class="form-control form-control-sm w-75" name="ventaspg" id="ventaspg"
+                                                                    placeholder="VENTAS">
+                                                                    <label>VENTAS</label>
+                                                                </div>
+                                                                <div class="invalid-feedback" v-for="error in formPerdidas.errors.ventaspg" :key="error">
+                                                                    {{ error }}
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="input-group has-validation">
+                                                                <span class="input-group-text">S/.</span>
+                                                                <div class="form-floating is-invalid">
+                                                                    <input type="text" class="form-control form-control-sm w-75" name="costopg" id="costopg"
+                                                                    placeholder="COSTOS">
+                                                                    <label>COSTOS</label>
+                                                                </div>
+                                                                <div class="invalid-feedback" v-for="error in formPerdidas.errors.costopg" :key="error">
+                                                                    {{ error }}
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Ventas</label>						
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" name="ventaspg" id="ventaspg" class="form-control" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['ventas'] ?>" readonly>
+                                                                <div class="input-group-append">
+                                                                <a href="#epgventascosto" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Costo</label>						
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>								
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="costopg" id="costopg" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['costo'] ?>" readonly>
+                                                                <div class="input-group-append">
+                                                                    <a href="#epgventascosto" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">UTILIDAD</label>							
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>								
+                                                                </div>
+                                                                <input type="text" class="form-control numerosypunto" name="utilidadbpg" id="utilidadbpg" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['utilidad'] ?>" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Gasto Negocio</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>									
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="gastoneg" id="gastoneg" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['costonegocio'] ?>" placeholder="0.00" readonly>
+                                                                <div class="input-group-append">
+                                                                    <a href="#gastonegocio" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Utilidad Operativa</label>					
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilidopera" id="utilidopera" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['utiloperativa'] ?>" readonly>
+                                                            </div>
+                                                        </div>						
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Otros Ingresos</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="otrosing" id="otrosing" onclick="selecciona_value(this)" value="<?php echo !isset($perdidasgananciasgral['otrosing']) ? '0.00' : $perdidasgananciasgral['otrosing'] ?>" placeholder="0.00">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Otros Egresos</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="otrosegre" id="otrosegre" onclick="selecciona_value(this)" value="<?php echo !isset($perdidasgananciasgral['otrosegr']) ? '0.00' : $perdidasgananciasgral['otrosegr'] ?>" placeholder="0.00">
+                                                            </div>
+                                                        </div>
+                                                    </div>										
+                                                    <div class="row">
+                                                        <div class="col-md-6"></div>
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label col-md-offset-6">Gastos Familiares</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="gastfamiliares" id="gastfamiliares" value="<?php echo !isset($perdidasgananciasgral['gast_fam']) ? '0.00' : $perdidasgananciasgral['gast_fam'] ?>" placeholder="0.00" onclick="selecciona_value(this)" readonly>
+                                                                <div class="input-group-append">
+                                                                    <a href="#gastosfamiliares" data-toggle="modal" class="btn btn-outline-secondary">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Utilidad Neta</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilneta" id="utilneta" placeholder="0.00" value="<?php echo !isset($perdidasgananciasgral['utilidadneta']) ? '0.00' : $perdidasgananciasgral['utilidadneta'] ?>" readonly>
+                                                            </div>
+                                                        </div>							
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label" id="lblutilnet">Utilidad Neta</label>	
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="hidden" name="tipoplazosol" value="<?= $solicitud['frecuencia'] ?>">
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilnetadiaria" id="utilnetadiaria" placeholder="0.00" value="<?php echo !isset($perdidasgananciasgral['utilnetdiaria']) ? '0.00' : $perdidasgananciasgral['utilnetdiaria'] ?>" readonly>
+                                                            </div>
+                                                        </div>						
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Costo</label>						
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>								
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="costopg" id="costopg" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['costo'] ?>" readonly>
-                                                <div class="input-group-append">
-                                                    <a href="#epgventascosto" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                        <div class="col">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="input-group has-validation">
+                                                                <span class="input-group-text">S/.</span>
+                                                                <div class="form-floating is-invalid">
+                                                                    <input type="text" class="form-control form-control-sm w-75" name="ventaspg" id="ventaspg"
+                                                                    placeholder="VENTAS">
+                                                                    <label>VENTAS</label>
+                                                                </div>
+                                                                <div class="invalid-feedback" v-for="error in formPerdidas.errors.ventaspg" :key="error">
+                                                                    {{ error }}
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="input-group has-validation">
+                                                                <span class="input-group-text">S/.</span>
+                                                                <div class="form-floating is-invalid">
+                                                                    <input type="text" class="form-control form-control-sm w-75" name="costopg" id="costopg"
+                                                                    placeholder="COSTOS">
+                                                                    <label>COSTOS</label>
+                                                                </div>
+                                                                <div class="invalid-feedback" v-for="error in formPerdidas.errors.costopg" :key="error">
+                                                                    {{ error }}
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Ventas</label>						
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" name="ventaspg" id="ventaspg" class="form-control" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['ventas'] ?>" readonly>
+                                                                <div class="input-group-append">
+                                                                <a href="#epgventascosto" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Costo</label>						
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>								
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="costopg" id="costopg" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['costo'] ?>" readonly>
+                                                                <div class="input-group-append">
+                                                                    <a href="#epgventascosto" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">UTILIDAD</label>							
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>								
+                                                                </div>
+                                                                <input type="text" class="form-control numerosypunto" name="utilidadbpg" id="utilidadbpg" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['utilidad'] ?>" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Gasto Negocio</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>									
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="gastoneg" id="gastoneg" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['costonegocio'] ?>" placeholder="0.00" readonly>
+                                                                <div class="input-group-append">
+                                                                    <a href="#gastonegocio" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Utilidad Operativa</label>					
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilidopera" id="utilidopera" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['utiloperativa'] ?>" readonly>
+                                                            </div>
+                                                        </div>						
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Otros Ingresos</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="otrosing" id="otrosing" onclick="selecciona_value(this)" value="<?php echo !isset($perdidasgananciasgral['otrosing']) ? '0.00' : $perdidasgananciasgral['otrosing'] ?>" placeholder="0.00">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Otros Egresos</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="otrosegre" id="otrosegre" onclick="selecciona_value(this)" value="<?php echo !isset($perdidasgananciasgral['otrosegr']) ? '0.00' : $perdidasgananciasgral['otrosegr'] ?>" placeholder="0.00">
+                                                            </div>
+                                                        </div>
+                                                    </div>										
+                                                    <div class="row">
+                                                        <div class="col-md-6"></div>
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label col-md-offset-6">Gastos Familiares</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="gastfamiliares" id="gastfamiliares" value="<?php echo !isset($perdidasgananciasgral['gast_fam']) ? '0.00' : $perdidasgananciasgral['gast_fam'] ?>" placeholder="0.00" onclick="selecciona_value(this)" readonly>
+                                                                <div class="input-group-append">
+                                                                    <a href="#gastosfamiliares" data-toggle="modal" class="btn btn-outline-secondary">+</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label">Utilidad Neta</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilneta" id="utilneta" placeholder="0.00" value="<?php echo !isset($perdidasgananciasgral['utilidadneta']) ? '0.00' : $perdidasgananciasgral['utilidadneta'] ?>" readonly>
+                                                            </div>
+                                                        </div>							
+                                                        <div class="col-md-6">
+                                                            <label for="" class="control-label" id="lblutilnet">Utilidad Neta</label>	
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">S/.</span>
+                                                                </div>
+                                                                <input type="hidden" name="tipoplazosol" value="<?= $solicitud['frecuencia'] ?>">
+                                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilnetadiaria" id="utilnetadiaria" placeholder="0.00" value="<?php echo !isset($perdidasgananciasgral['utilnetdiaria']) ? '0.00' : $perdidasgananciasgral['utilnetdiaria'] ?>" readonly>
+                                                            </div>
+                                                        </div>						
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">UTILIDAD</label>							
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>								
-                                                </div>
-                                                <input type="text" class="form-control numerosypunto" name="utilidadbpg" id="utilidadbpg" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['utilidad'] ?>" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Gasto Negocio</label>
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>									
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="gastoneg" id="gastoneg" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['costonegocio'] ?>" placeholder="0.00" readonly>
-                                                <div class="input-group-append">
-                                                    <a href="#gastonegocio" data-toggle="modal" class="btn btn-outline-secondary" type="button">+</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Utilidad Operativa</label>					
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilidopera" id="utilidopera" placeholder="0.00" value="<?= is_null($perdidasgananciasgral) ? 0 : $perdidasgananciasgral['utiloperativa'] ?>" readonly>
-                                            </div>
-                                        </div>						
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Otros Ingresos</label>
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="otrosing" id="otrosing" onclick="selecciona_value(this)" value="<?php echo !isset($perdidasgananciasgral['otrosing']) ? '0.00' : $perdidasgananciasgral['otrosing'] ?>" placeholder="0.00">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Otros Egresos</label>
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="otrosegre" id="otrosegre" onclick="selecciona_value(this)" value="<?php echo !isset($perdidasgananciasgral['otrosegr']) ? '0.00' : $perdidasgananciasgral['otrosegr'] ?>" placeholder="0.00">
-                                            </div>
-                                        </div>
-                                    </div>										
-                                    <div class="row">
-                                        <div class="col-md-6"></div>
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label col-md-offset-6">Gastos Familiares</label>
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="gastfamiliares" id="gastfamiliares" value="<?php echo !isset($perdidasgananciasgral['gast_fam']) ? '0.00' : $perdidasgananciasgral['gast_fam'] ?>" placeholder="0.00" onclick="selecciona_value(this)" readonly>
-                                                <div class="input-group-append">
-                                                    <a href="#gastosfamiliares" data-toggle="modal" class="btn btn-outline-secondary">+</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label">Utilidad Neta</label>
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilneta" id="utilneta" placeholder="0.00" value="<?php echo !isset($perdidasgananciasgral['utilidadneta']) ? '0.00' : $perdidasgananciasgral['utilidadneta'] ?>" readonly>
-                                            </div>
-                                        </div>							
-                                        <div class="col-md-6">
-                                            <label for="" class="control-label" id="lblutilnet">Utilidad Neta</label>	
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">S/.</span>
-                                                </div>
-                                                <input type="hidden" name="tipoplazosol" value="<?= $solicitud['frecuencia'] ?>">
-                                                <input type="text" class="form-control form-control-sm numerosypunto" name="utilnetadiaria" id="utilnetadiaria" placeholder="0.00" value="<?php echo !isset($perdidasgananciasgral['utilnetdiaria']) ? '0.00' : $perdidasgananciasgral['utilnetdiaria'] ?>" readonly>
-                                            </div>
-                                        </div>						
-                                    </div>
+
                                 </div>
                                 <div class="tab-pane px-sm-3 px-md-1" role="tabpanel" aria-labelledby="bootstrap-wizard-tab4" id="bootstrap-wizard-tab4">
                                     <h3 class=" text-center">Propuesta de Credito</h3>
