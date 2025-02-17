@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Balance\StoreBalanceRequest;
 use App\Http\Requests\Balance\UpdateBalanceRequest;
 use App\Models\Balance;
+use App\Models\DetBalance;
 use Illuminate\Http\Request;
 
 class BalanceController extends Controller
@@ -19,6 +20,25 @@ class BalanceController extends Controller
             'patrimonio'    => $request->patrimonio ,
             'fecha'         => $request->fecha ,
         ]);
+        $detbalance = DetBalance::create([
+            'credito_id'            => $request->credito_id,
+            'activocaja'            => $request->activocaja,
+            'activobancos'          => $request->activobancos,
+            'activotascobrar'       => $request->activotascobrar,
+            'activoinventarios'     => $request->activoinventarios,
+            'pasivodeudaprove'      => $request->pasivodeudaprove,
+            'pasivodeudanet'        => $request->pasivodeudanet,
+            'pasivodeudaempre'      => $request->pasivodeudaempre,
+            'activomueble'          => $request->activomueble,
+            'activootrosact'        => $request->activootrosact,
+            'activodepre'           => $request->activodepre,
+            'pasivolargo'           => $request->pasivolargo,
+            'otrascuentasapagar'    => $request->otrascuentasapagar,
+            'totalacorriente'       => $request->totalacorriente,
+            'totalpcorriente'       => $request->totalpcorriente,
+            'totalpncorriente'      => $request->totalpncorriente,
+        ]);
+       
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Registro Registrado satisfactoriamente'

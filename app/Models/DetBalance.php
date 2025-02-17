@@ -9,6 +9,7 @@ class DetBalance extends Model
     protected $primaryKey = 'credito_id';
 
     protected $fillable = [
+        'credito_id',
         'activocaja',
         'activobancos',
         'activotascobrar',
