@@ -249,7 +249,7 @@ const imagenNoEncontrada = (event)=>{
                                         <label for="foto" class="form-label">Foto</label>
                                         <input class="form-control" type="file" accept="image/*" @change="cambiarFoto">
                                         <div class="card">
-                                            <img id="inputImagen" :src="form.foto" class="img-fluid img-thumbnail" @error="imagenNoEncontrada">
+                                            <img id="inputImagen" :src="form.foto" class="img-fluid img-thumbnail">
                                         </div>
                                         <small class="text-danger" v-for="error in form.errors.foto" :key="error">{{ error }}<br></small>
                                     </div>   

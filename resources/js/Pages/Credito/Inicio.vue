@@ -228,7 +228,7 @@ const { agencia, role } = toRefs(props);
         //     formAnalisis.value.recorpagoult = analisis.value.recorpagoult;
         //     formAnalisis.value.niveldesarr = analisis.value.niveldesarr;
         //     formAnalisis.value.tiempo_neg = analisis.value.tiempo_neg;
-        //     formAnalisis.value.control_integre = analisis.value.control_integre;
+        //     formAnalisis.value.control_ingegre = analisis.value.control_ingegre;
         //     formAnalisis.value.vent_totdec = analisis.value.vent_totdec;
         //     formAnalisis.value.compsubsector = analisis.value.compsubsector;
         //     formAnalisis.value.totunidfamiliar = analisis.value.totunidfamiliar;
@@ -323,7 +323,7 @@ const asignarValores = (form, datos, valoresPorDefecto) => {
             recorpagoult: '',
             niveldesarr: '',
             tiempo_neg: '',
-            control_integre: '',
+            control_ingegre: '',
             vent_totdec: '',
             compsubsector: '',
             totunidfamiliar: '',

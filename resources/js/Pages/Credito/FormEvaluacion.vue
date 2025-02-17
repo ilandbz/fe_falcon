@@ -30,7 +30,7 @@ const calcularAnalisis = () => {
         Number(formAnalisis.value.recorpagoult) +
         Number(formAnalisis.value.niveldesarr) +
         Number(formAnalisis.value.tiempo_neg) +
-        Number(formAnalisis.value.control_integre) +
+        Number(formAnalisis.value.control_ingegre) +
         Number(formAnalisis.value.vent_totdec) +
         Number(formAnalisis.value.compsubsector);
        
@@ -74,7 +74,7 @@ const opciones = ref({
         { label: "ENTRE 1 Y 3 AÑOS", value: 2 },
         { label: "MENOR A 1 AÑO", value: 1 },
     ],
-    control_integre: [
+    control_ingegre: [
         { label: "SUFICIENTE Y ADECUADAMENTE REGISTRADA", value: 3 },
         { label: "SUFICIENTE PERO INADECUADAMENTE REGISTRADA", value: 2 },
         { label: "INSUFICIENTE", value: 1 },
@@ -361,20 +361,20 @@ onMounted(() => {
                                                         </div>                                    
                                                         <small class="text-danger" v-for="error in formAnalisis.errors.tiempo_neg" :key="error">{{ error  }}</small>                    
                                                         <p class="text-primary fw-bold">5. CONTROLA SUS INGRESOS Y EGRESOS</p>
-                                                        <div class="mb-0" v-for="(opcion, index) in opciones.control_integre" :key="index">
+                                                        <div class="mb-0" v-for="(opcion, index) in opciones.control_ingegre" :key="index">
                                                             <div class="row">
                                                                 <div class="col-md-10">
-                                                                    <label :for="'control_integre' + index" class="form-check-label">
+                                                                    <label :for="'control_ingegre' + index" class="form-check-label">
                                                                         {{ opcion.label }}
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-md-2">
                                                                     <input
                                                                         class="form-check-input"
-                                                                        :id="'control_integre' + index"
-                                                                        v-model="formAnalisis.control_integre"
+                                                                        :id="'control_ingegre' + index"
+                                                                        v-model="formAnalisis.control_ingegre"
                                                                         type="radio"
-                                                                        name="control_integre"
+                                                                        name="control_ingegre"
                                                                         :value="opcion.value"
                                                                         @change="calcularAnalisis()"
                                                                     />
@@ -382,7 +382,7 @@ onMounted(() => {
                                                                 </div>
                                                             </div>
                                                         </div>         
-                                                        <small class="text-danger" v-for="error in formAnalisis.errors.control_integre" :key="error">{{ error  }}</small>                                                 
+                                                        <small class="text-danger" v-for="error in formAnalisis.errors.control_ingegre" :key="error">{{ error  }}</small>                                                 
                                                         <p class="text-primary fw-bold">6. LAS VENTAS TOTALES SE DECLARAN</p>
                                                         <div class="mb-0" v-for="(opcion, index) in opciones.vent_totdec" :key="index">
                                                             <div class="row">

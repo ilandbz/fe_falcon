@@ -275,7 +275,6 @@
                                         <th>Asesor</th>
                                         <th>Estado</th>
                                         <th>Agencia</th>
-                                        <th>Foto</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -292,9 +291,6 @@
                                         <td>{{ cliente.usuario.name }}</td>
                                         <td>{{ cliente.estado }}</td>
                                         <td>{{ cliente.agencia.nombre }}</td>
-                                        <td>
-                                            <div class="avatar avatar-xl"><img class="rounded-circle" :src="'storage/fotos/personas/'+cliente.persona.dni+'.webp'" alt=""></div>
-                                        </td>
                                         <td>
                                             <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(cliente.id)">
                                                 <i class="fas fa-edit"></i>
@@ -360,5 +356,5 @@
         </div>
       </div>
     </div>
-    <ClienteForm :form="form" @onListar="listarClientes" :currentPage="clientes.current_page"></ClienteForm>
+    <!-- <ClienteForm :form="form" @onListar="listarClientes" :currentPage="clientes.current_page"></ClienteForm> -->
 </template>
