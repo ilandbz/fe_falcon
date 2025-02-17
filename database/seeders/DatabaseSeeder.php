@@ -34,6 +34,10 @@ class DatabaseSeeder extends Seeder
             PersonaSeeder::class,
             ClienteSeeder::class,
             CreditoSeeder::class,
+            AnalisisCualitativoSeeder::class,
+            BalanceSeeder::class,
+            PerdidaGananciaSeeder::class,
+            PropuestaCreditoSeeder::class,
         ]);
     }
 }

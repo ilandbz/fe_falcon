@@ -45,7 +45,7 @@ class AnalisisCualitativoSeeder extends Seeder
                     'recorpagoult' => $recorpagoult,
                     'niveldesarr' => $niveldesarr,
                     'tiempo_neg' => $tiempo_neg,
-                    'control_integre' => $control_ingegre,
+                    'control_ingegre' => $control_ingegre,
                     'vent_totdec' => $vent_totdec,
                     'compsubsector' => $compsubsector,
                     'totunidfamiliar' => $totunidfamiliar,
