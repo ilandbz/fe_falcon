@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('egresos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('agencia_id')->constrained('agencias')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('nro');
+            $table->string('tipo', 5);
+            $table->string('tipo_descripcion', 30);
+            $table->string('tipo_comprobante', 30);
+            $table->char('ruc', 11);
+            $table->string('nrocomprobante', 20);
+            $table->string('razonsocial', 90);
+            $table->string('concepto', 90);
+            $table->decimal('monto', 9, 2);
+            $table->char('usuario', 9);
+            $table->dateTime('fecharegistro');
             $table->timestamps();
         });
     }

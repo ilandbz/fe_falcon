@@ -68,6 +68,14 @@ class AnalisisCualitativoController extends Controller
         return $registro;
     }
 
-
+    public function destroy(Request $request)
+    {
+        $menu = AnalisisCualitativo::where('credito_id', $request->id)->first();
+        $menu->delete();
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Cargo eliminado satisfactoriamente'
+        ],200);
+    }
 
 }

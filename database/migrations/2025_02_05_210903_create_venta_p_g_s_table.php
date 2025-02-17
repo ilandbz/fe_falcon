@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('venta_p_g_s', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('credito_id');
+            $table->primary('credito_id');
+            $table->foreign('credito_id')->references('credito_id')->on('perdida_ganancias')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('tot_ing_mensual', 9, 2);
+            $table->decimal('tot_cosprimo_m', 9, 2);
+            $table->decimal('margen_tot', 9, 2);
+            $table->decimal('ventas_cred', 9, 2);
+            $table->decimal('irrecuperable', 9, 2);
+            $table->integer('cantproductos')->length(1);
             $table->timestamps();
         });
     }

@@ -26,9 +26,20 @@ select id,tipo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,refere
 join distrito on ubicacion.distrito=distrito.iddistrito
 join provincia on distrito.idprovincia = provincia.idprovincia
 
-SELECT ubicacion.*, distrito.nombre as distrito, provincia.nombre as provincia FROM `ubicacion` join distrito on ubicacion.distrito=distrito.iddistrito join provincia on distrito.idprovincia = provincia.idprovincia;
+SELECT ubicacion.*, distrito.nombre as distrito, provincia.nombre as provincia FROM `ubicacion` 
+join distrito on ubicacion.distrito=distrito.iddistrito 
+join provincia on distrito.idprovincia = provincia.idprovincia;
 
 
 
 obtener solicitudes
 SELECT solicitud.*, agencia.nombre as agencia FROM `solicitud` join agencia on solicitud.idagencia=agencia.idagencia
+
+
+analisis
+balance
+perdidas
+propuesta
+
+
+es de la misma tabla

@@ -25,19 +25,19 @@ class StoreAnalisisCualitativoRequest extends FormRequest
     {
         return [
             'credito_id' => 'required|integer|exists:creditos,id',
-            'tipogarantia' => 'required|integer|in:2,4',
-            'cargafamiliar' => 'required|integer|in:0,1,2,4',
-            'riesgoedadmax' => 'required|integer|in:1,3',
-            'antecedentescred' => 'required|integer|in:1,3,4,5',
-            'recorpagoult' => 'required|integer|in:0,2,5,7',
-            'niveldesarr' => 'required|integer|in:1,2,3,4',
-            'tiempo_neg' => 'required|integer|in:1,2,3',
-            'control_integre' => 'required|integer|in:1,2,3',
-            'vent_totdec' => 'required|integer|in:0,2',
-            'compsubsector' => 'required|integer|in:0,2,4',
-            'totunidfamiliar' => 'required|integer|min:0',
-            'totunidempresa' => 'required|integer|min:0',
-            'total' => 'required|integer|min:0',
+            'tipogarantia' => 'required|numeric|in:2,4',
+            'cargafamiliar' => 'required|numeric|in:0,1,2,4',
+            'riesgoedadmax' => 'required|numeric|in:1,3',
+            'antecedentescred' => 'required|numeric|in:1,3,4,5',
+            'recorpagoult' => 'required|numeric|in:0,2,5,7',
+            'niveldesarr' => 'required|numeric|in:1,2,3,4',
+            'tiempo_neg' => 'required|numeric|in:1,2,3',
+            'control_integre' => 'required|numeric|in:1,2,3',
+            'vent_totdec' => 'required|numeric|in:0,2',
+            'compsubsector' => 'required|numeric|in:0,2,4',
+            'totunidfamiliar' => 'required|numeric|min:0',
+            'totunidempresa' => 'required|numeric|min:0',
+            'total' => 'required|numeric|min:0',
         ];
     }
 

@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('desembolsos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('credito_id')->constrained('creditos')->onUpdate('cascade')->onDelete('cascade');
+            $table->date('fecha');
+            $table->time('hora');
+            $table->foreignId('user_id')->constrained('usuarios')->onUpdate('cascade')->onDelete('cascade');
+            $table->decimal('descontado', 6, 2);
+            $table->decimal('totalentregado', 9, 2);
             $table->timestamps();
         });
     }

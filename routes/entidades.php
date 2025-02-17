@@ -2,13 +2,16 @@
 
 use App\Http\Controllers\AgenciaController;
 use App\Http\Controllers\AnalisisCualitativoController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\GrupoMenuController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\PerdidaGananciaController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ProfesionController;
+use App\Http\Controllers\PropuestaCreditoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UbicacionController;
@@ -119,10 +122,30 @@ Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::get('tipo-credito-cliente', [CreditoController::class, 'obtenerTiposCreditoPorCiente']);
 });
 //analisis cualitativo
-
 Route::group(['prefix' => 'analisis-cualitativo', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [AnalisisCualitativoController::class, 'update']);
     Route::post('eliminar', [AnalisisCualitativoController::class, 'destroy']);
     Route::post('guardar', [AnalisisCualitativoController::class, 'store']);
     Route::get('mostrar-analisis-cualitativo', [AnalisisCualitativoController::class, 'show']);
+});
+//balance
+Route::group(['prefix' => 'balance', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [BalanceController::class, 'update']);
+    Route::post('eliminar', [BalanceController::class, 'destroy']);
+    Route::post('guardar', [BalanceController::class, 'store']);
+    Route::get('mostrar', [BalanceController::class, 'show']);
+});
+//perdidas
+Route::group(['prefix' => 'perdidas-ganancias', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [PerdidaGananciaController::class, 'update']);
+    Route::post('eliminar', [PerdidaGananciaController::class, 'destroy']);
+    Route::post('guardar', [PerdidaGananciaController::class, 'store']);
+    Route::get('mostrar', [PerdidaGananciaController::class, 'show']);
+});
+//propuesta
+Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [PropuestaCreditoController::class, 'update']);
+    Route::post('eliminar', [PropuestaCreditoController::class, 'destroy']);
+    Route::post('guardar', [PropuestaCreditoController::class, 'store']);
+    Route::get('mostrar', [PropuestaCreditoController::class, 'show']);
 });

@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('gasto_familiar_p_g_s', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('credito_id');
+            $table->primary('credito_id');
+            $table->foreign('credito_id')->references('credito_id')->on('perdida_ganancias')->onDelete('cascade')->onUpdate('cascade');
+
+
+
+            
             $table->timestamps();
         });
     }

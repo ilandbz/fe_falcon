@@ -4,6 +4,9 @@
   import useHelper from '@/Helpers';  
   import useCredito from '@/Composables/Credito.js';
   import useAnalisisCualitativo from '@/Composables/AnalisisCualitativo.js';  
+  import usePerdidas from '@/Composables/Perdidas.js'; 
+  import useBalance from '@/Composables/Balance.js'; 
+  import usePropuesta from '@/Composables/Propuesta.js'; 
   import CreditoForm from './Form.vue'
   import EvaluacionForm from './FormEvaluacion.vue'
   const props = defineProps({
@@ -20,6 +23,15 @@ const { agencia, role } = toRefs(props);
     const {
         obtenerAnalisisCredito, analisis
     } = useAnalisisCualitativo();
+    const {
+        obtenerBalance, balance
+    } = useBalance();
+    const {
+        obtenerPerdidas, perdidas
+    } = usePerdidas();
+    const {
+        obtenerPropuesta, propuesta
+    } = usePropuesta();
     const dato = ref({
         page:'',
         buscar:'',
@@ -67,17 +79,34 @@ const { agencia, role } = toRefs(props);
         errors: []
     })
     const formBalance = ref({
-        credito_id: '',
+        credito_id : '',
+        total_activo : '',
+        total_pasivo : '',
+        patrimonio : '',
+        fecha : '',
         estadoCrud: '',
         errors: []
     })
     const formPerdidas = ref({
         credito_id: '',
+        ventas : '',
+        costo : '',
+        utilidad : '',
+        costonegocio : '',
+        utiloperativa : '',
+        otrosing : '',
+        gast_fam : '',
+        utilidadneta : '',
+        utilnetdiaria : '',
         estadoCrud: '',
         errors: []
     })
     const formPropuesta = ref({
         credito_id: '',
+        unidad_familiar : '',
+        experiencia_cred : '',
+        destino_prest : '',
+        referencias : '',
         estadoCrud: '',
         errors: []
     })
@@ -188,44 +217,160 @@ const { agencia, role } = toRefs(props);
     const cambiarPaginacion = () => {
         listarCreditos()
     }
-    const cargarDatosEvaluacion=(id)=>{
-        if(analisis.value){
-            formAnalisis.value.credito_id = analisis.value.credito_id;
-            formAnalisis.value.tipogarantia = analisis.value.tipogarantia;
-            formAnalisis.value.cargafamiliar = analisis.value.cargafamiliar;
-            formAnalisis.value.riesgoedadmax = analisis.value.riesgoedadmax;
-            formAnalisis.value.antecedentescred = analisis.value.antecedentescred;
-            formAnalisis.value.recorpagoult = analisis.value.recorpagoult;
-            formAnalisis.value.niveldesarr = analisis.value.niveldesarr;
-            formAnalisis.value.tiempo_neg = analisis.value.tiempo_neg;
-            formAnalisis.value.control_integre = analisis.value.control_integre;
-            formAnalisis.value.vent_totdec = analisis.value.vent_totdec;
-            formAnalisis.value.compsubsector = analisis.value.compsubsector;
-            formAnalisis.value.totunidfamiliar = analisis.value.totunidfamiliar;
-            formAnalisis.value.totunidempresa = analisis.value.totunidempresa;
-            formAnalisis.value.total = analisis.value.total;
-            formAnalisis.value.estadoCrud = 'editar';
-        }else{
-            formAnalisis.value.credito_id = id,
-            formAnalisis.value.tipogarantia = '',
-            formAnalisis.value.cargafamiliar = '',
-            formAnalisis.value.riesgoedadmax = '',
-            formAnalisis.value.antecedentescred = '',
-            formAnalisis.value.recorpagoult = '',
-            formAnalisis.value.niveldesarr = '',
-            formAnalisis.value.tiempo_neg = '',
-            formAnalisis.value.control_ingegre = '',
-            formAnalisis.value.vent_totdec = '',
-            formAnalisis.value.compsubsector = '',
-            formAnalisis.value.totunidfamiliar = '',
-            formAnalisis.value.totunidempresa = '',
-            formAnalisis.value.total = '',
-            formAnalisis.value.estadoCrud = 'nuevo';
-        }
-    }
+    const cargarDatosEvaluacion = (id) => {
+
+        // if(analisis.value){
+        //     formAnalisis.value.credito_id = analisis.value.credito_id;
+        //     formAnalisis.value.tipogarantia = analisis.value.tipogarantia;
+        //     formAnalisis.value.cargafamiliar = analisis.value.cargafamiliar;
+        //     formAnalisis.value.riesgoedadmax = analisis.value.riesgoedadmax;
+        //     formAnalisis.value.antecedentescred = analisis.value.antecedentescred;
+        //     formAnalisis.value.recorpagoult = analisis.value.recorpagoult;
+        //     formAnalisis.value.niveldesarr = analisis.value.niveldesarr;
+        //     formAnalisis.value.tiempo_neg = analisis.value.tiempo_neg;
+        //     formAnalisis.value.control_integre = analisis.value.control_integre;
+        //     formAnalisis.value.vent_totdec = analisis.value.vent_totdec;
+        //     formAnalisis.value.compsubsector = analisis.value.compsubsector;
+        //     formAnalisis.value.totunidfamiliar = analisis.value.totunidfamiliar;
+        //     formAnalisis.value.totunidempresa = analisis.value.totunidempresa;
+        //     formAnalisis.value.total = analisis.value.total;
+        //     formAnalisis.value.estadoCrud = 'editar';
+        // }else{
+        //     formAnalisis.value.credito_id = id,
+        //     formAnalisis.value.tipogarantia = '',
+        //     formAnalisis.value.cargafamiliar = '',
+        //     formAnalisis.value.riesgoedadmax = '',
+        //     formAnalisis.value.antecedentescred = '',
+        //     formAnalisis.value.recorpagoult = '',
+        //     formAnalisis.value.niveldesarr = '',
+        //     formAnalisis.value.tiempo_neg = '',
+        //     formAnalisis.value.control_ingegre = '',
+        //     formAnalisis.value.vent_totdec = '',
+        //     formAnalisis.value.compsubsector = '',
+        //     formAnalisis.value.totunidfamiliar = '',
+        //     formAnalisis.value.totunidempresa = '',
+        //     formAnalisis.value.total = '',
+        //     formAnalisis.value.estadoCrud = 'nuevo';
+        // }
+        // if(balance.value){
+        //     formBalance.value.credito_id = balance.value.credito_id;
+        //     formBalance.value.total_activo = balance.value.total_activo;
+        //     formBalance.value.total_pasivo = balance.value.total_pasivo;
+        //     formBalance.value.patrimonio = balance.value.patrimonio;
+        //     formBalance.value.fecha = balance.value.fecha;
+        //     formBalance.value.estadoCrud = 'editar';
+        // }else{
+        //     formBalance.value.credito_id = id;
+        //     formBalance.value.total_activo = '';
+        //     formBalance.value.total_pasivo = '';
+        //     formBalance.value.patrimonio = '';
+        //     formBalance.value.fecha = '';
+        //     formBalance.value.estadoCrud = 'nuevo';
+        // }
+        // if(perdidas.value){
+        //     formPerdidas.value.credito_id = perdidas.value.credito_id;
+        //     formPerdidas.value.ventas = perdidas.value.ventas;
+        //     formPerdidas.value.costo = perdidas.value.costo;
+        //     formPerdidas.value.utilidad = perdidas.value.utilidad;
+        //     formPerdidas.value.costonegocio = perdidas.value.costonegocio;
+        //     formPerdidas.value.utiloperativa = perdidas.value.utiloperativa;
+        //     formPerdidas.value.otrosing = perdidas.value.otrosing;
+        //     formPerdidas.value.gast_fam = perdidas.value.gast_fam;
+        //     formPerdidas.value.utilidadneta = perdidas.value.utilidadneta;
+        //     formPerdidas.value.utilnetdiaria = perdidas.value.utilnetdiaria;
+        //     formPerdidas.value.estadoCrud = 'editar';
+        // }else{
+        //     formPerdidas.value.credito_id = id;
+        //     formPerdidas.value.ventas = '';
+        //     formPerdidas.value.costo = '';
+        //     formPerdidas.value.utilidad = '';
+        //     formPerdidas.value.costonegocio = '';
+        //     formPerdidas.value.utiloperativa = '';
+        //     formPerdidas.value.otrosing = '';
+        //     formPerdidas.value.gast_fam = '';
+        //     formPerdidas.value.utilidadneta = '';
+        //     formPerdidas.value.utilnetdiaria = '';
+        //     formPerdidas.value.estadoCrud = 'nuevo';
+        // }
+        // if(propuesta.value){
+        //     formPropuesta.value.credito_id = propuesta.value.credito_id;
+        //     formPropuesta.value.unidad_familiar = propuesta.value.unidad_familiar;
+        //     formPropuesta.value.experiencia_cred = propuesta.value.experiencia_cred;
+        //     formPropuesta.value.destino_prest = propuesta.value.destino_prest;
+        //     formPropuesta.value.referencias = propuesta.value.referencias;
+        //     formPropuesta.value.estadoCrud = 'editar';
+        // }else{
+        //     formPropuesta.value.credito_id = id;
+        //     formPropuesta.value.unidad_familiar = '';
+        //     formPropuesta.value.experiencia_cred = '';
+        //     formPropuesta.value.destino_prest = '';
+        //     formPropuesta.value.referencias = '';
+        //     formPropuesta.value.estadoCrud = 'nuevo';
+        // }
+
+const asignarValores = (form, datos, valoresPorDefecto) => {
+            Object.keys(valoresPorDefecto).forEach(key => {
+                form.value[key] = datos ? datos[key] : valoresPorDefecto[key];
+            });
+        };
+
+        asignarValores(formAnalisis, analisis.value, {
+            credito_id: id,
+            tipogarantia: '',
+            cargafamiliar: '',
+            riesgoedadmax: '',
+            antecedentescred: '',
+            recorpagoult: '',
+            niveldesarr: '',
+            tiempo_neg: '',
+            control_integre: '',
+            vent_totdec: '',
+            compsubsector: '',
+            totunidfamiliar: '',
+            totunidempresa: '',
+            total: '',
+            estadoCrud: analisis.value ? 'editar' : 'nuevo'
+        });
+
+        asignarValores(formBalance, balance.value, {
+            credito_id: id,
+            total_activo: '',
+            total_pasivo: '',
+            patrimonio: '',
+            fecha: '',
+            estadoCrud: balance.value ? 'editar' : 'nuevo'
+        });
+
+        asignarValores(formPerdidas, perdidas.value, {
+            credito_id: id,
+            ventas: '',
+            costo: '',
+            utilidad: '',
+            costonegocio: '',
+            utiloperativa: '',
+            otrosing: '',
+            gast_fam: '',
+            utilidadneta: '',
+            utilnetdiaria: '',
+            estadoCrud: perdidas.value ? 'editar' : 'nuevo'
+        });
+
+        asignarValores(formPropuesta, propuesta.value, {
+            credito_id: id,
+            unidad_familiar: '',
+            experiencia_cred: '',
+            destino_prest: '',
+            referencias: '',
+            estadoCrud: propuesta.value ? 'editar' : 'nuevo'
+        });
+    };
+
     const buscarCredito = async(id)=>{
         await obtenerCredito(id)
         await obtenerAnalisisCredito(id)
+        await obtenerPerdidas(id)
+        await obtenerBalance(id)
+        await obtenerPropuesta(id)
         cargarDatosEvaluacion(id)
     }
     const evaluacion = (id)=>{
@@ -380,9 +525,12 @@ const { agencia, role } = toRefs(props);
                                             <button class="btn btn-danger btn-sm" style="font-size: .65rem;" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
                                                 <i class="fas fa-trash"></i>
                                             </button>&nbsp;
-                                            <button v-if="credito.estado=='REGISTRADO' || credito.estado=='EVALUACION'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                            <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
                                                 <i class="fas fa-check"></i>
                                             </button>&nbsp;
+                                            <!-- <button v-if="credito.estado=='REGISTRADO' || credito.estado=='EVALUACION'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                <i class="fas fa-check"></i>
+                                            </button>&nbsp; -->
                                         </td>
                                     </tr>
                                 </tbody>

@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('garantias', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('credito_id')->constrained('creditos')->onUpdate('cascade')->onDelete('cascade');
+            $table->decimal('tasa', 3, 1);
+            $table->decimal('fondo', 9, 2);
+            $table->dateTime('fecha');
+            $table->string('estado', 12)->default('Registrado');
             $table->timestamps();
         });
     }
