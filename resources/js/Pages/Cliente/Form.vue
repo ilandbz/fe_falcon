@@ -609,16 +609,21 @@ onMounted(() => {
                                                 {{ error }}
                                             </div>
                                         </div>
-                                        <div class="mb-3 has-validation">
-                                            <div class="form-floating is-invalid">
-                                                <select class="form-select" id="usuario" aria-label="Floating" v-model="form.usuario_id">
-                                                    <option selected disabled value="">Seleccione</option>
-                                                    <option v-for="usuario in usuarios" :value="usuario.id" :key="usuario.id">{{ usuario.name }}</option>
-                                                </select>
-                                                <label for="usuario">Asesor</label>
-                                            </div>
-                                            <div class="invalid-feedback" v-for="error in form.errors.usuario_id" :key="error">
-                                                {{ error }}
+                                        <div class="mb-3">
+                                            <div class="input-group has-validation">
+                                                <span class="input-group-text" v-if="form.estadoCrud=='editar'">
+                                                    {{ form.usuario_name }}
+                                                </span>                                            
+                                                <div class="form-floating is-invalid">
+                                                    <select class="form-select" id="usuario" aria-label="Floating" v-model="form.usuario_id">
+                                                        <option selected disabled value="">Seleccione</option>
+                                                        <option v-for="usuario in usuarios" :value="usuario.id" :key="usuario.id">{{ usuario.name }}</option>
+                                                    </select>
+                                                    <label for="usuario">Asesor</label>
+                                                </div>
+                                                <div class="invalid-feedback" v-for="error in form.errors.usuario_id" :key="error">
+                                                    {{ error }}
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="mb-3">

@@ -336,25 +336,21 @@ const { agencia, role } = toRefs(props);
             total_pasivo: '',
             patrimonio: '',
             fecha: '',
-
             activocaja: '',
             activobancos: '',
             activoctascobrar: '',
             activoinventarios: '',
             totalacorriente: '', 
-
-            pasivodeudaprove: '',
-            pasivodeudaent: '',
-            pasivodeudaempre: '',
-            
             activomueble: '',
             activootrosact: '',
             activodepre: '',
-            pasivolargop: '',
-            otrascuentaspagar: '',
-
-            totalpcorriente: '',
             totalancorriente: '',
+            pasivodeudaprove: '',
+            pasivodeudaent: '',
+            pasivodeudaempre: '',
+            totalpcorriente: '',
+            pasivolargop: '',
+            otrascuentaspagar: '',          
             totalpncorriente: '',
             estadoCrud: balance.value ? 'editar' : 'nuevo'
         });

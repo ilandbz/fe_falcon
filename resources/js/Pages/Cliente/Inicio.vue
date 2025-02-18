@@ -1,11 +1,15 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, toRefs } from 'vue';
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers';  
   import useCliente from '@/Composables/Cliente.js';
   import ClienteForm from './Form.vue'
-  import useDatosSession from '@/Composables/session';
-    const { agencia } = useDatosSession();
+  const props = defineProps({
+    agencia: Object,
+    role: Object
+});
+
+const { agencia, role } = toRefs(props);
     const { openModal, Toast, Swal } = useHelper();
     const {
         clientes, errors, cliente, respuesta,
@@ -38,6 +42,7 @@
         grado_instr: '',
         profesion:'',
         usuario_id: '',
+        usuario_name:'',
         dniconyugue: '',
         dniaval:'',
         tipo_trabajador: '',
@@ -72,6 +77,7 @@
         form.value.ubigeo = '';
         form.value.agencia_id = agencia.value?.id;
         form.value.usuario_id = '';
+        form.value.usuario_name = '';
         form.value.conyugue_id = '';
         form.value.aval_id = '';
         form.value.dniaval = '';
@@ -87,13 +93,26 @@
         await obtenerCliente(id);
         if (cliente.value) {
             form.value.id = cliente.value.id;
+            form.value.dni = cliente.value.persona.dni;
             form.value.ape_pat=cliente.value.persona.ape_pat;
             form.value.ape_mat=cliente.value.persona.ape_mat;
             form.value.primernombre=cliente.value.persona.primernombre;
             form.value.otrosnombres=cliente.value.persona.otrosnombres;
             form.value.fecha_nac=cliente.value.persona.fecha_nac;
+            form.value.ubigeo=cliente.value.persona.ubigeo_nac;
+            form.value.email=cliente.value.persona.email;
+            form.value.celular=cliente.value.persona.celular;
+            form.value.genero=cliente.value.persona.genero;
+            form.value.estado_civil=cliente.value.persona.estado_civil;
+            form.value.ruc=cliente.value.persona.ruc;
+            form.value.grado_instr=cliente.value.persona.grado_instr;
+            form.value.tipo_trabajador=cliente.value.persona.tipo_trabajador;
+            form.value.ocupacion=cliente.value.persona.ocupacion;
+            form.value.institucion_lab=cliente.value.persona.institucion_lab;
+            
             form.value.agencia_id = cliente.value.agencia_id;
             form.value.usuario_id = cliente.value.usuario_id;
+            form.value.usuario_name = cliente.value.usuario.name;
             form.value.persona_id = cliente.value.persona_id;
             form.value.dniaval = cliente.value.dniaval;
             form.value.estado = cliente.value.estado;
@@ -356,5 +375,5 @@
         </div>
       </div>
     </div>
-    <!-- <ClienteForm :form="form" @onListar="listarClientes" :currentPage="clientes.current_page"></ClienteForm> -->
+    <ClienteForm :form="form" @onListar="listarClientes" :currentPage="clientes.current_page"></ClienteForm>
 </template>

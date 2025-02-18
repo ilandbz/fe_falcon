@@ -599,7 +599,6 @@ onMounted(() => {
                                                         </div>
                                                         <div class="row mb-2">
                                                             <div class="col">
-                                                                {{ formBalance }}
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
                                                                         <input title="TOTAL ACTIVO" type="text" class="form-control form-control-sm" v-model="formBalance.total_activo"

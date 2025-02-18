@@ -97,7 +97,10 @@ class ClienteController extends Controller
     }
     public function show(Request $request)
     {
-        $persona = Cliente::where('id', $request->id)->first();
+        $persona = Cliente::with(
+            'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,fecha_nac,ubigeo_nac,email,celular,genero,estado_civil,ruc,grado_instr,tipo_trabajador,ocupacion,institucion_lab,ubicacion_domicilio_id',
+            'usuario:id,name'
+        )->where('id', $request->id)->first();
         return $persona;
     }
     public function mostrarPorDni(Request $request){

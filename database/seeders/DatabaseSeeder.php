@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             BalanceSeeder::class,
             PerdidaGananciaSeeder::class,
             PropuestaCreditoSeeder::class,
+            DetBalanceSeeder::class,
         ]);
     }
 }
