@@ -29,6 +29,21 @@ class StoreBalanceRequest extends FormRequest
             'total_pasivo' => 'required|numeric|min:0',
             'patrimonio' => 'required|numeric|min:0',
             'fecha' => 'required|date',
+            'activocaja' => 'required|numeric|min:0',
+            'activobancos' => 'required|numeric|min:0',
+            'activotascobrar' => 'required|numeric|min:0',
+            'activoinventarios' => 'required|numeric|min:0',
+            'pasivodeudaprove' => 'required|numeric|min:0',
+            'pasivodeudanet' => 'required|numeric|min:0',
+            'pasivodeudaempre' => 'required|numeric|min:0',
+            'activomueble' => 'required|numeric|min:0',
+            'activootrosact' => 'required|numeric|min:0',
+            'activodepre' => 'required|numeric|min:0',
+            'pasivolargo' => 'required|numeric|min:0',
+            'otrascuentasapagar' => 'required|numeric|min:0',
+            'totalacorriente' => 'required|numeric|min:0',
+            'totalpcorriente' => 'required|numeric|min:0',
+            'totalpncorriente' => 'required|numeric|min:0',
         ];
     }
 

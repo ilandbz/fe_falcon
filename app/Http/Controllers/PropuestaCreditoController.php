@@ -26,7 +26,7 @@ class PropuestaCreditoController extends Controller
     }
     public function show(Request $request)
     {
-        $propuesta = PropuestaCredito::where('id', $request->id)->first();
+        $propuesta = PropuestaCredito::where('credito_id', $request->credito_id)->first();
         return $propuesta;
     }
     public function update(UpdatePropuestaCreditoRequest $request)

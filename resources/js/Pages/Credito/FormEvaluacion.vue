@@ -517,7 +517,7 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.activoctascobrar"
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.activoinventarios"
                                                                         placeholder="INVENTARIOS">
                                                                         <label>INVENTARIOS</label>
                                                                     </div>
@@ -531,11 +531,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.totalactivocorr"
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.totalacorriente"
                                                                         placeholder="TOTAL ACTIVO CORRIENTE">
                                                                         <label>TOTAL ACTIVO CORRIENTE</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalactivocorr" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalacorriente" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
@@ -587,11 +587,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input title="TOTAL ACTIVO NO CORRIENTE" type="text" class="form-control form-control-sm" v-model="formBalance.totalactivonocorr"
+                                                                        <input title="TOTAL ACTIVO NO CORRIENTE" type="text" class="form-control form-control-sm" v-model="formBalance.totalancorriente"
                                                                         placeholder="TOTAL ACTIVO NO CORRIENTE">
                                                                         <label>TOTAL ACTIVO NO CORRIENTE</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalactivonocorr" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalancorriente" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
@@ -626,11 +626,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivoproveedores"
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivodeudaprove"
                                                                         placeholder="PROVEEDORES">
                                                                         <label>PROVEEDORES</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivoproveedores" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivodeudaprove" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>
@@ -638,11 +638,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivodocpagar"
-                                                                        placeholder="DOCUMENTOS POR PAGAR">
-                                                                        <label>DOCUMENTOS POR PAGAR</label>
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivodeudaent"
+                                                                        placeholder="DEUDAS CON ENTIDADES FINANCIERAS">
+                                                                        <label>DEUDAS CON ENTIDADES FINANCIERAS</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivodocpagar" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivodeudaent" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>
@@ -652,37 +652,28 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivoctaspagar"
-                                                                        placeholder="CUENTAS POR PAGAR">
-                                                                        <label>CUENTAS POR PAGAR</label>
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivodeudaempre"
+                                                                        placeholder="DEUDAS CON EMPRENDER">
+                                                                        <label>DEUDAS CON EMPRENDER</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivoctaspagar" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivodeudaempre" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
                                                             </div>
                                                             <div class="col">
-                                                                <div class="has-validation">
-                                                                    <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.pasivoimpuestos"
-                                                                        placeholder="IMPUESTOS POR PAGAR">
-                                                                        <label>IMPUESTOS POR PAGAR</label>
-                                                                    </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivoimpuestos" :key="error">
-                                                                        {{ error }}
-                                                                    </div> 
-                                                                </div>                                                            
+                                                         
                                                             </div>
                                                         </div>
                                                         <div class="row mb-2">
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.totalpasivocorr"
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.totalpcorriente"
                                                                         placeholder="TOTAL PASIVO CORRIENTE">
                                                                         <label>TOTAL PASIVO CORRIENTE</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalpasivocorr" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalpcorriente" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
@@ -693,11 +684,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input title="OBLIGACIONES FINANCIERAS" type="text" class="form-control form-control-sm" v-model="formBalance.pasivofinancieras"
-                                                                        placeholder="OBLIGACIONES FINANCIERAS">
-                                                                        <label>OBLIGACIONES FINANCIERAS</label>
+                                                                        <input title="PASIVO LARGO PLAZO" type="text" class="form-control form-control-sm" v-model="formBalance.pasivolargop"
+                                                                        placeholder="PASIVO LARGO PLAZO">
+                                                                        <label>PASIVO LARGO PLAZO</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivofinancieras" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivolargop" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
@@ -705,11 +696,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input title="OTROS PASIVOS" type="text" class="form-control form-control-sm" v-model="formBalance.pasivootros"
-                                                                        placeholder="OTROS PASIVOS">
-                                                                        <label>OTROS PASIVOS</label>
+                                                                        <input title="OTRAS CUENTAS POR PAGAR<" type="text" class="form-control form-control-sm" v-model="formBalance.otrascuentaspagar"
+                                                                        placeholder="OTRAS CUENTAS POR PAGAR<">
+                                                                        <label>OTRAS CUENTAS POR PAGAR<</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.pasivootros" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.otrascuentaspagar" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
@@ -719,11 +710,11 @@ onMounted(() => {
                                                             <div class="col">
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
-                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.totalpasivoNOcorr"
-                                                                        placeholder="TOTAL PASIVO CORRIENTE" readonly>
+                                                                        <input type="text" class="form-control form-control-sm" v-model="formBalance.totalpncorriente"
+                                                                        placeholder="TOTAL PASIVO NO CORRIENTE" readonly>
                                                                         <label>TOTAL PASIVO NO CORRIENTE</label>
                                                                     </div>
-                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalpasivoNOcorr" :key="error">
+                                                                    <div class="invalid-feedback" v-for="error in formBalance.errors.totalpncorriente" :key="error">
                                                                         {{ error }}
                                                                     </div> 
                                                                 </div>                                                            
@@ -734,7 +725,7 @@ onMounted(() => {
                                                                 <div class="has-validation">
                                                                     <div class="form-floating is-invalid">
                                                                         <input type="text" class="form-control form-control-sm" v-model="formBalance.total_pasivo"
-                                                                        placeholder="TOTAL PASIVO CORRIENTE" readonly>
+                                                                        placeholder="TOTAL PASIVO" readonly>
                                                                         <label>TOTAL PASIVO</label>
                                                                     </div>
                                                                     <div class="invalid-feedback" v-for="error in formBalance.errors.total_pasivo" :key="error">

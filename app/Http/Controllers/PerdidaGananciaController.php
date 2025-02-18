@@ -31,7 +31,7 @@ class PerdidaGananciaController extends Controller
     }
     public function show(Request $request)
     {
-        $balance = PerdidaGanancia::where('id', $request->id)->first();
+        $balance = PerdidaGanancia::where('credito_id', $request->credito_id)->first();
         return $balance;
     }
     public function update(UpdatePerdidasGananciasRequest $request)

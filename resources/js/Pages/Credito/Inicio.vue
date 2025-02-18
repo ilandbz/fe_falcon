@@ -308,12 +308,11 @@ const { agencia, role } = toRefs(props);
         //     formPropuesta.value.estadoCrud = 'nuevo';
         // }
 
-const asignarValores = (form, datos, valoresPorDefecto) => {
+        const asignarValores = (form, datos, valoresPorDefecto) => {
             Object.keys(valoresPorDefecto).forEach(key => {
                 form.value[key] = datos ? datos[key] : valoresPorDefecto[key];
             });
         };
-
         asignarValores(formAnalisis, analisis.value, {
             credito_id: id,
             tipogarantia: '',
@@ -331,16 +330,34 @@ const asignarValores = (form, datos, valoresPorDefecto) => {
             total: '',
             estadoCrud: analisis.value ? 'editar' : 'nuevo'
         });
-
         asignarValores(formBalance, balance.value, {
             credito_id: id,
             total_activo: '',
             total_pasivo: '',
             patrimonio: '',
             fecha: '',
+
+            activocaja: '',
+            activobancos: '',
+            activoctascobrar: '',
+            activoinventarios: '',
+            totalacorriente: '', 
+
+            pasivodeudaprove: '',
+            pasivodeudaent: '',
+            pasivodeudaempre: '',
+            
+            activomueble: '',
+            activootrosact: '',
+            activodepre: '',
+            pasivolargop: '',
+            otrascuentaspagar: '',
+
+            totalpcorriente: '',
+            totalancorriente: '',
+            totalpncorriente: '',
             estadoCrud: balance.value ? 'editar' : 'nuevo'
         });
-
         asignarValores(formPerdidas, perdidas.value, {
             credito_id: id,
             ventas: '',
@@ -354,7 +371,6 @@ const asignarValores = (form, datos, valoresPorDefecto) => {
             utilnetdiaria: '',
             estadoCrud: perdidas.value ? 'editar' : 'nuevo'
         });
-
         asignarValores(formPropuesta, propuesta.value, {
             credito_id: id,
             unidad_familiar: '',
