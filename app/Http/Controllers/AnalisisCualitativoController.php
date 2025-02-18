@@ -49,7 +49,7 @@ class AnalisisCualitativoController extends Controller
             'recorpagoult'     => $request->recorpagoult,
             'niveldesarr'      => $request->niveldesarr,
             'tiempo_neg'       => $request->tiempo_neg,
-            'control_integre'  => $request->control_integre,
+            'control_ingegre'  => $request->control_ingegre,
             'vent_totdec'      => $request->vent_totdec,
             'compsubsector'    => $request->compsubsector,
             'totunidfamiliar'  => $request->totunidfamiliar,

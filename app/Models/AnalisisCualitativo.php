@@ -15,7 +15,7 @@ class AnalisisCualitativo extends Model
         'recorpagoult',
         'niveldesarr',
         'tiempo_neg',
-        'control_integre',
+        'control_ingegre',
         'vent_totdec',
         'compsubsector',
         'totunidfamiliar',

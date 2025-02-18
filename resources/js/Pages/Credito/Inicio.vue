@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, toRefs } from 'vue';
   import { defineTitle } from '@/Helpers';
-  import useHelper from '@/Helpers';  
+  import useHelper from '@/Helpers'; 
   import useCredito from '@/Composables/Credito.js';
   import useAnalisisCualitativo from '@/Composables/AnalisisCualitativo.js';  
   import usePerdidas from '@/Composables/Perdidas.js'; 
@@ -83,6 +83,25 @@ const { agencia, role } = toRefs(props);
         total_activo : '',
         total_pasivo : '',
         patrimonio : '',
+        paspatrimonio: '',
+        captrabajo: '',
+        fecha: '',
+        activocaja: '',
+        activobancos: '',
+        activoctascobrar: '',
+        activoinventarios: '',
+        totalacorriente: '', 
+        activomueble: '',
+        activootrosact: '',
+        activodepre: '',
+        totalancorriente: '',
+        pasivodeudaprove: '',
+        pasivodeudaent: '',
+        pasivodeudaempre: '',
+        totalpcorriente: '',
+        pasivolargop: '',
+        otrascuentaspagar: '',          
+        totalpncorriente: '',
         fecha : '',
         estadoCrud: '',
         errors: []
@@ -217,6 +236,12 @@ const { agencia, role } = toRefs(props);
     const cambiarPaginacion = () => {
         listarCreditos()
     }
+    const asignarValores = (form, datos, valoresPorDefecto) => {
+        Object.keys(valoresPorDefecto).forEach(key => {
+            form.value[key] = datos && datos[key] !== undefined ? datos[key] : valoresPorDefecto[key];
+        });
+    };
+
     const cargarDatosEvaluacion = (id) => {
 
         // if(analisis.value){
@@ -308,11 +333,7 @@ const { agencia, role } = toRefs(props);
         //     formPropuesta.value.estadoCrud = 'nuevo';
         // }
 
-        const asignarValores = (form, datos, valoresPorDefecto) => {
-            Object.keys(valoresPorDefecto).forEach(key => {
-                form.value[key] = datos ? datos[key] : valoresPorDefecto[key];
-            });
-        };
+
         asignarValores(formAnalisis, analisis.value, {
             credito_id: id,
             tipogarantia: '',
@@ -479,14 +500,14 @@ const { agencia, role } = toRefs(props);
                                     <a href="#" aria-label="Next" class="page-link"
                                         title="Página Siguiente"
                                         @click.prevent="cambiarPagina(creditos.current_page + 1)">
-                                        <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                        <span><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
                                     <li v-if="creditos.current_page <= creditos.last_page-1" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
                                         @click.prevent="cambiarPagina(creditos.last_page)"
                                         title="Última Página">
-                                        <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
+                                        <span><i class="fas fa-step-forward"></i></span>
                                     </a>
                                 </li>
                             </ul>
@@ -585,14 +606,14 @@ const { agencia, role } = toRefs(props);
                                     <a href="#" aria-label="Next" class="page-link"
                                         title="Página Siguiente"
                                         @click.prevent="cambiarPagina(creditos.current_page + 1)">
-                                        <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                        <span><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
                                     <li v-if="creditos.current_page <= creditos.last_page-1" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
                                         @click.prevent="cambiarPagina(creditos.last_page)"
                                         title="Última Página">
-                                        <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
+                                        <span><i class="fas fa-step-forward"></i></span>
                                     </a>
                                 </li>
                             </ul>

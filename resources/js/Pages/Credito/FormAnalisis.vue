@@ -1,10 +1,16 @@
 <script setup>
 import { toRefs, onMounted, ref } from 'vue';
+import useAnalisisCualitativo from '@/Composables/AnalisisCualitativo.js';  
+import useHelper from '@/Helpers'; 
 const props = defineProps({
     formAnalisis: Object,
 
 });
 const { formAnalisis } = toRefs(props);
+const {
+    agregarRegistro, actualizarRegistro, respuesta, errors
+    } = useAnalisisCualitativo();
+const { Toast } = useHelper();
 const opciones = ref({
     tipogarantia: [
         { label: "REAL CONSTITUIDA A FAVOR DE LA INSTITUCIÓN (HIPOTECA Y/O PRENDA)", value: 4 },
@@ -75,7 +81,6 @@ const calcularAnalisis = () => {
        
     formAnalisis.value.total = formAnalisis.value.totunidfamiliar + formAnalisis.value.totunidempresa;
 };
-
 const crud = {
     'nuevo': async() => {
         await agregarRegistro(formAnalisis.value)

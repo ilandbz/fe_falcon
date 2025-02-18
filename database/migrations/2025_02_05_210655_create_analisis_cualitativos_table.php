@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedInteger('compsubsector');
             $table->unsignedInteger('totunidfamiliar');
             $table->unsignedInteger('totunidempresa');
-            $table->decimal('total', 10, 2);
+            $table->unsignedInteger('total', 10, 2);
             $table->timestamps();
         });
     }

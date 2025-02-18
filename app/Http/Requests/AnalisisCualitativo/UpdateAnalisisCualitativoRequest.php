@@ -32,7 +32,7 @@ class UpdateAnalisisCualitativoRequest extends FormRequest
             'recorpagoult' => 'required|numeric|in:0,2,5,7',
             'niveldesarr' => 'required|numeric|in:1,2,3,4',
             'tiempo_neg' => 'required|numeric|in:1,2,3',
-            'control_integre' => 'required|numeric|in:1,2,3',
+            'control_ingegre' => 'required|numeric|in:1,2,3',
             'vent_totdec' => 'required|numeric|in:0,2',
             'compsubsector' => 'required|numeric|in:0,2,4',
             'totunidfamiliar' => 'required|numeric|min:0',
