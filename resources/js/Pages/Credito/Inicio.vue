@@ -335,6 +335,8 @@ const { agencia, role } = toRefs(props);
             total_activo: '',
             total_pasivo: '',
             patrimonio: '',
+            paspatrimonio: '',
+            captrabajo: '',
             fecha: '',
             activocaja: '',
             activobancos: '',
