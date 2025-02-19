@@ -16,31 +16,36 @@ const {
 const { Toast, openModal } = useHelper();
 
 
-const form = ref({
+const venta = ref({
     credito_id: '',
-    datos: [{
-        nroproducto: '',
+    tot_ing_mensual:'',
+    tot_cosprimo_m:'',
+    margen_tot:'',
+    ventas_cred:'',
+    irrecuperable:'',
+    cantproductos:1,
+    costoprimovent:0,//totcostoprimo/totingmensual
+    detalles: [{
+        nroproducto: 1,
         descripcion: '',
-        unidadmedida: '',
-        preciounit: '',
-        primaprincipal: '',
-        primasecundaria: '',
-        primacomplement: '',
-        matprima: '',
-        manoobra1: '',
-        manoobra2: '',
-        manoobra: '',
-        costoprimount: '',
-        prodmensual: '',
-        ventastotales: '',
-        totcostoprimo: '',
-        margenventas: '',           
+        unidadmedida: 'Diario',
+        preciounit: 0,
+        primaprincipal: 0,
+        primasecundaria: 0,
+        primacomplement: 0,
+        matprima: 0,
+        manoobra1: 0,
+        manoobra2: 0,
+        manoobra: 0,
+        costoprimount: 0,
+        prodmensual: 0,
+        ventastotales: 0,
+        totcostoprimo: 0,
+        margenventas: 0,            
     }],
     estadoCrud: '', 
     errors: []
 });
-
-
 
 const obtenerDatos = async(credito_id)=>{
 
@@ -265,7 +270,7 @@ const guardarPerdidas = () => {
         </div>
         <button type="submit" class="btn btn-primary">{{ (formPerdidas.estadoCrud=='nuevo') ? 'Guardar Perdidas' : 'Actualizar Perdidas' }}</button>
     </form>
-    <DetVentasForm></DetVentasForm>
+    <DetVentasForm :venta="venta"></DetVentasForm>
     <GastoNegocioForm></GastoNegocioForm>
     <GastoFamiliarForm></GastoFamiliarForm>
 </template>
