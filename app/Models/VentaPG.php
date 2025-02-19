@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VentaPG extends Model
 {
@@ -18,4 +19,14 @@ class VentaPG extends Model
         'irrecuperable',
         'cantproductos',
     ];
+
+    /**
+     * Get all of the detalles for the VentaPG
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function detalles(): HasMany
+    {
+        return $this->hasMany(DetVentaPG::class, 'credito_id');
+    }
 }

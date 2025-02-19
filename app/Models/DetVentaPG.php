@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DetVentaPG extends Model
 {
-    protected $primaryKey = 'credito_id';
+    protected $primaryKey = ['credito_id', 'nroproducto'];
 
     protected $fillable = [
         'credito_id',
@@ -27,4 +28,14 @@ class DetVentaPG extends Model
         'totcostoprimo',
         'margenventas',
     ];
+
+    /**
+     * Get the venta that owns the DetVentaPG
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function venta(): BelongsTo
+    {
+        return $this->belongsTo(VentaPG::class, 'credito_id');
+    }
 }

@@ -18,9 +18,9 @@ const { Toast, openModal } = useHelper();
 
 const venta = ref({
     credito_id: '',
-    tot_ing_mensual:'',
-    tot_cosprimo_m:'',
-    margen_tot:'',
+    tot_ing_mensual:0,
+    tot_cosprimo_m:0,
+    margen_tot:0,
     ventas_cred:'',
     irrecuperable:'',
     cantproductos:1,
@@ -38,7 +38,7 @@ const venta = ref({
         manoobra2: 0,
         manoobra: 0,
         costoprimount: 0,
-        prodmensual: 0,
+        prodmensual: 26,
         ventastotales: 0,
         totcostoprimo: 0,
         margenventas: 0,            

@@ -30,7 +30,7 @@ const agregarProducto = () => {
         manoobra2: 0,
         manoobra: 0,
         costoprimount: 0,
-        prodmensual: 0,
+        prodmensual: 26,
         ventastotales: 0,
         totcostoprimo: 0,
         margenventas: 0,            
@@ -41,6 +41,32 @@ const eliminarUltimoProducto = () => {
         venta.value.detalles.pop();
     }
 };
+
+const calcularDatos = (indice) => {
+    let detalle = venta.value.detalles[indice];
+    const prodMensualMap = {
+        'Semanal': 4,
+        'Mensual': 1
+    };
+    detalle.prodmensual = prodMensualMap[detalle.unidadmedida] ?? 26;
+    detalle.ventastotales = Number(detalle.preciounit) * Number(detalle.prodmensual);
+    detalle.totcostoprimo = (Number(detalle.primaprincipal)+Number(detalle.manoobra1))*detalle.prodmensual
+    detalle.margenventas = (detalle.ventastotales - detalle.totcostoprimo)/Number(detalle.ventastotales)
+
+    detalle.matprima = Number(detalle.primaprincipal) + Number(detalle.primasecundaria) + Number(detalle.primacomplement)
+
+    detalle.manoobra = detalle.manoobra1 + detalle.manoobra2
+    venta.value.tot_ing_mensual = venta.value.detalles.reduce(
+    (total, detalle) => total + Number(detalle.ventastotales), 
+    0);
+    venta.value.tot_cosprimo_m = venta.value.detalles.reduce(
+    (total, detalle) => total + Number(detalle.totcostoprimo), 
+    0);    
+    venta.value.costoprimovent = (venta.value.tot_cosprimo_m)/(venta.value.tot_ing_mensual);
+    venta.value.margen_tot = (venta.value.tot_ing_mensual-venta.value.costoprimovent)/(venta.value.tot_ing_mensual);
+};
+
+
 </script>
 
 <template>
@@ -77,7 +103,8 @@ const eliminarUltimoProducto = () => {
                                                 </div>
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
-                                                        <select class="form-select" v-model="venta.detalles[indice].unidadmedida">
+                                                        <select class="form-select" v-model="venta.detalles[indice].unidadmedida"
+                                                            @change="calcularDatos(indice)">
                                                             <option value="Diario">Diario</option>
                                                             <option value="Semanal">Semanal</option>
                                                             <option value="Mensual">Mensual</option>
@@ -88,35 +115,39 @@ const eliminarUltimoProducto = () => {
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].preciounit"
-                                                        placeholder="PRECIO VENTA UNIT.">
+                                                        placeholder="PRECIO VENTA UNIT."
+                                                        @change="calcularDatos(indice)">
                                                         <label>PRECIO VENTA UNIT.</label>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].primaprincipal"
-                                                        placeholder="MATERIA PRIMA PRINCIPAL">
+                                                        placeholder="MATERIA PRIMA PRINCIPAL"
+                                                        @change="calcularDatos(indice)">
                                                         <label>MATERIA PRIMA PRINCIPAL</label>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].primasecundaria"
-                                                        placeholder="MATERIA PRIMA SECUNDARIA">
+                                                        placeholder="MATERIA PRIMA SECUNDARIA"
+                                                        @change="calcularDatos(indice)">
                                                         <label>MATERIA PRIMA SECUNDARIA</label>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].primacomplement"
-                                                        placeholder="MATERIA PRIMA COMPLEMENTARIA">
+                                                        placeholder="MATERIA PRIMA COMPLEMENTARIA"
+                                                        @change="calcularDatos(indice)">
                                                         <label>MATERIA PRIMA COMPLEMENTARIA</label>
                                                     </div>
                                                 </div> 
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].matprima"
-                                                        placeholder="MATERIA PRIMA">
+                                                        placeholder="MATERIA PRIMA" readonly>
                                                         <label>MATERIA PRIMA</label>
                                                     </div>
                                                 </div>                                 
@@ -151,7 +182,7 @@ const eliminarUltimoProducto = () => {
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].prodmensual"
-                                                        placeholder="PRODUCCION MENSUAL POR PRODUCTO">
+                                                        placeholder="PRODUCCION MENSUAL POR PRODUCTO" readonly>
                                                         <label>PRODUCCION MENSUAL POR PRODUCTO</label>
                                                     </div>
                                                 </div>                                  

@@ -142,6 +142,13 @@ Route::group(['prefix' => 'perdidas-ganancias', 'middleware' => 'auth'], functio
     Route::post('guardar', [PerdidaGananciaController::class, 'store']);
     Route::get('mostrar', [PerdidaGananciaController::class, 'show']);
 });
+//ventapyg
+Route::group(['prefix' => 'ventapyg', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [PropuestaCreditoController::class, 'update']);
+    Route::post('eliminar', [PropuestaCreditoController::class, 'destroy']);
+    Route::post('guardar', [PropuestaCreditoController::class, 'store']);
+    Route::get('mostrar', [PropuestaCreditoController::class, 'show']);
+});
 //propuesta
 Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [PropuestaCreditoController::class, 'update']);
@@ -149,3 +156,4 @@ Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
     Route::post('guardar', [PropuestaCreditoController::class, 'store']);
     Route::get('mostrar', [PropuestaCreditoController::class, 'show']);
 });
+
