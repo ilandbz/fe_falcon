@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VentaPGController;
 use App\Models\AnalisisCualitativo;
 use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Route;
@@ -144,10 +145,10 @@ Route::group(['prefix' => 'perdidas-ganancias', 'middleware' => 'auth'], functio
 });
 //ventapyg
 Route::group(['prefix' => 'ventapyg', 'middleware' => 'auth'], function () {
-    Route::post('actualizar', [PropuestaCreditoController::class, 'update']);
-    Route::post('eliminar', [PropuestaCreditoController::class, 'destroy']);
-    Route::post('guardar', [PropuestaCreditoController::class, 'store']);
-    Route::get('mostrar', [PropuestaCreditoController::class, 'show']);
+    Route::post('actualizar', [VentaPGController::class, 'update']);
+    Route::post('eliminar', [VentaPGController::class, 'destroy']);
+    Route::post('guardar', [VentaPGController::class, 'store']);
+    Route::get('mostrar', [VentaPGController::class, 'show']);
 });
 //propuesta
 Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {

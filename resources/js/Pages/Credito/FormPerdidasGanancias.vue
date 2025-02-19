@@ -1,6 +1,7 @@
 <script setup>
 import { toRefs, onMounted, ref } from 'vue';
 import usePerdidas from '@/Composables/Perdidas.js'; 
+import useVenta from '@/Composables/Venta.js'; 
 import DetVentasForm from './FormDetVentas.vue'
 import GastoNegocioForm from './FormGastoNegocio.vue'
 import GastoFamiliarForm from './FormGastosFamiliares.vue'
@@ -13,6 +14,9 @@ const { formPerdidas } = toRefs(props);
 const {
     agregarRegistro, actualizarRegistro, respuesta, errors
     } = usePerdidas();
+const {
+    regventa, agregarVenta, obtenerVenta
+    } = useVenta();    
 const { Toast, openModal } = useHelper();
 
 
@@ -48,12 +52,53 @@ const venta = ref({
 });
 
 const obtenerDatos = async(credito_id)=>{
-
+    await obtenerVenta(credito_id)
+    venta.value.credito_id=credito_id;
+    if(regventa.value){
+        venta.value.tot_ing_mensual=regventa.value.tot_ing_mensual;
+        venta.value.tot_cosprimo_m=regventa.value.tot_cosprimo_m;
+        venta.value.margen_tot=regventa.value.margen_tot;
+        venta.value.ventas_cred=regventa.value.ventas_cred;
+        venta.value.irrecuperable=regventa.value.irrecuperable;
+        venta.value.cantproductos=regventa.value.cantproductos;
+        venta.value.detalles = regventa.value.detalles;
+        venta.value.estadoCrud= 'editar'; 
+    }else{
+        venta.value.tot_ing_mensual=0;
+        venta.value.tot_cosprimo_m=0;
+        venta.value.margen_tot=0;
+        venta.value.ventas_cred='';
+        venta.value.irrecuperable='';
+        venta.value.cantproductos=1;
+        venta.value.detalles = [
+            {
+                nroproducto: 1,
+                descripcion: '',
+                unidadmedida: 'Diario',
+                preciounit: 0,
+                primaprincipal: 0,
+                primasecundaria: 0,
+                primacomplement: 0,
+                matprima: 0,
+                manoobra1: 0,
+                manoobra2: 0,
+                manoobra: 0,
+                costoprimount: 0,
+                prodmensual: 26,
+                ventastotales: 0,
+                totcostoprimo: 0,
+                margenventas: 0,  
+            }
+        ];
+        venta.value.estadoCrud = 'nuevo';
+    }
 }
 
 const buscarDetVenta=()=>{
     //limpiar()
     // form.value.estadoCrud = 'nuevo'
+
+    obtenerDatos(formPerdidas.value.credito_id)
     openModal('#modaldetVentas')
     document.getElementById("modaldetVentasLabel").innerHTML = 'Detalle de Ventas';
 }

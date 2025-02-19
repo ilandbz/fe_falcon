@@ -1,8 +1,12 @@
 <script setup>
 import { toRefs, onMounted, ref } from 'vue';
 import useHelper from '@/Helpers';  
+import useVenta from '@/Composables/Venta.js';
 
 const { hideModal, Toast, openModal, Swal } = useHelper();
+const {
+    agregarVenta, respuesta, errors
+    } = useVenta();   
 
 const props = defineProps({
     venta: Object,
@@ -10,12 +14,38 @@ const props = defineProps({
 
 const { venta } = toRefs(props);
 
-const emit = defineEmits(['onListar', 'evaluar']);
+const emit = defineEmits([ 'evaluar']);
 
-const guardar = () => {
-    
+const guardar = async() => {
+    crud[venta.value.estadoCrud]();
 };
-
+const crud = {
+    'nuevo': async() => {
+        await agregarVenta(venta.value)
+        venta.value.errors = []
+        if(errors.value)
+        {
+            venta.value.errors = errors.value
+        }
+        if(respuesta.value.ok==1){
+            venta.value.errors = []
+            Toast.fire({icon:'success', title:respuesta.value.mensaje})
+            venta.value.estadoCrud='editar'
+        }
+    },
+    'editar': async() => {
+        await actualizarVenta(venta.value)
+        venta.value.errors = []
+        if(errors.value)
+        {
+            venta.value.errors = errors.value
+        }
+        if(respuesta.value.ok==1){
+            venta.value.errors = []
+            Toast.fire({icon:'success', title:respuesta.value.mensaje})
+        }
+    }
+}
 const agregarProducto = () => {
     venta.value.detalles.push({
         nroproducto: venta.value.detalles.length + 1, // Número correlativo
@@ -52,16 +82,13 @@ const calcularDatos = (indice) => {
     detalle.ventastotales = Number(detalle.preciounit) * Number(detalle.prodmensual);
     detalle.totcostoprimo = (Number(detalle.primaprincipal)+Number(detalle.manoobra1))*detalle.prodmensual
     detalle.margenventas = (detalle.ventastotales - detalle.totcostoprimo)/Number(detalle.ventastotales)
-
     detalle.matprima = Number(detalle.primaprincipal) + Number(detalle.primasecundaria) + Number(detalle.primacomplement)
-
-    detalle.manoobra = detalle.manoobra1 + detalle.manoobra2
+    detalle.manoobra = Number(detalle.manoobra1) + Number(detalle.manoobra2)
+    detalle.costoprimount = Number(detalle.matprima)+Number(detalle.manoobra)
     venta.value.tot_ing_mensual = venta.value.detalles.reduce(
-    (total, detalle) => total + Number(detalle.ventastotales), 
-    0);
+    (total, detalle) => total + Number(detalle.ventastotales), 0);
     venta.value.tot_cosprimo_m = venta.value.detalles.reduce(
-    (total, detalle) => total + Number(detalle.totcostoprimo), 
-    0);    
+    (total, detalle) => total + Number(detalle.totcostoprimo), 0);    
     venta.value.costoprimovent = (venta.value.tot_cosprimo_m)/(venta.value.tot_ing_mensual);
     venta.value.margen_tot = (venta.value.tot_ing_mensual-venta.value.costoprimovent)/(venta.value.tot_ing_mensual);
 };
@@ -72,7 +99,7 @@ const calcularDatos = (indice) => {
 <template>
     <form @submit.prevent="guardar">
         <div class="modal fade" id="modaldetVentas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="modaldetVentasLabel" aria-hidden="true">
+            aria-labelledby="modaldetVentasLabel">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -154,21 +181,23 @@ const calcularDatos = (indice) => {
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].manoobra1"
-                                                        placeholder="MANO DE OBRA 1">
+                                                        placeholder="MANO DE OBRA 1"
+                                                        @change="calcularDatos(indice)">
                                                         <label>MANO DE OBRA 1</label>
                                                     </div>
                                                 </div>  
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].manoobra2"
-                                                        placeholder="MANO DE OBRA 2">
+                                                        placeholder="MANO DE OBRA 2"
+                                                        @change="calcularDatos(indice)">
                                                         <label>MANO DE OBRA 2</label>
                                                     </div>
                                                 </div>                                                              
                                                 <div class="mb-3 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].manoobra"
-                                                        placeholder="MANO DE OBRA">
+                                                        placeholder="MANO DE OBRA" readonly>
                                                         <label>MANO DE OBRA</label>
                                                     </div>
                                                 </div>

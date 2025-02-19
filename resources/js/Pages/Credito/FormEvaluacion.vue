@@ -90,19 +90,19 @@ onMounted(() => {
                                     <form @submit.prevent="guardarPropuesta">
                                         <div class="form-group">
                                             <label class="control-label">UNIDAD FAMILIAR(CONYUGUE, HIJOS)</label>
-                                            <textarea v-model="formPropuesta.unidfam" class="form-control input-sm" placeholder="Unidad Familiar" rows="4"></textarea>
+                                            <textarea v-model="formPropuesta.unidad_familiar" class="form-control input-sm" placeholder="Unidad Familiar" rows="4"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label class="">EXPERIENCIA CREDITICIA Y NEGOCIO</label>
-                                            <textarea v-model="formPropuesta.expcred" class="form-control input-sm" placeholder="Experiencia Crediticia" rows="4"></textarea>
+                                            <textarea v-model="formPropuesta.experiencia_cred" class="form-control input-sm" placeholder="Experiencia Crediticia" rows="4"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label class="">DESTINO DEL PRESTAMO</label>
-                                            <textarea v-model="formPropuesta.destprest" class="form-control input-sm" placeholder="Destino del Prestamo" rows="4"></textarea>
+                                            <textarea v-model="formPropuesta.destino_prest" class="form-control input-sm" placeholder="Destino del Prestamo" rows="4"></textarea>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="">REFERENCIAS PERSONALES Y COMERCIALES</label>
-                                            <textarea v-model="formPropuesta.refper" class="form-control input-sm" placeholder="Destino del Prestamo" rows="4"></textarea>
+                                            <textarea v-model="formPropuesta.referencias" class="form-control input-sm" placeholder="Destino del Prestamo" rows="4"></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary">{{ (formPropuesta.estadoCrud=='nuevo') ? 'Guardar Propuesta' : 'Actualizar Propuesta' }}</button>
                                     </form>

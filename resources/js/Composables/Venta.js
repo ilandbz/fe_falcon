@@ -3,19 +3,20 @@ import { ref } from 'vue'
 import { getConfigHeader, getdataParamsPagination } from '@/Helpers'
 export default function useVenta() {
     const errors = ref('')
-    const venta = ref({})
+    const regventa = ref({})
     const respuesta = ref([])
     const detalleVenta = ref([])
     const obtenerVenta = async(id) => {
-        let respuesta = await axios.get('rol/mostrar?id='+id,getConfigHeader())
-        role.value = respuesta.data
+        let respuesta = await axios.get('ventapyg/mostrar?credito_id='+id,getConfigHeader())
+        regventa.value = respuesta.data
+
     }
 
 
     const agregarVenta = async(data) => {
         errors.value = ''
         try {
-            let respond = await axios.post('rol/guardar',data,getConfigHeader())
+            let respond = await axios.post('ventapyg/guardar',data,getConfigHeader())
             errors.value =''
             if(respond.data.ok==1){
                 respuesta.value=respond.data
@@ -27,10 +28,10 @@ export default function useVenta() {
             }
         }
     }
-    const actualizarRole = async(data) => {
+    const actualizarVenta = async(data) => {
         errors.value = ''
         try {
-            let respond = await axios.post('rol/actualizar',data,getConfigHeader())
+            let respond = await axios.post('ventapyg/actualizar',data,getConfigHeader())
             errors.value =''
             if(respond.data.ok==1){
                 respuesta.value=respond.data
@@ -43,15 +44,15 @@ export default function useVenta() {
             }
         }
     }
-    const eliminarRole = async(id) => {
-        const respond = await axios.post('rol/eliminar', {id:id},getConfigHeader())
+    const eliminarVenta = async(id) => {
+        const respond = await axios.post('ventapyg/eliminar', {id:id},getConfigHeader())
         if(respond.data.ok==1)
         {
             respuesta.value = respond.data
         }
     }
     return {
-        errors, roles, listaRoles, role, obtenerVenta, 
-        agregarVenta, actualizarRole, eliminarRole, respuesta
+        errors, regventa, obtenerVenta, 
+        agregarVenta, actualizarVenta, eliminarVenta, respuesta
     }
 }
