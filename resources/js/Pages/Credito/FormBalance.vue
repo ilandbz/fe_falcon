@@ -14,7 +14,8 @@ const { Toast } = useHelper();
 
 const calcularBalance = () => {
     formBalance.value.totalacorriente = Number(formBalance.value.activocaja) + Number(formBalance.value.activobancos) + Number(formBalance.value.activoctascobrar) + Number(formBalance.value.activoinventarios)
-    formBalance.value.totalpcorriente = Number(formBalance.value.pasivodeudaprove) + Number(formBalance.value.pasivodeudaent) + Number(formBalance.value.pasivodeudacapital)
+    formBalance.value.totalpcorriente = Number(formBalance.value.pasivodeudaprove) + Number(formBalance.value.pasivodeudaent) + Number(formBalance.value.pasivodeudaempre)
+
     formBalance.value.totalancorriente = Number(formBalance.value.activomueble) + Number(formBalance.value.activootrosact) + Number(formBalance.value.activodepre)
     formBalance.value.totalpncorriente = Number(formBalance.value.pasivolargop) + Number(formBalance.value.otrascuentaspagar)
     formBalance.value.total_activo = Number(formBalance.value.totalacorriente) + Number(formBalance.value.totalancorriente)
@@ -23,33 +24,33 @@ const calcularBalance = () => {
 };
 const crud = {
     'nuevo': async() => {
-        await agregarRegistro(formAnalisis.value)
-        formAnalisis.value.errors = []
+        await agregarRegistro(formBalance.value)
+        formBalance.value.errors = []
         if(errors.value)
         {
-            formAnalisis.value.errors = errors.value
+            formBalance.value.errors = errors.value
         }
         if(respuesta.value.ok==1){
-            formAnalisis.value.errors = []
+            formBalance.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
-            formAnalisis.value.estadoCrud='editar'
+            formBalance.value.estadoCrud='editar'
         }
     },
     'editar': async() => {
-        await actualizarRegistro(formAnalisis.value)
-        formAnalisis.value.errors = []
+        await actualizarRegistro(formBalance.value)
+        formBalance.value.errors = []
         if(errors.value)
         {
-            formAnalisis.value.errors = errors.value
+            formBalance.value.errors = errors.value
         }
         if(respuesta.value.ok==1){
-            formAnalisis.value.errors = []
+            formBalance.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
         }
     }
 }
 const guardarBalance = () => {
-    crud[formAnalisis.value.estadoCrud]();
+    crud[formBalance.value.estadoCrud]();
 };
 </script>
 <template>

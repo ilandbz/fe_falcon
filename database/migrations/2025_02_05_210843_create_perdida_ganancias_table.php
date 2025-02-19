@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('costonegocio', 9, 2);
             $table->decimal('utiloperativa', 7, 2);
             $table->decimal('otrosing', 7, 2);
+            $table->decimal('otrosegr', 7, 2);
             $table->decimal('gast_fam', 9, 2);
             $table->decimal('utilidadneta', 9, 2);
             $table->decimal('utilnetdiaria', 9, 2);

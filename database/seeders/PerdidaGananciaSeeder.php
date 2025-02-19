@@ -44,6 +44,7 @@ class PerdidaGananciaSeeder extends Seeder
                     'costonegocio' => $costonegocio,
                     'utiloperativa' => $utiloperativa,
                     'otrosing' => $otrosing,
+                    'otrosegr' => $otrosegr,
                     'gast_fam' => $gast_fam,
                     'utilidadneta' => $utilidadneta,
                     'utilnetdiaria' => $utilnetdiaria,

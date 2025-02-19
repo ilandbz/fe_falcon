@@ -45,6 +45,7 @@ class PerdidaGananciaController extends Controller
             'costonegocio'  => $request->costonegocio,
             'utiloperativa' => $request->utiloperativa,
             'otrosing'      => $request->otrosing,
+            'otrosegr'      => $request->otrosegr,
             'gast_fam'      => $request->gast_fam,
             'utilidadneta'  => $request->utilidadneta,
             'utilnetdiaria' => $request->utilnetdiaria,

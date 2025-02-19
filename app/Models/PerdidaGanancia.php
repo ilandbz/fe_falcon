@@ -14,6 +14,7 @@ class PerdidaGanancia extends Model
         'costonegocio',
         'utiloperativa',
         'otrosing',
+        'otrosegr',
         'gast_fam',
         'utilidadneta',
         'utilnetdiaria',

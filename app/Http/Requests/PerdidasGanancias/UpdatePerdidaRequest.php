@@ -31,6 +31,7 @@ class UpdatePerdidasGananciasRequest extends FormRequest
             'costonegocio' => 'required|numeric|min:0',
             'utiloperativa' => 'required|numeric|min:0',
             'otrosing' => 'required|numeric|min:0',
+            'otrosegr' => 'required|numeric|min:0',
             'gast_fam' => 'required|numeric|min:0',
             'utilidadneta' => 'required|numeric|min:0',
             'utilnetdiaria' => 'required|numeric|min:0',
