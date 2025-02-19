@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('venta_p_g_s', function (Blueprint $table) {
             $table->unsignedBigInteger('credito_id');
             $table->primary('credito_id');
-            $table->foreign('credito_id')->references('credito_id')->on('perdida_ganancias')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('tot_ing_mensual', 9, 2);
             $table->decimal('tot_cosprimo_m', 9, 2);
             $table->decimal('margen_tot', 9, 2);

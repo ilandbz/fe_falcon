@@ -13,8 +13,7 @@ class VentaPGController extends Controller
 {
     public function store(StoreVentasPerdidasGananciasRequest $request)
     {
-        $request->validated();
-
+        //$request->validated();
         $pyg = VentaPG::create([
             'credito_id'       => $request->credito_id,
             'tot_ing_mensual'  => $request->tot_ing_mensual,
@@ -24,31 +23,28 @@ class VentaPGController extends Controller
             'irrecuperable'    => $request->irrecuperable,
             'cantproductos'    => $request->cantproductos,
         ]);
-
-
-        foreach ($request->detalles as $fila) {
-            $fila = (array) $fila; // Asegura que es un array asociativo
+        $detalles = $request->detalles;
+        foreach($detalles as $row){
             DetVentaPG::create([
                 'credito_id'        => $pyg->credito_id,
-                'nroproducto'       => $fila['nroproducto'] ?? null,
-                'descripcion'       => $fila['descripcion'] ?? '',
-                'unidadmedida'      => $fila['unidadmedida'] ?? '',
-                'preciounit'        => $fila['preciounit'] ?? 0,
-                'primaprincipal'    => $fila['primaprincipal'] ?? 0,
-                'primasecundaria'   => $fila['primasecundaria'] ?? 0,
-                'primacomplement'   => $fila['primacomplement'] ?? 0,
-                'matprima'          => $fila['matprima'] ?? 0,
-                'manoobra1'         => $fila['manoobra1'] ?? 0,
-                'manoobra2'         => $fila['manoobra2'] ?? 0,
-                'manoobra'          => $fila['manoobra'] ?? 0,
-                'costoprimount'     => $fila['costoprimount'] ?? 0,
-                'prodmensual'       => $fila['prodmensual'] ?? 0,
-                'ventastotales'     => $fila['ventastotales'] ?? 0,
-                'totcostoprimo'     => $fila['totcostoprimo'] ?? 0,
-                'margenventas'      => $fila['margenventas'] ?? 0,
+                'nroproducto'       => $row['nroproducto'],
+                'descripcion'       => $row['descripcion'],
+                'unidadmedida'      => $row['unidadmedida'],
+                'preciounit'        => $row['preciounit'],
+                'primaprincipal'    => $row['primaprincipal'],
+                'primasecundaria'   => $row['primasecundaria'],
+                'primacomplement'   => $row['primacomplement'],
+                'matprima'          => $row['matprima'],
+                'manoobra1'         => $row['manoobra1'],
+                'manoobra2'         => $row['manoobra2'],
+                'manoobra'          => $row['manoobra'],
+                'costoprimount'     => $row['costoprimount'],
+                'prodmensual'       => $row['prodmensual'],
+                'ventastotales'     => $row['ventastotales'],
+                'totcostoprimo'     => $row['totcostoprimo'],
+                'margenventas'      => $row['margenventas'],
             ]);
         }
-        
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Venta Registrado satisfactoriamente',

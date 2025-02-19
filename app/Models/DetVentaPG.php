@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DetVentaPG extends Model
 {
-    protected $primaryKey = ['credito_id', 'nroproducto'];
-
     protected $fillable = [
         'credito_id',
         'nroproducto',
@@ -28,6 +26,9 @@ class DetVentaPG extends Model
         'totcostoprimo',
         'margenventas',
     ];
+
+
+
 
     /**
      * Get the venta that owns the DetVentaPG

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class VentaPG extends Model
 {
     protected $primaryKey = 'credito_id';
-
+    protected $table = 'venta_p_g_s';
+    public $incrementing = false; 
+    protected $keyType = 'int'; 
 
     protected $fillable = [
         'credito_id',
