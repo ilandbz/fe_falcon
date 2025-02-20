@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PerdidasGanancias\UpdatePerdidasGananciasRequest;
-use App\Http\Requests\VentasPerdidasGanancias\StoreVentasPerdidasGananciasRequest;
+use App\Http\Requests\Ventas\StoreVentasRequest;
+use App\Http\Requests\Ventas\UpdateVentasRequest;
 use App\Models\DetVentaPG;
 use App\Models\PerdidaGanancia;
 use App\Models\VentaPG;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class VentaPGController extends Controller
 {
-    public function store(StoreVentasPerdidasGananciasRequest $request)
+    public function store(StoreVentasRequest $request)
     {
         //$request->validated();
         $pyg = VentaPG::create([
@@ -57,9 +57,9 @@ class VentaPGController extends Controller
         ])->where('credito_id', $request->credito_id)->first();
         return $pyg;
     }
-    public function update(UpdatePerdidasGananciasRequest $request)
+    public function update(UpdateVentasRequest $request)
     {
-        $request->validated();
+        //$request->validated();
         $pyg = VentaPG::where('credito_id',$request->credito_id)->first();
         $pyg->credito_id   = $request->credito_id;
         $pyg->tot_ing_mensual  = $request->tot_ing_mensual;
@@ -70,26 +70,27 @@ class VentaPGController extends Controller
         $pyg->cantproductos    = $request->cantproductos;
         $pyg->save();
 
-        foreach($request->detalles as $fila){
-            DetVentaPG::firstOrCreate([
-                'credito_id' => $request->credito_id,
-                'nroproducto' => $request->nroproducto,
-            ],[
-                'descripcion'       => $fila['descripcion'],
-                'unidadmedida'      => $fila['unidadmedida'],
-                'preciounit'        => $fila['preciounit'],
-                'primaprincipal'    => $fila['primaprincipal'],
-                'primasecundaria'   => $fila['primasecundaria'],
-                'primacomplement'   => $fila['primacomplement'],
-                'matprima'          => $fila['matprima'],
-                'manoobra1'         => $fila['manoobra1'],
-                'manoobra2'         => $fila['manoobra2'],
-                'manoobra'          => $fila['manoobra'],
-                'costoprimount'     => $fila['costoprimount'],
-                'prodmensual'       => $fila['prodmensual'],
-                'ventastotales'     => $fila['ventastotales'],
-                'totcostoprimo'     => $fila['totcostoprimo'],
-                'margenventas'      => $fila['margenventas'],
+        DetVentaPG::where('credito_id', $pyg->credito_id)->delete();        
+        $detalles = $request->detalles;
+        foreach($detalles as $row){
+            DetVentaPG::create([
+                'credito_id'        => $pyg->credito_id,
+                'nroproducto'       => $row['nroproducto'],
+                'descripcion'       => $row['descripcion'],
+                'unidadmedida'      => $row['unidadmedida'],
+                'preciounit'        => $row['preciounit'],
+                'primaprincipal'    => $row['primaprincipal'],
+                'primasecundaria'   => $row['primasecundaria'],
+                'primacomplement'   => $row['primacomplement'],
+                'matprima'          => $row['matprima'],
+                'manoobra1'         => $row['manoobra1'],
+                'manoobra2'         => $row['manoobra2'],
+                'manoobra'          => $row['manoobra'],
+                'costoprimount'     => $row['costoprimount'],
+                'prodmensual'       => $row['prodmensual'],
+                'ventastotales'     => $row['ventastotales'],
+                'totcostoprimo'     => $row['totcostoprimo'],
+                'margenventas'      => $row['margenventas'],
             ]);
         }
         return response()->json([

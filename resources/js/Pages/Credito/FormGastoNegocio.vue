@@ -6,12 +6,10 @@ const { hideModal, Toast, openModal, Swal } = useHelper();
 
 const props = defineProps({
     form: Object,
-    currentPage: Number
 });
 
-const { form, currentPage } = toRefs(props);
+const { form } = toRefs(props);
 
-const emit = defineEmits(['onListar', 'evaluar']);
 
 const guardar = () => {
     
@@ -34,14 +32,14 @@ onMounted(() => {
                     </div>
                     <div class="modal-body">
                         <form action="" class="form-horizontal">
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="" class="control-label">Alquiler</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>
-                                        <input type="text" class="form-control" name="alquilerpg" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" placeholder="0.00" v-model="form.alquiler">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -50,19 +48,18 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>	
-                                        <input type="text" class="form-control" name="serviciospg" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.servicios">
                                     </div>
                                 </div>				
                             </div>
-                            <br>
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="" class="control-label">Personal</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>		
-                                        <input type="text" class="form-control" name="personalpg" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" name="personalpg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.personal">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -71,19 +68,18 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>			
-                                        <input type="text" class="form-control" name="sunatpg" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" name="sunatpg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.sunat">
                                     </div>
                                 </div>				
                             </div>
-                            <br>
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="" class="control-label">Transporte</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>			
-                                        <input type="text" class="form-control" name="transportepg" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" name="transportepg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.transporte">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -92,18 +88,27 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>			
-                                        <input type="text" class="form-control" name="gastosfinan" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" name="gastosfinan" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.gastosfinancieros">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="" class="control-label">Otros</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>		
-                                        <input type="text" class="form-control" name="otrospg" onclick="selecciona_value(this)" placeholder="0.00" value="">
+                                        <input type="text" class="form-control" name="otrospg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.otros">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="" class="control-label">Total</label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">S/.</span>
+                                        </div>		
+                                        <input type="text" class="form-control" name="otrospg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.total" readonly>
                                     </div>
                                 </div>
                             </div>

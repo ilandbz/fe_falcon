@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gasto_negocio_p_g_s', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('credito_id');
+            $table->primary('credito_id');
+            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('alquiler', 7, 2)->nullable();
+            $table->decimal('servicios', 7, 2)->nullable();
+            $table->decimal('personal', 7, 2)->nullable();
+            $table->decimal('sunat', 7, 2)->nullable();
+            $table->decimal('transporte', 7, 2)->nullable();
+            $table->decimal('gastosfinancieros', 7, 2)->nullable();
+            $table->decimal('otros', 7, 2)->nullable();
             $table->timestamps();
         });
     }

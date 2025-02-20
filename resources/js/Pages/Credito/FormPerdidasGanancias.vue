@@ -2,6 +2,7 @@
 import { toRefs, onMounted, ref } from 'vue';
 import usePerdidas from '@/Composables/Perdidas.js'; 
 import useVenta from '@/Composables/Venta.js'; 
+import useGastoNegocio from '@/Composables/GastoNegocio.js'; 
 import DetVentasForm from './FormDetVentas.vue'
 import GastoNegocioForm from './FormGastoNegocio.vue'
 import GastoFamiliarForm from './FormGastosFamiliares.vue'
@@ -17,6 +18,10 @@ const {
 const {
     regventa, agregarVenta, obtenerVenta
     } = useVenta();    
+const {
+    gastos, obtenerGastos
+    } = useGastoNegocio();    
+    
 const { Toast, openModal } = useHelper();
 
 
@@ -50,6 +55,49 @@ const venta = ref({
     estadoCrud: '', 
     errors: []
 });
+
+
+const formGastoNegocio = ref({
+    credito_id : '',
+    alquiler : '',
+    servicios : '',
+    personal : '',
+    sunat : '',
+    transporte : '',
+    gastosfinancieros : '',
+    otros : '',
+    total : '',
+    estadoCrud: '', 
+    errors: []
+});
+
+
+const obtenerDatosGastoNegocio = async(credito_id)=>{
+    await obtenerGastos(credito_id)
+    formGastoNegocio.value.credito_id=credito_id;
+    if(regventa.value){
+        formGastoNegocio.value.alquiler=gastos.value.alquiler;
+        formGastoNegocio.value.servicios=gastos.value.servicios;
+        formGastoNegocio.value.personal=gastos.value.personal;
+        formGastoNegocio.value.sunat=gastos.value.sunat;
+        formGastoNegocio.value.transporte=gastos.value.transporte;
+        formGastoNegocio.value.gastosfinancieros=gastos.value.gastosfinancieros;
+        formGastoNegocio.value.otros = gastos.value.otros;
+        formGastoNegocio.value.total = Number(gastos.value.alquiler) + Number(gastos.value.servicios) + Number(gastos.value.personal) + Number(gastos.value.sunat) + 
+        Number(gastos.value.transporte) + Number(gastos.value.otros) + Number(gastos.value.otros);
+        formGastoNegocio.value.estadoCrud= 'editar'; 
+    }else{
+        formGastoNegocio.value.alquiler=0;
+        formGastoNegocio.value.servicios=0;
+        formGastoNegocio.value.personal=0;
+        formGastoNegocio.value.sunat=0;
+        formGastoNegocio.value.transporte=0;
+        formGastoNegocio.value.gastosfinancieros=0;
+        formGastoNegocio.value.otros=0;
+        formGastoNegocio.value.total = 0;
+        formGastoNegocio.value.estadoCrud = 'nuevo';
+    }
+}
 
 const obtenerDatos = async(credito_id)=>{
     await obtenerVenta(credito_id)
@@ -95,25 +143,19 @@ const obtenerDatos = async(credito_id)=>{
 }
 
 const buscarDetVenta=()=>{
-    //limpiar()
-    // form.value.estadoCrud = 'nuevo'
-
     obtenerDatos(formPerdidas.value.credito_id)
     openModal('#modaldetVentas')
     document.getElementById("modaldetVentasLabel").innerHTML = 'Detalle de Ventas';
 }
-
 const buscarGastoNegocio=()=>{
+    obtenerDatosGastoNegocio(formPerdidas.value.credito_id)
     openModal('#GastosNegocio')
     document.getElementById("GastosNegocioLabel").innerHTML = 'Gasto Negocio';
 }
-
 const buscarGastoFamiliar=()=>{
     openModal('#GastosFamiliar')
     document.getElementById("GastosFamiliarLabel").innerHTML = 'Gasto Familiar';
 }
-
-
 const crud = {
     'nuevo': async() => {
         await agregarRegistro(formPerdidas.value)
@@ -263,7 +305,6 @@ const guardarPerdidas = () => {
                 </div>										
                 <div class="row mb-3">
                     <div class="col"></div>
-
                     <div class="col">
                         <div class="input-group has-validation">
                             <span class="input-group-text">S/.</span>
@@ -280,7 +321,6 @@ const guardarPerdidas = () => {
                             </div> 
                         </div>
                     </div>
-
                 </div>
                 <div class="row mb-3">
                     <div class="col">
@@ -315,7 +355,7 @@ const guardarPerdidas = () => {
         </div>
         <button type="submit" class="btn btn-primary">{{ (formPerdidas.estadoCrud=='nuevo') ? 'Guardar Perdidas' : 'Actualizar Perdidas' }}</button>
     </form>
-    <DetVentasForm :venta="venta"></DetVentasForm>
-    <GastoNegocioForm></GastoNegocioForm>
+    <DetVentasForm :venta="venta" :formPerdidas="formPerdidas"></DetVentasForm>
+    <GastoNegocioForm :form="formGastoNegocio"></GastoNegocioForm>
     <GastoFamiliarForm></GastoFamiliarForm>
 </template>

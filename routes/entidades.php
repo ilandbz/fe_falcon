@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalisisCualitativoController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\GastoNegocioPGController;
 use App\Http\Controllers\GrupoMenuController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PacienteController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaPGController;
 use App\Models\AnalisisCualitativo;
+use App\Models\GastoNegocioPG;
 use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Route;
 
@@ -149,6 +151,13 @@ Route::group(['prefix' => 'ventapyg', 'middleware' => 'auth'], function () {
     Route::post('eliminar', [VentaPGController::class, 'destroy']);
     Route::post('guardar', [VentaPGController::class, 'store']);
     Route::get('mostrar', [VentaPGController::class, 'show']);
+});
+//gasto negocio
+Route::group(['prefix' => 'gasto-negocio', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [GastoNegocioPGController::class, 'update']);
+    Route::post('eliminar', [GastoNegocioPGController::class, 'destroy']);
+    Route::post('guardar', [GastoNegocioPGController::class, 'store']);
+    Route::get('mostrar', [GastoNegocioPGController::class, 'show']);
 });
 //propuesta
 Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {

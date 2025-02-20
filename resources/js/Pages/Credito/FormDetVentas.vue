@@ -5,16 +5,15 @@ import useVenta from '@/Composables/Venta.js';
 
 const { hideModal, Toast, openModal, Swal } = useHelper();
 const {
-    agregarVenta, respuesta, errors
+    agregarVenta, respuesta, errors, actualizarVenta
     } = useVenta();   
 
 const props = defineProps({
     venta: Object,
+    formPerdidas: Object
 });
 
-const { venta } = toRefs(props);
-
-const emit = defineEmits([ 'evaluar']);
+const { venta, formPerdidas } = toRefs(props);
 
 const guardar = async() => {
     crud[venta.value.estadoCrud]();
@@ -31,7 +30,11 @@ const crud = {
             venta.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
             venta.value.estadoCrud='editar'
+            hideModal('#modaldetVentas');
+            formPerdidas.value.ventas= venta.value.tot_ing_mensual
+            formPerdidas.value.costo= venta.value.tot_cosprimo_m
         }
+        
     },
     'editar': async() => {
         await actualizarVenta(venta.value)
@@ -43,8 +46,13 @@ const crud = {
         if(respuesta.value.ok==1){
             venta.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
+            hideModal('#modaldetVentas');
+            formPerdidas.value.ventas= venta.value.tot_ing_mensual
+            formPerdidas.value.costo= venta.value.tot_cosprimo_m
         }
+        
     }
+
 }
 const agregarProducto = () => {
     venta.value.detalles.push({
@@ -121,14 +129,14 @@ const calcularDatos = (indice) => {
                                                 PRODUCTO {{ det.nroproducto }}
                                             </div>
                                             <div class="card-body">
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].descripcion"
                                                         placeholder="DESCRIPCION">
                                                         <label>DESCRIPCION</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <select class="form-select" v-model="venta.detalles[indice].unidadmedida"
                                                             @change="calcularDatos(indice)">
@@ -139,7 +147,7 @@ const calcularDatos = (indice) => {
                                                         <label>UNIDAD DE MEDIDA</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].preciounit"
                                                         placeholder="PRECIO VENTA UNIT."
@@ -147,7 +155,7 @@ const calcularDatos = (indice) => {
                                                         <label>PRECIO VENTA UNIT.</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].primaprincipal"
                                                         placeholder="MATERIA PRIMA PRINCIPAL"
@@ -155,7 +163,7 @@ const calcularDatos = (indice) => {
                                                         <label>MATERIA PRIMA PRINCIPAL</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].primasecundaria"
                                                         placeholder="MATERIA PRIMA SECUNDARIA"
@@ -163,7 +171,7 @@ const calcularDatos = (indice) => {
                                                         <label>MATERIA PRIMA SECUNDARIA</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].primacomplement"
                                                         placeholder="MATERIA PRIMA COMPLEMENTARIA"
@@ -171,14 +179,14 @@ const calcularDatos = (indice) => {
                                                         <label>MATERIA PRIMA COMPLEMENTARIA</label>
                                                     </div>
                                                 </div> 
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].matprima"
                                                         placeholder="MATERIA PRIMA" readonly>
                                                         <label>MATERIA PRIMA</label>
                                                     </div>
                                                 </div>                                 
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].manoobra1"
                                                         placeholder="MANO DE OBRA 1"
@@ -186,7 +194,7 @@ const calcularDatos = (indice) => {
                                                         <label>MANO DE OBRA 1</label>
                                                     </div>
                                                 </div>  
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].manoobra2"
                                                         placeholder="MANO DE OBRA 2"
@@ -194,42 +202,42 @@ const calcularDatos = (indice) => {
                                                         <label>MANO DE OBRA 2</label>
                                                     </div>
                                                 </div>                                                              
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].manoobra"
                                                         placeholder="MANO DE OBRA" readonly>
                                                         <label>MANO DE OBRA</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].costoprimount"
                                                         placeholder="COSTO PRIMO UNITARIO">
                                                         <label>COSTO PRIMO UNITARIO</label>
                                                     </div>
                                                 </div>                                
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].prodmensual"
                                                         placeholder="PRODUCCION MENSUAL POR PRODUCTO" readonly>
                                                         <label>PRODUCCION MENSUAL POR PRODUCTO</label>
                                                     </div>
                                                 </div>                                  
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].ventastotales"
                                                         placeholder="VENTAS TOTALES POR PRODUCTO">
                                                         <label>VENTAS TOTALES POR PRODUCTO</label>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].totcostoprimo"
                                                         placeholder="COSTO PRIMO POR PRODUCTO">
                                                         <label>COSTO PRIMO POR PRODUCTO</label>
                                                     </div>
                                                 </div> 
-                                                <div class="mb-3 has-validation">
+                                                <div class="mb-1 has-validation">
                                                     <div class="form-floating is-invalid">
                                                         <input type="text" class="form-control" v-model="venta.detalles[indice].margenventas"
                                                         placeholder="MARGEN DE VENTAS POR PRODUCTO">

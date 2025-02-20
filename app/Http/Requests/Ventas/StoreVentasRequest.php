@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\VentasPerdidasGanancias;
+namespace App\Http\Requests\Ventas;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreVentasPerdidasGananciasRequest extends FormRequest
+class StoreVentasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
