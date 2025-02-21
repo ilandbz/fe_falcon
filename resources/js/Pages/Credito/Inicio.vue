@@ -19,6 +19,7 @@ const { agencia, role } = toRefs(props);
     const {
         creditos, errors, credito, respuesta,
         obtenerCreditos, obtenerCredito, eliminarCredito,
+        validarEvaluacionAsesor, 
     } = useCredito();
     const {
         obtenerAnalisisCredito, analisis
@@ -242,9 +243,31 @@ const { agencia, role } = toRefs(props);
             form.value[key] = datos && datos[key] !== undefined ? datos[key] : valoresPorDefecto[key];
         });
     };
-
+    const enviar=(id)=>{
+        validarEnvio(id)
+        if(respuesta.value.ok==1){
+            Swal.fire({
+                title: '¿Estás seguro de Enviar a Gerencia?',
+                text: "Credito",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Enviar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    alert('enviado')
+                }
+            })
+        }else{
+            alert('No realizo las evaluaciones')
+        }    
+    }
+    const validarEnvio=async(id)=>{
+        await validarEvaluacionAsesor(id)
+    
+    }
     const cargarDatosEvaluacion = (id) => {
-
         // if(analisis.value){
         //     formAnalisis.value.credito_id = analisis.value.credito_id;
         //     formAnalisis.value.tipogarantia = analisis.value.tipogarantia;
@@ -333,8 +356,6 @@ const { agencia, role } = toRefs(props);
         //     formPropuesta.value.referencias = '';
         //     formPropuesta.value.estadoCrud = 'nuevo';
         // }
-
-
         asignarValores(formAnalisis, analisis.value, {
             credito_id: id,
             tipogarantia: '',
@@ -522,7 +543,7 @@ const { agencia, role } = toRefs(props);
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="11" class="text-center">Creditos</th>
+                                        <th colspan="12" class="text-center">Creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -531,6 +552,7 @@ const { agencia, role } = toRefs(props);
                                         <th>Apellidos y Nombres</th>
                                         <th>Monto</th>
                                         <th>Plazo</th>
+                                        <th>Fecha</th>
                                         <th>Frecuencia</th>
                                         <th>Asesor</th>
                                         <th>Agencia</th>
@@ -540,7 +562,7 @@ const { agencia, role } = toRefs(props);
                                 </thead>
                                 <tbody>
                                     <tr v-if="creditos.total == 0">
-                                        <td class="text-danger text-center" colspan="11">
+                                        <td class="text-danger text-center" colspan="12">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
@@ -551,6 +573,7 @@ const { agencia, role } = toRefs(props);
                                         <td>{{ credito.cliente.persona.apenom }}</td>
                                         <td>{{ 'S/. ' + credito.monto }}</td>
                                         <td>{{ credito.plazo }}</td>
+                                        <td>{{ credito.fecha_reg }}</td>
                                         <td>{{ credito.frecuencia }}</td>
                                         <td>{{ credito.asesor.name }}</td>
                                         <td>{{ credito.agencia.nombre }}</td>
@@ -561,13 +584,18 @@ const { agencia, role } = toRefs(props);
                                             </button>&nbsp;
                                             <button class="btn btn-danger btn-sm" style="font-size: .65rem;" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
                                                 <i class="fas fa-trash"></i>
-                                            </button>&nbsp;
+                                            </button>
                                             <!-- <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
                                                 <i class="fas fa-check"></i>
                                             </button>&nbsp; -->
-                                            <button v-if="credito.estado=='REGISTRADO' || credito.estado=='EVALUACION'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
-                                                <i class="fas fa-check"></i>
-                                            </button>&nbsp;
+                                            <div v-if="credito.estado=='REGISTRADO'">
+                                                <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                    <i class="fas fa-check"></i>
+                                                </button>&nbsp;
+                                                <button class="btn btn-primary btn-sm" style="font-size: .65rem;" title="Enviar a Gerencia" @click.prevent="enviar(credito.id)">
+                                                    <i class="fa-solid fa-paper-plane"></i>
+                                                </button>&nbsp;
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>

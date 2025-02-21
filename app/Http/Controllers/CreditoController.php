@@ -173,5 +173,18 @@ class CreditoController extends Controller
             'mensaje' => 'Evaluación anterior copiada correctamente',
         ],200);
     }
+    public function validarParaEvaluacion(Request $request){
+        $solicitud = Credito::with(['analisis', 'balance', 'perdidas', 'propuesta'])
+        ->where('id', $request->id)->first();
+        if($solicitud->tieneTodosLosRegistros){
+            $sta=1;
+        }else{
+            $rsta=0;
+        }
+        return response()->json([
+            'ok' => $rsta,
+            'mensaje' => 'Validacion Realizada',
+        ],200);
+    }
     
 }

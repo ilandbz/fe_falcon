@@ -57,5 +57,14 @@ class Credito extends Model
     {
         return $this->hasOne(PropuestaCredito::class, 'credito_id');
     }
-    
+    /**
+     * Verifica si la solicitud tiene todos los registros requeridos
+     */
+    public function tieneRegistrosCompletos(): bool
+    {
+        return !is_null($this->analisis) && 
+               !is_null($this->balance) && 
+               !is_null($this->perdidas) && 
+               !is_null($this->propuesta);
+    }
 }
