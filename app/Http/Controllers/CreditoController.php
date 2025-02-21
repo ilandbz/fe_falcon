@@ -78,6 +78,15 @@ class CreditoController extends Controller
             'mensaje' => 'Credito modificado satisfactoriamente'
         ],200);
     }
+    public function cambiarEstado(Request $request){
+        Credito::where('id', $request->id)->update([
+            'estado' => $request->estado,
+        ]);
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Estado Actualizado'
+        ],200);
+    }
     public function obtenerTiposCreditoPorCiente(Request $request){
 
         $estados = Credito::where('cliente_id', $request->cliente_id)
@@ -176,8 +185,14 @@ class CreditoController extends Controller
     public function validarParaEvaluacion(Request $request){
         $solicitud = Credito::with(['analisis', 'balance', 'perdidas', 'propuesta'])
         ->where('id', $request->id)->first();
-        if($solicitud->tieneTodosLosRegistros){
-            $sta=1;
+        if (!$solicitud) {
+            return response()->json([
+                'ok' => 0,
+                'mensaje' => 'Solicitud no encontrada',
+            ], 404);
+        }
+        if($solicitud->tieneTodosLosRegistros()){
+            $rsta=1;
         }else{
             $rsta=0;
         }
@@ -186,5 +201,6 @@ class CreditoController extends Controller
             'mensaje' => 'Validacion Realizada',
         ],200);
     }
+    
     
 }

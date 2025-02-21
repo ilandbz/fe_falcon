@@ -60,7 +60,7 @@ class Credito extends Model
     /**
      * Verifica si la solicitud tiene todos los registros requeridos
      */
-    public function tieneRegistrosCompletos(): bool
+    public function tieneTodosLosRegistros(): bool
     {
         return !is_null($this->analisis) && 
                !is_null($this->balance) && 

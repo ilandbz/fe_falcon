@@ -63,6 +63,23 @@ export default function useCredito() {
             }
         }
     }
+
+    const cambiarEstado = async(data) => {
+        errors.value = ''
+        try {
+            let respond = await axios.post('credito/cambiar-estado', data, getConfigHeader())
+            errors.value = ''
+            if (respond.data.ok == 1) {
+                respuesta.value = respond.data
+            }
+        } catch (error) {
+            errors.value = ""
+            if (error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+    
     const eliminarCredito = async(id) => {
         const respond = await axios.post('credito/eliminar', { id: id }, getConfigHeader())
         if (respond.data.ok == 1) {
@@ -73,6 +90,7 @@ export default function useCredito() {
     return {
         errors, creditos, listaCreditos, credito, obtenerCredito, obtenerCreditos, 
         agregarCredito, actualizarCredito, eliminarCredito, respuesta, tiposCreditos, 
-        listaTiposCreditos, replicarEvaluacion, validarEvaluacionAsesor, respuesta
+        listaTiposCreditos, replicarEvaluacion, validarEvaluacionAsesor, respuesta,
+        cambiarEstado
     }
 }

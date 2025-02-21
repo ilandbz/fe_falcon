@@ -9,6 +9,7 @@
   import usePropuesta from '@/Composables/Propuesta.js'; 
   import CreditoForm from './Form.vue'
   import EvaluacionForm from './FormEvaluacion.vue'
+  import FormImpresiones from './FormImpresiones.vue';
   const props = defineProps({
     agencia: Object,
     role: Object
@@ -19,7 +20,7 @@ const { agencia, role } = toRefs(props);
     const {
         creditos, errors, credito, respuesta,
         obtenerCreditos, obtenerCredito, eliminarCredito,
-        validarEvaluacionAsesor, 
+        validarEvaluacionAsesor, cambiarEstado,
     } = useCredito();
     const {
         obtenerAnalisisCredito, analisis
@@ -243,8 +244,20 @@ const { agencia, role } = toRefs(props);
             form.value[key] = datos && datos[key] !== undefined ? datos[key] : valoresPorDefecto[key];
         });
     };
+    const data=ref({
+        id:'',
+        estado:'',
+    })
     const enviar=(id)=>{
         validarEnvio(id)
+    };
+    const cambiarEstadoCredito=async(id)=>{
+        data.value.id=id
+        data.value.estado='PENDIENTE'
+        await cambiarEstado(data.value)
+    }
+    const validarEnvio=async(id)=>{
+        await validarEvaluacionAsesor(id)
         if(respuesta.value.ok==1){
             Swal.fire({
                 title: '¿Estás seguro de Enviar a Gerencia?',
@@ -256,16 +269,13 @@ const { agencia, role } = toRefs(props);
                 confirmButtonText: 'Si, Enviar!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    alert('enviado')
+                    cambiarEstadoCredito(id)
+                    listarCreditos(creditos.value.current_page)
                 }
             })
         }else{
-            alert('No realizo las evaluaciones')
-        }    
-    }
-    const validarEnvio=async(id)=>{
-        await validarEvaluacionAsesor(id)
-    
+            Swal.fire("Falta evaluar");
+        }        
     }
     const cargarDatosEvaluacion = (id) => {
         // if(analisis.value){
@@ -436,6 +446,10 @@ const { agencia, role } = toRefs(props);
         openModal('#modalevaluacion')
         document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
+    const archivos=()=>{
+       openModal('#modalimpresiones')
+       document.getElementById("modalimpresionesLabel").innerHTML = 'Evaluacion Credito';        
+    }
     const cambiarPagina =(pagina) => {
         listarCreditos(pagina)
     }
@@ -584,18 +598,19 @@ const { agencia, role } = toRefs(props);
                                             </button>&nbsp;
                                             <button class="btn btn-danger btn-sm" style="font-size: .65rem;" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
                                                 <i class="fas fa-trash"></i>
-                                            </button>
+                                            </button>&nbsp;
                                             <!-- <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
                                                 <i class="fas fa-check"></i>
                                             </button>&nbsp; -->
-                                            <div v-if="credito.estado=='REGISTRADO'">
-                                                <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
-                                                    <i class="fas fa-check"></i>
-                                                </button>&nbsp;
-                                                <button class="btn btn-primary btn-sm" style="font-size: .65rem;" title="Enviar a Gerencia" @click.prevent="enviar(credito.id)">
-                                                    <i class="fa-solid fa-paper-plane"></i>
-                                                </button>&nbsp;
-                                            </div>
+                                            <button v-if="credito.estado=='REGISTRADO'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                <i class="fas fa-check"></i>
+                                            </button>&nbsp;
+                                            <button v-if="credito.estado=='REGISTRADO'" class="btn btn-primary btn-sm" style="font-size: .65rem;" title="Enviar a Gerencia" @click.prevent="enviar(credito.id)">
+                                                <i class="fa-solid fa-paper-plane"></i>
+                                            </button>&nbsp;
+                                            <button v-if="credito.estado=='PENDIENTE'" class="btn btn-success btn-sm" style="font-size: .65rem;" title="Archivos" @click.prevent="archivos(credito.id)">
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                            </button>&nbsp;
                                         </td>
                                     </tr>
                                 </tbody>
@@ -662,4 +677,5 @@ const { agencia, role } = toRefs(props);
     :formPerdidas="formPerdidas"
     :formPropuesta="formPropuesta"
     @buscarCredito="buscarCredito"></EvaluacionForm>
+    <FormImpresiones :credito="credito"></FormImpresiones>
 </template>

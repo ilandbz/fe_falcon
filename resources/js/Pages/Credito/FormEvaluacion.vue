@@ -26,9 +26,6 @@ const formData = ref({
     cliente_id : '',
     credito_id : '',
 })
-
-
-
 const copiarEvaluacionAnterior=async() =>{
     formData.value.cliente_id=credito.value.cliente_id;
     formData.value.credito_id = credito.value.id;

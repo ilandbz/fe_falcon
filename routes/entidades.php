@@ -121,6 +121,7 @@ Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::get('tipo-credito-cliente', [CreditoController::class, 'obtenerTiposCreditoPorCiente']);
     Route::post('replicar-evaluacion-anterior', [CreditoController::class, 'cargarEvaluacionAnterior']);
     Route::get('validar-evaluacion-asesor', [CreditoController::class, 'validarParaEvaluacion']);
+    Route::post('cambiar-estado', [CreditoController::class, 'cambiarEstado']);
 });
 //analisis cualitativo
 Route::group(['prefix' => 'analisis-cualitativo', 'middleware' => 'auth'], function () {
