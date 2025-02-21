@@ -374,7 +374,7 @@ const guardarAnalisis = () => {
                         <div class="row">
                             <div class="col-md-9">
                                 <label for="totalunidademp" class="form-label">
-                                    TOTAL PUNTAJE UNIDAD EMPRESARIAL {{ formAnalisis.estadoCrud }}
+                                    TOTAL PUNTAJE UNIDAD EMPRESARIAL
                                 </label>
                             </div>
                             <div class="col-md-3">

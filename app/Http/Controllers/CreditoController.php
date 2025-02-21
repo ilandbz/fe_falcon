@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Credito\StoreCreditoRequest;
 use App\Http\Requests\Credito\UpdateCreditoRequest;
+use App\Models\AnalisisCualitativo;
+use App\Models\Balance;
 use Illuminate\Support\Facades\DB;
 use App\Models\Credito;
+use App\Models\PerdidaGanancia;
+use App\Models\PropuestaCredito;
 use Illuminate\Http\Request;
 
 class CreditoController extends Controller
@@ -131,4 +135,43 @@ class CreditoController extends Controller
         return $query->orderBy('fecha_reg', 'Desc')->paginate($paginacion);
     }
 
+    public function cargarEvaluacionAnterior(Request $request)
+    {
+        $credito_id = $request->credito_id;
+        $cliente_id = $request->cliente_id;
+    
+        // Buscar el crédito anterior
+        $credito = Credito::with(['analisis', 'balance', 'perdidas', 'propuesta'])
+            ->where('cliente_id', $cliente_id)
+            ->where('estado', '!=', 'Registrado')
+            ->first();
+    
+        // Verificar si se encontró un crédito válido
+        if (!$credito) {
+            return response()->json(['error' => 'No se encontró un crédito válido'], 404);
+        }
+    
+        // Modelos relacionados a duplicar
+        $relaciones = [
+            'analisis' => AnalisisCualitativo::class,
+            'balance' => Balance::class,
+            'perdidas' => PerdidaGanancia::class,
+            'propuesta' => PropuestaCredito::class,
+        ];
+    
+        foreach ($relaciones as $relacion => $modelo) {
+            if ($credito->$relacion) { // Verifica si la relación existe
+                $modelo::where('credito_id', $credito_id)->delete();
+                $nuevoRegistro = $credito->$relacion->replicate();
+                $nuevoRegistro->credito_id = $credito_id;
+                $nuevoRegistro->save();
+            }
+        }
+
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Evaluación anterior copiada correctamente',
+        ],200);
+    }
+    
 }

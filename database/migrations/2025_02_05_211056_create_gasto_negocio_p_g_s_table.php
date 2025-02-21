@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('gasto_negocio_p_g_s', function (Blueprint $table) {
             $table->unsignedBigInteger('credito_id');
             $table->primary('credito_id');
-            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('credito_id')->references('credito_id')->on('perdida_ganancias')->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('alquiler', 7, 2)->nullable();
             $table->decimal('servicios', 7, 2)->nullable();
             $table->decimal('personal', 7, 2)->nullable();

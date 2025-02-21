@@ -1,23 +1,82 @@
 <script setup>
 import { toRefs, onMounted, ref } from 'vue';
 import useHelper from '@/Helpers';  
-
+import useGastoNegocio from '@/Composables/GastoNegocio.js'; 
 const { hideModal, Toast, openModal, Swal } = useHelper();
 
 const props = defineProps({
     form: Object,
+    formPerdidas: Object
 });
 
-const { form } = toRefs(props);
+const { form, formPerdidas } = toRefs(props);
+const {
+    agregarGastos, respuesta, errors, actualizarGastos
+    } = useGastoNegocio();   
 
-
-const guardar = () => {
-    
+const guardar = async() => {
+    //crud[form.value.estadoCrud]();
+    hideModal('#GastosNegocio');
+    formPerdidas.value.costonegocio= form.value.total
 };
+const calcularTotal = () =>{
+    form.value.total=Number(form.value.alquiler)+
+                    Number(form.value.servicios)+
+                    Number(form.value.personal)+
+                    Number(form.value.sunat)+
+                    Number(form.value.transporte)+
+                    Number(form.value.gastosfinancieros)+
+                    Number(form.value.otros);
+}
+const limpiar=()=>{
+    if(form.value.estadoCrud == 'nuevo'){
+        form.value.credito_id='';
+        form.value.alquiler=0;
+        form.value.servicios=0;
+        form.value.personal=0;
+        form.value.sunat=0;
+        form.value.transporte=0;
+        form.value.gastosfinancieros=0;
+        form.value.otros=0;
+        form.value.total = 0;
+        form.value.estadoCrud = '';
+    }
 
-onMounted(() => {
+}
+// const crud = {
+//     'nuevo': async() => {
+//         await agregarGastos(form.value)
+//         form.value.errors = []
+//         if(errors.value)
+//         {
+//             form.value.errors = errors.value
+//         }
+//         if(respuesta.value.ok==1){
+//             form.value.errors = []
+//             Toast.fire({icon:'success', title:respuesta.value.mensaje})
+//             form.value.estadoCrud='editar'
+//             hideModal('#GastosNegocio');
+//             formPerdidas.value.costonegocio= form.value.total
+//         }
+        
+//     },
+//     'editar': async() => {
+//         await actualizarGastos(form.value)
+//         form.value.errors = []
+//         if(errors.value)
+//         {
+//             form.value.errors = errors.value
+//         }
+//         if(respuesta.value.ok==1){
+//             form.value.errors = []
+//             Toast.fire({icon:'success', title:respuesta.value.mensaje})
+//             hideModal('#GastosNegocio');
+//             formPerdidas.value.costonegocio= form.value.total
+//         }
+        
+//     }
+// }
 
-});
 </script>
 
 <template>
@@ -39,7 +98,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="0.00" v-model="form.alquiler">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.alquiler">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -48,7 +107,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>	
-                                        <input type="text" class="form-control" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.servicios">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.servicios">
                                     </div>
                                 </div>				
                             </div>
@@ -59,7 +118,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>		
-                                        <input type="text" class="form-control" name="personalpg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.personal">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.personal">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -68,7 +127,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>			
-                                        <input type="text" class="form-control" name="sunatpg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.sunat">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.sunat">
                                     </div>
                                 </div>				
                             </div>
@@ -79,7 +138,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>			
-                                        <input type="text" class="form-control" name="transportepg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.transporte">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.transporte">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -88,7 +147,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>			
-                                        <input type="text" class="form-control" name="gastosfinan" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.gastosfinancieros">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.gastosfinancieros">
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +158,7 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>		
-                                        <input type="text" class="form-control" name="otrospg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.otros">
+                                        <input type="text" class="form-control" @change="calcularTotal()" placeholder="0.00" v-model="form.otros">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -108,14 +167,14 @@ onMounted(() => {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">S/.</span>
                                         </div>		
-                                        <input type="text" class="form-control" name="otrospg" onclick="selecciona_value(this)" placeholder="0.00" v-model="form.total" readonly>
+                                        <input type="text" class="form-control" placeholder="0.00" v-model="form.total" readonly>
                                     </div>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="limpiar()">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Credito extends Model
 {
@@ -38,5 +39,23 @@ class Credito extends Model
     public function agencia(): BelongsTo
     {
         return $this->belongsTo(Agencia::class, 'agencia_id');
-    }   
+    }
+
+    public function analisis(): HasOne
+    {
+        return $this->hasOne(AnalisisCualitativo::class, 'credito_id');
+    }
+    public function balance(): HasOne
+    {
+        return $this->hasOne(Balance::class, 'credito_id');
+    }
+    public function perdidas(): HasOne
+    {
+        return $this->hasOne(PerdidaGanancia::class, 'credito_id');
+    }
+    public function propuesta(): HasOne
+    {
+        return $this->hasOne(PropuestaCredito::class, 'credito_id');
+    }
+    
 }

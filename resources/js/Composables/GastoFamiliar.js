@@ -2,20 +2,20 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { getConfigHeader, getdataParamsPagination } from '@/Helpers'
 
-export default function useGastoNegocio() {
-    const gastos = ref([])
+export default function useGastoFamiliar() {
+    const gastosfamiliares = ref([])
     const errors = ref('')
     const respuesta = ref([])
     
-    const obtenerGastos = async(id) => {
-        let respuesta = await axios.get('gasto-negocio/mostrar?credito_id='+id, getConfigHeader())
-        gastos.value = respuesta.data
+    const obtenerGastosFamiliares = async(id) => {
+        let respuesta = await axios.get('gasto-familiar/mostrar?credito_id='+id, getConfigHeader())
+        gastosfamiliares.value = respuesta.data
     }
 
-    const agregarGastos = async(data) => {
+    const agregarGastosFamiliares = async(data) => {
         errors.value = ''
         try {
-            let respond = await axios.post('gasto-negocio/guardar', data, getConfigHeader())
+            let respond = await axios.post('gasto-familiar/guardar', data, getConfigHeader())
             errors.value = ''
             if (respond.data.ok == 1) {
                 respuesta.value = respond.data
@@ -27,10 +27,10 @@ export default function useGastoNegocio() {
             }
         }
     }
-    const actualizarGastos = async(data) => {
+    const actualizarGastosFamiliares = async(data) => {
         errors.value = ''
         try {
-            let respond = await axios.post('gasto-negocio/actualizar', data, getConfigHeader())
+            let respond = await axios.post('gasto-familiar/actualizar', data, getConfigHeader())
             errors.value = ''
             if (respond.data.ok == 1) {
                 respuesta.value = respond.data
@@ -42,14 +42,14 @@ export default function useGastoNegocio() {
             }
         }
     }
-    const eliminarGastos = async(id) => {
-        const respond = await axios.post('gasto-negocio/eliminar', { id: id }, getConfigHeader())
+    const eliminarGastosFamiliares = async(id) => {
+        const respond = await axios.post('gasto-familiar/eliminar', { id: id }, getConfigHeader())
         if (respond.data.ok == 1) {
             respuesta.value = respond.data
         }
     }
     return {
-        errors, gastos, obtenerGastos, obtenerGastos, 
-        agregarGastos, actualizarGastos, eliminarGastos, respuesta
+        errors, gastosfamiliares, obtenerGastosFamiliares,  
+        agregarGastosFamiliares, actualizarGastosFamiliares, eliminarGastosFamiliares, respuesta
     }
 }

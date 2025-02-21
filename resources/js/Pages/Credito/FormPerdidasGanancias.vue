@@ -3,25 +3,27 @@ import { toRefs, onMounted, ref } from 'vue';
 import usePerdidas from '@/Composables/Perdidas.js'; 
 import useVenta from '@/Composables/Venta.js'; 
 import useGastoNegocio from '@/Composables/GastoNegocio.js'; 
+import useGastoFamiliar from '@/Composables/GastoFamiliar.js'; 
 import DetVentasForm from './FormDetVentas.vue'
 import GastoNegocioForm from './FormGastoNegocio.vue'
 import GastoFamiliarForm from './FormGastosFamiliares.vue'
 import useHelper from '@/Helpers'; 
 const props = defineProps({
     formPerdidas: Object,
-
 });
 const { formPerdidas } = toRefs(props);
 const {
-    agregarRegistro, actualizarRegistro, respuesta, errors
+    agregarPerdidas, actualizarPerdidas, respuesta, errors
     } = usePerdidas();
 const {
-    regventa, agregarVenta, obtenerVenta
+    regventa, obtenerVenta, agregarVenta, actualizarVenta
     } = useVenta();    
 const {
-    gastos, obtenerGastos
+    gastos, obtenerGastos, agregarGastos, actualizarGastos
     } = useGastoNegocio();    
-    
+const {
+    gastosfamiliares, obtenerGastosFamiliares, agregarGastosFamiliares, actualizarGastosFamiliares
+    } = useGastoFamiliar();        
 const { Toast, openModal } = useHelper();
 
 
@@ -30,8 +32,8 @@ const venta = ref({
     tot_ing_mensual:0,
     tot_cosprimo_m:0,
     margen_tot:0,
-    ventas_cred:'',
-    irrecuperable:'',
+    ventas_cred:0,
+    irrecuperable:0,
     cantproductos:1,
     costoprimovent:0,//totcostoprimo/totingmensual
     detalles: [{
@@ -56,7 +58,38 @@ const venta = ref({
     errors: []
 });
 
-
+const limpiarVenta = () => {
+    venta.value = {
+        credito_id: '',
+        tot_ing_mensual: 0,
+        tot_cosprimo_m: 0,
+        margen_tot: 0,
+        ventas_cred: 0,
+        irrecuperable: 0,
+        cantproductos: 1,
+        costoprimovent: 0,
+        detalles: [{
+            nroproducto: 1,
+            descripcion: '',
+            unidadmedida: 'Diario',
+            preciounit: 0,
+            primaprincipal: 0,
+            primasecundaria: 0,
+            primacomplement: 0,
+            matprima: 0,
+            manoobra1: 0,
+            manoobra2: 0,
+            manoobra: 0,
+            costoprimount: 0,
+            prodmensual: 26,
+            ventastotales: 0,
+            totcostoprimo: 0,
+            margenventas: 0,            
+        }],
+        estadoCrud: '',
+        errors: []
+    };
+};
 const formGastoNegocio = ref({
     credito_id : '',
     alquiler : '',
@@ -72,10 +105,28 @@ const formGastoNegocio = ref({
 });
 
 
+const formGastoFamiliar = ref({
+    idsolicitud : '',
+    alimentacion : '',
+    alquileres : '',
+    educacion : '',
+    servicios : '',
+    transporte : '',
+    salud : '',
+    otros : '',
+    total : '',
+    estadoCrud: '', 
+    errors: []
+});
+
+
 const obtenerDatosGastoNegocio = async(credito_id)=>{
-    await obtenerGastos(credito_id)
+    if(formGastoNegocio.value.estadoCrud != ''){
+        return true;
+    }
     formGastoNegocio.value.credito_id=credito_id;
-    if(regventa.value){
+    await obtenerGastos(credito_id)
+    if(gastos.value){
         formGastoNegocio.value.alquiler=gastos.value.alquiler;
         formGastoNegocio.value.servicios=gastos.value.servicios;
         formGastoNegocio.value.personal=gastos.value.personal;
@@ -84,7 +135,7 @@ const obtenerDatosGastoNegocio = async(credito_id)=>{
         formGastoNegocio.value.gastosfinancieros=gastos.value.gastosfinancieros;
         formGastoNegocio.value.otros = gastos.value.otros;
         formGastoNegocio.value.total = Number(gastos.value.alquiler) + Number(gastos.value.servicios) + Number(gastos.value.personal) + Number(gastos.value.sunat) + 
-        Number(gastos.value.transporte) + Number(gastos.value.otros) + Number(gastos.value.otros);
+        Number(gastos.value.transporte) + Number(gastos.value.gastosfinancieros) + Number(gastos.value.otros);
         formGastoNegocio.value.estadoCrud= 'editar'; 
     }else{
         formGastoNegocio.value.alquiler=0;
@@ -98,10 +149,43 @@ const obtenerDatosGastoNegocio = async(credito_id)=>{
         formGastoNegocio.value.estadoCrud = 'nuevo';
     }
 }
-
+const obtenerDatosGastoFamiliares = async(credito_id)=>{
+    if(formGastoFamiliar.value.estadoCrud != ''){
+        return true;
+    }
+    await obtenerGastosFamiliares(credito_id)
+    formGastoFamiliar.value.credito_id=credito_id;
+    if(gastosfamiliares.value){
+        formGastoFamiliar.value.alimentacion=gastosfamiliares.value.alimentacion;
+        formGastoFamiliar.value.alquileres=gastosfamiliares.value.alquileres;
+        formGastoFamiliar.value.educacion=gastosfamiliares.value.educacion;
+        formGastoFamiliar.value.servicios=gastosfamiliares.value.servicios;
+        formGastoFamiliar.value.transporte=gastosfamiliares.value.transporte;
+        formGastoFamiliar.value.salud=gastosfamiliares.value.salud;
+        formGastoFamiliar.value.otros=gastosfamiliares.value.otros;
+        formGastoFamiliar.value.total=Number(gastosfamiliares.value.alimentacion)+
+                                      Number(gastosfamiliares.value.alquileres)+
+                                      Number(gastosfamiliares.value.educacion)+
+                                      Number(gastosfamiliares.value.servicios)+
+                                      Number(gastosfamiliares.value.transporte)+
+                                      Number(gastosfamiliares.value.salud)+
+                                      Number(gastosfamiliares.value.otros);
+        formGastoFamiliar.value.estadoCrud= 'editar'; 
+    }else{
+        formGastoFamiliar.value.alimentacion=0;
+        formGastoFamiliar.value.alquileres=0;
+        formGastoFamiliar.value.educacion=0;
+        formGastoFamiliar.value.servicios=0;
+        formGastoFamiliar.value.transporte=0;
+        formGastoFamiliar.value.salud=0;
+        formGastoFamiliar.value.otros=0;
+        formGastoFamiliar.value.total=0;
+        formGastoFamiliar.value.estadoCrud = 'nuevo';
+    }
+}
 const obtenerDatos = async(credito_id)=>{
-    await obtenerVenta(credito_id)
     venta.value.credito_id=credito_id;
+    await obtenerVenta(credito_id)
     if(regventa.value){
         venta.value.tot_ing_mensual=regventa.value.tot_ing_mensual;
         venta.value.tot_cosprimo_m=regventa.value.tot_cosprimo_m;
@@ -153,12 +237,13 @@ const buscarGastoNegocio=()=>{
     document.getElementById("GastosNegocioLabel").innerHTML = 'Gasto Negocio';
 }
 const buscarGastoFamiliar=()=>{
+    obtenerDatosGastoFamiliares(formPerdidas.value.credito_id)
     openModal('#GastosFamiliar')
     document.getElementById("GastosFamiliarLabel").innerHTML = 'Gasto Familiar';
 }
 const crud = {
     'nuevo': async() => {
-        await agregarRegistro(formPerdidas.value)
+        await agregarPerdidas(formPerdidas.value)
         formPerdidas.value.errors = []
         if(errors.value)
         {
@@ -168,10 +253,14 @@ const crud = {
             formPerdidas.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
             formPerdidas.value.estadoCrud='editar'
+            await agregarVenta(venta.value)
+            await agregarGastos(formGastoNegocio.value)
+            await agregarGastosFamiliares(formGastoFamiliar.value)
+            limpiarVenta()
         }
     },
     'editar': async() => {
-        await actualizarRegistro(formPerdidas.value)
+        await actualizarPerdidas(formPerdidas.value)
         formPerdidas.value.errors = []
         if(errors.value)
         {
@@ -180,6 +269,22 @@ const crud = {
         if(respuesta.value.ok==1){
             formPerdidas.value.errors = []
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
+            if(venta.value.estadoCrud=='editar'){
+                await actualizarVenta(venta.value)
+            }else{
+                await agregarVenta(venta.value)
+            }
+            if(formGastoNegocio.value.estadoCrud=='editar'){
+                await agregarGastos(formGastoNegocio.value)
+            }else{
+                await actualizarGastos(formGastoNegocio.value)
+            }
+            if(formGastoFamiliar.value.estadoCrud=='editar'){
+                await agregarGastosFamiliares(formGastoFamiliar.value)
+            }else{
+                await actualizarGastosFamiliares(formGastoFamiliar.value)
+            }
+            limpiarVenta()
         }
     }
 }
@@ -292,11 +397,11 @@ const guardarPerdidas = () => {
                         <div class="input-group has-validation">
                             <span class="input-group-text">S/.</span>
                             <div class="form-floating is-invalid">
-                                <input type="text" title="OTROS EGRESOS" class="form-control" v-model="formPerdidas.otrosegre"
+                                <input type="text" title="OTROS EGRESOS" class="form-control" v-model="formPerdidas.otrosegr"
                                 placeholder="OTROS EGRESOS">
                                 <label>OTROS EGRESOS</label>
                             </div>
-                            <div class="invalid-feedback" v-for="error in formPerdidas.errors.otrosegre" :key="error">
+                            <div class="invalid-feedback" v-for="error in formPerdidas.errors.otrosegr" :key="error">
                                 {{ error }}
                             </div> 
                         </div>
@@ -355,7 +460,8 @@ const guardarPerdidas = () => {
         </div>
         <button type="submit" class="btn btn-primary">{{ (formPerdidas.estadoCrud=='nuevo') ? 'Guardar Perdidas' : 'Actualizar Perdidas' }}</button>
     </form>
-    <DetVentasForm :venta="venta" :formPerdidas="formPerdidas"></DetVentasForm>
-    <GastoNegocioForm :form="formGastoNegocio"></GastoNegocioForm>
-    <GastoFamiliarForm></GastoFamiliarForm>
+    <DetVentasForm :venta="venta" :formPerdidas="formPerdidas" @limpiarVenta="limpiarVenta"></DetVentasForm>
+    <GastoNegocioForm :form="formGastoNegocio" :formPerdidas="formPerdidas"></GastoNegocioForm>
+    <GastoFamiliarForm :form="formGastoFamiliar" :formPerdidas="formPerdidas"></GastoFamiliarForm>
+
 </template>

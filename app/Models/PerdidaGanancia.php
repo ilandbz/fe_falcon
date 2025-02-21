@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PerdidaGanancia extends Model
 {
+    protected $primaryKey = 'credito_id';
+    public $incrementing = false;
     protected $fillable = [
         'credito_id',
         'ventas',

@@ -5,22 +5,18 @@ use App\Http\Controllers\AnalisisCualitativoController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\GastoFamiliarPGController;
 use App\Http\Controllers\GastoNegocioPGController;
 use App\Http\Controllers\GrupoMenuController;
 use App\Http\Controllers\MenuController;
-use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\PerdidaGananciaController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ProfesionController;
 use App\Http\Controllers\PropuestaCreditoController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaPGController;
-use App\Models\AnalisisCualitativo;
-use App\Models\GastoNegocioPG;
-use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'grupo-menu', 'middleware' => 'auth'], function () {
@@ -123,6 +119,7 @@ Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::post('guardar', [CreditoController::class, 'store']);
     Route::get('listar', [CreditoController::class, 'listar']);
     Route::get('tipo-credito-cliente', [CreditoController::class, 'obtenerTiposCreditoPorCiente']);
+    Route::post('replicar-evaluacion-anterior', [CreditoController::class, 'cargarEvaluacionAnterior']);
 });
 //analisis cualitativo
 Route::group(['prefix' => 'analisis-cualitativo', 'middleware' => 'auth'], function () {
@@ -159,6 +156,15 @@ Route::group(['prefix' => 'gasto-negocio', 'middleware' => 'auth'], function () 
     Route::post('guardar', [GastoNegocioPGController::class, 'store']);
     Route::get('mostrar', [GastoNegocioPGController::class, 'show']);
 });
+
+//gasto familiar
+Route::group(['prefix' => 'gasto-familiar', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [GastoFamiliarPGController::class, 'update']);
+    Route::post('eliminar', [GastoFamiliarPGController::class, 'destroy']);
+    Route::post('guardar', [GastoFamiliarPGController::class, 'store']);
+    Route::get('mostrar', [GastoFamiliarPGController::class, 'show']);
+});
+
 //propuesta
 Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [PropuestaCreditoController::class, 'update']);
@@ -166,4 +172,7 @@ Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
     Route::post('guardar', [PropuestaCreditoController::class, 'store']);
     Route::get('mostrar', [PropuestaCreditoController::class, 'show']);
 });
+
+
+
 

@@ -5,10 +5,12 @@ import { onlyNumbers } from '@/Helpers'
 import FormAnalisis from './FormAnalisis.vue'
 import FormBalance from './FormBalance.vue'
 import FormPerdidasGanancias from './FormPerdidasGanancias.vue'
-import useAnalisisCualitativo from '@/Composables/AnalisisCualitativo.js'; 
-
-
-import usePropuesta from '@/Composables/Propuesta.js'; 
+import FormPropuesta from './FormPropuesta.vue'
+import useCredito from '@/Composables/Credito.js';
+const emit = defineEmits(['buscarCredito']);
+const {
+    replicarEvaluacion, respuesta, errors
+    } = useCredito();
 
 const { hideModal, Toast, openModal } = useHelper();
 
@@ -19,12 +21,23 @@ const props = defineProps({
     formPropuesta: Object,
     credito: Object,
 });
-const {
-        agregarRegistro, actualizarRegistro, errors, respuesta
-    } = useAnalisisCualitativo();
+
+const formData = ref({
+    cliente_id : '',
+    credito_id : '',
+})
 
 
 
+const copiarEvaluacionAnterior=async() =>{
+    formData.value.cliente_id=credito.value.cliente_id;
+    formData.value.credito_id = credito.value.id;
+    await replicarEvaluacion(formData.value)
+    if(respuesta.value.ok==1){
+        Toast.fire({icon:'success', title:respuesta.value.mensaje})
+    }
+    emit('buscarCredito', credito.value.id);
+}
 
 const { formAnalisis, credito, formBalance, formPerdidas, formPropuesta } = toRefs(props);
 
@@ -57,10 +70,14 @@ onMounted(() => {
                                 <div class="col">
                                     <h4 class="mt-2"><small>TIPO : </small>{{ credito.tipo }}</h4>
                                     <h4 class="mt-2"><small>PRODUCTO : </small>{{ credito.producto }}</h4>
+                                    <button type="button"
+                                    v-if="['Recurrente Sin Saldo', 'Recurrente Con Saldo', 'Paralelo'].includes(credito.tipo)"
+                                     class="mt-3 btn btn-sm btn-info" title="Copiar Anterior Evaluacion" @click="copiarEvaluacionAnterior()"><i class="fa-solid fa-paste"></i></button>
                                 </div>
                                 <div class="col">
                                     <h4 class="mt-2"><small>FRECUENCIA : </small>{{ credito.frecuencia }}</h4>
                                     <h4 class="mt-2"><small>PLAZO : </small>{{ credito.plazo }}</h4>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -86,26 +103,7 @@ onMounted(() => {
                                     <FormPerdidasGanancias :formPerdidas="formPerdidas"></FormPerdidasGanancias>
                                 </div>
                                 <div class="tab-pane px-sm-3 px-md-1" role="tabpanel" aria-labelledby="bootstrap-wizard-tab4" id="bootstrap-wizard-tab4">
-                                    <h3 class=" text-center">Propuesta de Credito</h3>
-                                    <form @submit.prevent="guardarPropuesta">
-                                        <div class="form-group">
-                                            <label class="control-label">UNIDAD FAMILIAR(CONYUGUE, HIJOS)</label>
-                                            <textarea v-model="formPropuesta.unidad_familiar" class="form-control input-sm" placeholder="Unidad Familiar" rows="4"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="">EXPERIENCIA CREDITICIA Y NEGOCIO</label>
-                                            <textarea v-model="formPropuesta.experiencia_cred" class="form-control input-sm" placeholder="Experiencia Crediticia" rows="4"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="">DESTINO DEL PRESTAMO</label>
-                                            <textarea v-model="formPropuesta.destino_prest" class="form-control input-sm" placeholder="Destino del Prestamo" rows="4"></textarea>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label class="">REFERENCIAS PERSONALES Y COMERCIALES</label>
-                                            <textarea v-model="formPropuesta.referencias" class="form-control input-sm" placeholder="Destino del Prestamo" rows="4"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">{{ (formPropuesta.estadoCrud=='nuevo') ? 'Guardar Propuesta' : 'Actualizar Propuesta' }}</button>
-                                    </form>
+                                    <FormPropuesta :formPropuesta="formPropuesta"></FormPropuesta>
                                 </div>
                             </div>
                         </div>

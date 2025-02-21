@@ -562,12 +562,12 @@ const { agencia, role } = toRefs(props);
                                             <button class="btn btn-danger btn-sm" style="font-size: .65rem;" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
                                                 <i class="fas fa-trash"></i>
                                             </button>&nbsp;
-                                            <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
-                                                <i class="fas fa-check"></i>
-                                            </button>&nbsp;
-                                            <!-- <button v-if="credito.estado=='REGISTRADO' || credito.estado=='EVALUACION'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                            <!-- <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
                                                 <i class="fas fa-check"></i>
                                             </button>&nbsp; -->
+                                            <button v-if="credito.estado=='REGISTRADO' || credito.estado=='EVALUACION'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                <i class="fas fa-check"></i>
+                                            </button>&nbsp;
                                         </td>
                                     </tr>
                                 </tbody>
@@ -632,5 +632,6 @@ const { agencia, role } = toRefs(props);
     :analisis="analisis"
     :formBalance="formBalance"
     :formPerdidas="formPerdidas"
-    :formPropuesta="formPropuesta"></EvaluacionForm>
+    :formPropuesta="formPropuesta"
+    @buscarCredito="buscarCredito"></EvaluacionForm>
 </template>

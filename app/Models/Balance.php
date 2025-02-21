@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Balance extends Model
 {
+    protected $primaryKey = 'credito_id';
+    public $incrementing = false;
     protected $fillable = [
         'credito_id',
         'total_activo',

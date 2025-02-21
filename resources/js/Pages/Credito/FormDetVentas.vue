@@ -12,48 +12,59 @@ const props = defineProps({
     venta: Object,
     formPerdidas: Object
 });
-
+const emit = defineEmits(['limpiarVenta']);
 const { venta, formPerdidas } = toRefs(props);
 
-const guardar = async() => {
-    crud[venta.value.estadoCrud]();
-};
-const crud = {
-    'nuevo': async() => {
-        await agregarVenta(venta.value)
-        venta.value.errors = []
-        if(errors.value)
-        {
-            venta.value.errors = errors.value
-        }
-        if(respuesta.value.ok==1){
-            venta.value.errors = []
-            Toast.fire({icon:'success', title:respuesta.value.mensaje})
-            venta.value.estadoCrud='editar'
-            hideModal('#modaldetVentas');
-            formPerdidas.value.ventas= venta.value.tot_ing_mensual
-            formPerdidas.value.costo= venta.value.tot_cosprimo_m
-        }
-        
-    },
-    'editar': async() => {
-        await actualizarVenta(venta.value)
-        venta.value.errors = []
-        if(errors.value)
-        {
-            venta.value.errors = errors.value
-        }
-        if(respuesta.value.ok==1){
-            venta.value.errors = []
-            Toast.fire({icon:'success', title:respuesta.value.mensaje})
-            hideModal('#modaldetVentas');
-            formPerdidas.value.ventas= venta.value.tot_ing_mensual
-            formPerdidas.value.costo= venta.value.tot_cosprimo_m
-        }
-        
-    }
 
+const limpiar=()=>{
+    emit('limpiarVenta');
 }
+
+
+
+const guardar = async() => {
+    //crud[venta.value.estadoCrud]();
+    hideModal('#modaldetVentas');
+    formPerdidas.value.ventas= venta.value.tot_ing_mensual
+    formPerdidas.value.costo= venta.value.tot_cosprimo_m
+};
+
+// const crud = {
+//     'nuevo': async() => {
+//         await agregarVenta(venta.value)
+//         venta.value.errors = []
+//         if(errors.value)
+//         {
+//             venta.value.errors = errors.value
+//         }
+//         if(respuesta.value.ok==1){
+//             venta.value.errors = []
+//             Toast.fire({icon:'success', title:respuesta.value.mensaje})
+//             venta.value.estadoCrud='editar'
+//             hideModal('#modaldetVentas');
+//             formPerdidas.value.ventas= venta.value.tot_ing_mensual
+//             formPerdidas.value.costo= venta.value.tot_cosprimo_m
+//         }
+        
+//     },
+//     'editar': async() => {
+//         await actualizarVenta(venta.value)
+//         venta.value.errors = []
+//         if(errors.value)
+//         {
+//             venta.value.errors = errors.value
+//         }
+//         if(respuesta.value.ok==1){
+//             venta.value.errors = []
+//             Toast.fire({icon:'success', title:respuesta.value.mensaje})
+//             hideModal('#modaldetVentas');
+//             formPerdidas.value.ventas= venta.value.tot_ing_mensual
+//             formPerdidas.value.costo= venta.value.tot_cosprimo_m
+//         }
+        
+//     }
+
+// }
 const agregarProducto = () => {
     venta.value.detalles.push({
         nroproducto: venta.value.detalles.length + 1, // Número correlativo
@@ -117,7 +128,7 @@ const calcularDatos = (indice) => {
                     <div class="modal-body">
                         <div class="card">
                             <div class="card-header">
-                                Detalle Venta 
+                                Detalle Venta {{ venta }}
                                 <button class="btn btn-info btn-sm" type="button" @click="agregarProducto()" title="Agregar Producto"><i class="fas fa-plus"></i></button>
                                 <button @click="eliminarUltimoProducto" type="button" class="btn btn-danger btn-sm" title="Eliminar Último"><i class="fas fa-trash"></i></button>
                             </div>
@@ -319,8 +330,8 @@ const calcularDatos = (indice) => {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="limpiar()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">{{ (venta.estadoCrud=='nuevo') ? 'Guardar' : 'Actualizar' }}</button>
                     </div>
                 </div>
             </div>

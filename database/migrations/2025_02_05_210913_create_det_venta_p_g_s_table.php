@@ -21,8 +21,8 @@ return new class extends Migration
 
             // Definir la clave foránea correctamente
             $table->foreign('credito_id')
-                  ->references('id')
-                  ->on('creditos')// mejor aca ya que cuando es nuevo debe guardarse sin necesidad de tener registro de venta
+                  ->references('credito_id')
+                  ->on('venta_p_g_s')// mejor aca ya que cuando es nuevo debe guardarse sin necesidad de tener registro de venta
                 //   ->on('venta_p_g_s')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
@@ -30,19 +30,19 @@ return new class extends Migration
             // Campos adicionales
             $table->string('descripcion', 40);
             $table->string('unidadmedida', 20);
-            $table->decimal('preciounit', 8, 2)->default(0.00);
-            $table->decimal('primaprincipal', 8, 2)->default(0.00);
-            $table->decimal('primasecundaria', 8, 2)->default(0.00);
-            $table->decimal('primacomplement', 8, 2)->default(0.00);
-            $table->decimal('matprima', 8, 2)->default(0.00);
-            $table->decimal('manoobra1', 8, 2)->default(0.00);
-            $table->decimal('manoobra2', 8, 2)->default(0.00);
-            $table->decimal('manoobra', 8, 2)->default(0.00);
-            $table->decimal('costoprimount', 8, 2)->default(0.00);
-            $table->decimal('prodmensual', 8, 2)->default(0.00);
-            $table->decimal('ventastotales', 8, 2)->default(0.00);
-            $table->decimal('totcostoprimo', 8, 2)->default(0.00);
-            $table->decimal('margenventas', 8, 2)->default(0.00);
+            $table->decimal('preciounit', 9, 2)->default(0.00);
+            $table->decimal('primaprincipal', 9, 2)->default(0.00);
+            $table->decimal('primasecundaria', 9, 2)->default(0.00);
+            $table->decimal('primacomplement', 9, 2)->default(0.00);
+            $table->decimal('matprima', 9, 2)->default(0.00);
+            $table->decimal('manoobra1', 9, 2)->default(0.00);
+            $table->decimal('manoobra2', 9, 2)->default(0.00);
+            $table->decimal('manoobra', 9, 2)->default(0.00);
+            $table->decimal('costoprimount', 9, 2)->default(0.00);
+            $table->decimal('prodmensual', 9, 2)->default(0.00);
+            $table->decimal('ventastotales', 9, 2)->default(0.00);
+            $table->decimal('totcostoprimo', 9, 2)->default(0.00);
+            $table->decimal('margenventas', 9, 2)->default(0.00);
 
             $table->timestamps();
         });

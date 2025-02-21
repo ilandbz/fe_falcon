@@ -24,6 +24,10 @@ export default function useCredito() {
         let respuesta = await axios.get('credito/listar' + getdataParamsPagination(data), getConfigHeader())
         creditos.value = respuesta.data
     }
+    const replicarEvaluacion = async(data) => {
+        let respond = await axios.post('credito/replicar-evaluacion-anterior', data, getConfigHeader())
+        respuesta.value = respond.data
+    }    
     const agregarCredito = async(data) => {
         errors.value = ''
         try {
@@ -65,6 +69,6 @@ export default function useCredito() {
     return {
         errors, creditos, listaCreditos, credito, obtenerCredito, obtenerCreditos, 
         agregarCredito, actualizarCredito, eliminarCredito, respuesta, tiposCreditos, 
-        listaTiposCreditos
+        listaTiposCreditos, replicarEvaluacion
     }
 }

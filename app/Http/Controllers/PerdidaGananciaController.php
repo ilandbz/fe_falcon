@@ -11,7 +11,7 @@ class PerdidaGananciaController extends Controller
 {
     public function store(StorePerdidasGananciasRequest $request)
     {
-        $request->validated();
+        //$request->validated();
         $balance = PerdidaGanancia::create([
             'credito_id'    => $request->credito_id,
             'ventas' => $request->ventas,
