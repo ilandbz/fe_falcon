@@ -12,6 +12,12 @@ export default function useCredito() {
         let respuesta = await axios.get('credito/mostrar?id='+id, getConfigHeader())
         credito.value = respuesta.data
     }
+
+    const obtenerCreditoPdf = async(id) => {
+        let respuesta = await axios.get('credito/generar-pdf?id='+id, getConfigHeader())
+        credito.value = respuesta.data
+    }
+    
     const listaCreditos = async()=>{
         let respuesta = await axios.get('credito/todos', getConfigHeader())
         creditos.value = respuesta.data        
@@ -91,6 +97,6 @@ export default function useCredito() {
         errors, creditos, listaCreditos, credito, obtenerCredito, obtenerCreditos, 
         agregarCredito, actualizarCredito, eliminarCredito, respuesta, tiposCreditos, 
         listaTiposCreditos, replicarEvaluacion, validarEvaluacionAsesor, respuesta,
-        cambiarEstado
+        cambiarEstado, obtenerCreditoPdf
     }
 }

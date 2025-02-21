@@ -6,7 +6,7 @@ use App\Http\Requests\Credito\StoreCreditoRequest;
 use App\Http\Requests\Credito\UpdateCreditoRequest;
 use App\Models\AnalisisCualitativo;
 use App\Models\Balance;
-use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Credito;
 use App\Models\PerdidaGanancia;
 use App\Models\PropuestaCredito;
@@ -72,7 +72,6 @@ class CreditoController extends Controller
         $credito->total          = $request->total ?? 0.00;
         $credito->costomora      = $request->costomora ?? 0.00;
         $credito->save();
-
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Credito modificado satisfactoriamente'
@@ -88,23 +87,17 @@ class CreditoController extends Controller
         ],200);
     }
     public function obtenerTiposCreditoPorCiente(Request $request){
-
         $estados = Credito::where('cliente_id', $request->cliente_id)
         ->whereIn('estado', ['DESEMBOLSADO', 'FINALIZADO'])
         ->pluck('estado')
-        ->toArray();
-    
+        ->toArray();   
         if (in_array('DESEMBOLSADO', $estados)) {
             return response()->json(['Recurrente Con Saldo', 'Paralelo'], 200);
         }
-        
         if (in_array('FINALIZADO', $estados)) {
             return response()->json(['Recurrente Sin Saldo'], 200);
         }
-        
         return response()->json(['Nuevo'], 200);
-
-
     }
     public function destroy(Request $request)
     {
@@ -201,6 +194,10 @@ class CreditoController extends Controller
             'mensaje' => 'Validacion Realizada',
         ],200);
     }
-    
+    public function generarPDF(){
+        $data = ['titulo' => 'Ejemplo de PDF en Laravel'];        
+        $pdf = Pdf::loadView('pdf.documento', $data);
+        return $pdf->download('archivo.pdf');
+    }
     
 }

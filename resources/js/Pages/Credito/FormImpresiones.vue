@@ -9,7 +9,7 @@ import FormPropuesta from './FormPropuesta.vue'
 import useCredito from '@/Composables/Credito.js';
 const emit = defineEmits(['buscarCredito']);
 const {
-    replicarEvaluacion, respuesta, errors
+    replicarEvaluacion, respuesta, errors, obtenerCreditoPdf
     } = useCredito();
 
 const { hideModal, Toast, openModal } = useHelper();
@@ -19,13 +19,11 @@ const props = defineProps({
 });
 const { credito } = toRefs(props);
 
-const generarPdf = (archivo)=>{
-    
+const generarPdf = async(archivo)=>{
+    await obtenerCreditoPdf(credito.value.id);
 }
 
-
 </script>
-
 <template>
     <div class="modal fade" id="modalimpresiones" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-xl">
@@ -37,34 +35,34 @@ const generarPdf = (archivo)=>{
                 <div class="modal-body">
                     <div class="card mb-3">
                         <div class="card-header">
-                            SELECCIONE
+                            SELECCIONE {{ credito }}
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <!-- Botón Solicitud -->
                                 <div class="col-md-4">
-                                    <button class="btn btn-primary btn-lg w-100 p-4" onclick="imprimir('solicitud')">
+                                    <button @click="generarPdf" class="btn btn-primary btn-lg w-100 p-4" onclick="imprimir('solicitud')">
                                         <i class="fas fa-file-alt fa-2x"></i> <br> Solicitud
                                     </button>
                                 </div>
     
                                 <!-- Botón Análisis Cualitativo -->
                                 <div class="col-md-4">
-                                    <button class="btn btn-secondary btn-lg w-100 p-4" onclick="imprimir('analisis')">
+                                    <button @click="generarPdf" class="btn btn-secondary btn-lg w-100 p-4" onclick="imprimir('analisis')">
                                         <i class="fas fa-chart-line fa-2x"></i> <br> Análisis Cualitativo
                                     </button>
                                 </div>
     
                                 <!-- Botón Estados Financieros -->
                                 <div class="col-md-4">
-                                    <button class="btn btn-success btn-lg w-100 p-4" onclick="imprimir('estados')">
+                                    <button @click="generarPdf" class="btn btn-success btn-lg w-100 p-4" onclick="imprimir('estados')">
                                         <i class="fas fa-balance-scale fa-2x"></i> <br> Estados Financieros
                                     </button>
                                 </div>
     
                                 <!-- Botón Seguro Desgravamen -->
                                 <div class="col-md-4">
-                                    <button class="btn btn-warning btn-lg w-100 p-4" onclick="imprimir('seguro')">
+                                    <button @click="generarPdf" class="btn btn-warning btn-lg w-100 p-4" onclick="imprimir('seguro')">
                                         <i class="fas fa-shield-alt fa-2x"></i> <br> Seguro Desgravamen
                                     </button>
                                 </div>
@@ -88,12 +86,9 @@ const generarPdf = (archivo)=>{
 
                         </div>
                         <div class="card-footer">
-
+                            
                         </div>
                     </div>
-
-
-                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

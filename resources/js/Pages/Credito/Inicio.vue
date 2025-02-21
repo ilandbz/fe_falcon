@@ -446,7 +446,8 @@ const { agencia, role } = toRefs(props);
         openModal('#modalevaluacion')
         document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
-    const archivos=()=>{
+    const archivos=(id)=>{
+       buscarCredito(id)
        openModal('#modalimpresiones')
        document.getElementById("modalimpresionesLabel").innerHTML = 'Evaluacion Credito';        
     }
