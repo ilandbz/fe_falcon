@@ -33,5 +33,8 @@ class Balance extends Model
         'fecha'
     ];
 
-
+    public function credito(): BelongsTo
+    {
+        return $this->belongsTo(Credito::class, 'credito_id');
+    }
 }

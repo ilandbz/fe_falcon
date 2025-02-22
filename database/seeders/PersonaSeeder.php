@@ -85,7 +85,7 @@ class PersonaSeeder extends Seeder
                         'tipo_trabajador'  => $tipo_trabajador ?? 'INDEPENDIENTE',
                         'ocupacion'        => $ocupacion ?? 'NINGUNO',
                         'institucion_lab'  => $institucion_lab ?? 'NINGUNO',
-                        //'ubicacion_domicilio_id' => ($ubicaciondomicilio || $ubicaciondomicilio=='NULL') ?? null,
+                        'ubicacion_domicilio_id' => ($ubicaciondomicilio || $ubicaciondomicilio=='NULL') ?? null,
                     ]);                
             }
 

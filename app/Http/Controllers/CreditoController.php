@@ -199,25 +199,57 @@ class CreditoController extends Controller
         $tipo = $request->tipo;
         $id = $request->credito_id;
 
-        $credito = Credito::with([
+
+        if($tipo=='solicitud'){
+            $credito = Credito::with([
                 'cliente:id,persona_id,estado',
                 'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
                 'asesor:id,dni,name',
                 'asesor.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
-                'cliente.persona.ubicacion:id,tipo,ubigeo',
+                'cliente.persona.ubicacion:id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
+                'cliente.persona.ubicacion.distrito:id,ubigeo,nombre,provincia_id',
+                'cliente.persona.ubicacion.distrito.provincia:id,nombre,departamento_id',
+                'cliente.persona.ubicacion.distrito.provincia.departamento:id,nombre',
+                'cliente.negocio:id,cliente_id,razonsocial,ruc,tel_cel,tipo_actividad_id,descripcion,inicioactividad,ubicacion_id',
+                'cliente.negocio.ubicacion:id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
+                'cliente.negocio.ubicacion.distrito:id,ubigeo,nombre,provincia_id',
+                'cliente.negocio.ubicacion.distrito.provincia:id,nombre,departamento_id',
+                'cliente.negocio.ubicacion.distrito.provincia.departamento:id,nombre',
             ])
             ->where('id', $id)->first();
 
-        $data = [
-            'credito'   => $credito,
-            'cliente'   => $credito->cliente,
-            'ubicacion' => $credito->cliente->persona->ubicacion,
-            'asesor'    => $credito->asesor,
-        ];
+            $data = [
+                'credito'           => $credito,
+                'cliente'           => $credito->cliente,
+                'domicilio'         => $credito->cliente->persona->ubicacion,
+                'asesor'            => $credito->asesor,
+                'negocio'           => $credito->cliente->negocio,
+                'ubicacionnegocio'  =>  optional($credito->cliente->negocio)->ubicacion
+            ];
 
-
-        if($tipo=='solicitud'){
             $pdf = Pdf::loadView('pdfs/solicitud', $data);
+        }elseif($tipo=='Estados Financieros'){
+            $credito = Credito::with([
+                'cliente:id,persona_id,estado',
+                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
+                'asesor.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+                'balance:credito_id,total_activo,total_pasivo,patrimonio,activocaja,activobancos,activoctascobrar,activoinventarios,pasivodeudaprove,pasivodeudaent,pasivodeudaempre,activomueble,activootrosact,activodepre,pasivolargop,otrascuentaspagar,totalacorriente,totalpcorriente,totalancorriente,totalpncorriente,fecha',
+                'perdidas:credito_id,ventas,costo,utilidad,costonegocio,utiloperativa,otrosing,otrosegr,gast_fam,utilidadneta,utilnetdiaria',
+                'perdidas.venta:credito_id,tot_ing_mensual,tot_cosprimo_m,margen_tot,ventas_cred,irrecuperable,cantproductos',
+                'perdidas.venta.detalles',
+                'perdidas.gastosnegocio:credito_id,alquiler,servicios,personal,sunat,transporte,gastosfinancieros,otros'
+            ])
+            ->where('id', $id)->first();
+            $data = [
+                'credito'           => $credito,
+                'cliente'           => $credito->cliente,
+                'balance'           => $credito->balance,
+                'perdidasganancias' => $credito->perdidas,
+                'ventaspyg'         => $credito->perdidas->venta,
+                'gastosnegocios'    => $credito->gastosnegocio,
+
+            ];
+            $pdf = Pdf::loadView('pdfs/estadosfinancieros', $data);
         }
         
         return Response::make($pdf->output(), 200, [

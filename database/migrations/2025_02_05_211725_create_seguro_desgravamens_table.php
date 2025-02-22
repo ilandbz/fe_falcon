@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('seguro_desgravamens', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('credito_id')->constrained('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('monto',7,2);
+            $table->date('fecha_reg');
+            $table->time('hora_reg');
         });
     }
 

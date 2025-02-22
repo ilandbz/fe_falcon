@@ -43,59 +43,66 @@ const generarPDF = async(archivo)=>{
                 <div class="modal-body">
                     <div class="card mb-3">
                         <div class="card-header">
-                            SELECCIONE
+                            IMPRESIONES
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <button @click="generarPDF('solicitud')" class="btn btn-primary btn-sm w-100 p-4">
+                                            <i class="fas fa-file-alt fa-2x"></i> <br> Solicitud
+                                        </button>
+                                    </div>
+        
+                                    <!-- Botón Análisis Cualitativo -->
+                                    <div class="mb-3">
+                                        <button @click="generarPDF('Analisis Cualitativo')" class="btn btn-secondary btn-sm w-100 p-4">
+                                            <i class="fas fa-chart-line fa-2x"></i> <br> Análisis Cualitativo
+                                        </button>
+                                    </div>
+        
+                                    <!-- Botón Estados Financieros -->
+                                    <div class="mb-3">
+                                        <button @click="generarPDF('Estados Financieros')" class="btn btn-success btn-sm w-100 p-4">
+                                            <i class="fas fa-balance-scale fa-2x"></i> <br> Estados Financieros
+                                        </button>
+                                    </div>
+        
+                                    <!-- Botón Seguro Desgravamen -->
+                                    <div class="mb-3">
+                                        <button @click="generarPDF('Seguro')" class="btn btn-warning btn-sm w-100 p-4">
+                                            <i class="fas fa-shield-alt fa-2x"></i> <br> Seguro Desgravamen
+                                        </button>
+                                    </div>
+        
+                                    <!-- Botón Propuesta de Crédito -->
+                                    <div class="mb-3">
+                                        <button class="btn btn-danger btn-sm w-100 p-4" onclick="imprimir('propuesta')">
+                                            <i class="fas fa-hand-holding-usd fa-2x"></i> <br> Propuesta de Crédito
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 p-0">
+                                    <div class="card border-info">
+                                        <div class="card-header bg-info text-white">PRE VISUALIZACION</div>
+                                        <div class="card-body">
+                                            <iframe v-if="pdfUrl" :src="pdfUrl" width="100%" height="500px"></iframe>
+                                            <p v-else>Seleccione un documento para visualizar.</p>
+                                        </div>
+                                        <div class="card-footer">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Botón Solicitud -->
-                                <div class="col">
-                                    <button @click="generarPDF('solicitud')" class="btn btn-primary btn-lg w-100 p-4">
-                                        <i class="fas fa-file-alt fa-2x"></i> <br> Solicitud
-                                    </button>
-                                </div>
-    
-                                <!-- Botón Análisis Cualitativo -->
-                                <div class="col">
-                                    <button @click="generarPDF('Analisis Cualitativo')" class="btn btn-secondary btn-lg w-100 p-4">
-                                        <i class="fas fa-chart-line fa-2x"></i> <br> Análisis Cualitativo
-                                    </button>
-                                </div>
-    
-                                <!-- Botón Estados Financieros -->
-                                <div class="col">
-                                    <button @click="generarPDF('Estados Financieros')" class="btn btn-success btn-lg w-100 p-4">
-                                        <i class="fas fa-balance-scale fa-2x"></i> <br> Estados Financieros
-                                    </button>
-                                </div>
-    
-                                <!-- Botón Seguro Desgravamen -->
-                                <div class="col">
-                                    <button @click="generarPDF('Seguro')" class="btn btn-warning btn-lg w-100 p-4">
-                                        <i class="fas fa-shield-alt fa-2x"></i> <br> Seguro Desgravamen
-                                    </button>
-                                </div>
-    
-                                <!-- Botón Propuesta de Crédito -->
-                                <div class="col">
-                                    <button class="btn btn-danger btn-lg w-100 p-4" onclick="imprimir('propuesta')">
-                                        <i class="fas fa-hand-holding-usd fa-2x"></i> <br> Propuesta de Crédito
-                                    </button>
-                                </div>
+
                             </div>
                         </div>
                         <div class="card-footer"></div>
                     </div>
 
-                    <div class="card border-info">
-                        <div class="card-header bg-info text-white">VISUALIZACION</div>
-                        <div class="card-body">
-                            <iframe v-if="pdfUrl" :src="pdfUrl" width="100%" height="500px"></iframe>
-                            <p v-else>Seleccione un documento para visualizar.</p>
-                        </div>
-                        <div class="card-footer">
-                            
-                        </div>
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

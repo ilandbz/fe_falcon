@@ -46,9 +46,15 @@ class Persona extends Model
         );
     }
 
+    public function distrito(): BelongsTo
+    {
+        return $this->belongsTo(Distrito::class, 'ubigeo_nac', 'ubigeo');
+    }
 
     public function getEdadAttribute()
     {
         return Carbon::parse($this->fecha_nac)->age;
     }
+
+    
 }

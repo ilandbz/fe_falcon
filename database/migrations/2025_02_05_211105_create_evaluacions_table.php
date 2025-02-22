@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('evaluacions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('credito_id')->constrained('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('resultado', 40);
+            $table->dateTime('fechahora');
+            $table->string('comentario', 60)->nullable();
+            $table->decimal('tasainteres', 4, 2)->nullable();
             $table->timestamps();
         });
     }

@@ -104,11 +104,71 @@
 		<th style="padding-top:8px; padding-bottom:8px;" colspan="6" align="center">DOMICILIO CLIENTE</th>
 	</tr>
 	<tr class="conborde">
-		<th>TIPO DE VIVIENDA</th><td colspan="5">{{ $ubicacion }}</td>
+		<th>TIPO DE VIVIENDA</th><td colspan="5">{{ $domicilio->tipo }}</td>
 	</tr>	
 	<tr class="conborde">
-		<th>DEPARTAMENTO</th><td></td>
+		<th>DEPARTAMENTO</th><td>{{ $domicilio->distrito->provincia->departamento->nombre }}</td><th>PROVINCIA</th><td>{{ $domicilio->distrito->provincia->nombre }}</td><th>DISTRITO</th><td>{{ $domicilio->distrito->nombre }}</td>
 	</tr>
+	<tr class="conborde">
+		<td colspan="6">
+            {{ $domicilio->direccion }}
+		</td>
+	</tr>
+    <tr class="conborde">
+		<th>REFERENCIA</th><td colspan="5">{{ $domicilio->referencia }}</td>
+	</tr>
+	<tr class="conborde">
+		<th style="padding-top:8px; padding-bottom:8px;" align="center" colspan="6">NEGOCIO</th>
+	</tr>
+    @if(!is_null($negocio))
+        <tr class="conborde">
+            <th colspan="2">Nombre del Negocio</th>
+            <td colspan="4" align="left">
+                {{ $negocio->razonsocial == '' ? 'NO TIENE' : $negocio->razonsocial }}
+            </td>
+        </tr>
+        <tr class="conborde">
+            <th>RUC</th>
+            <td>{{ $negocio->ruc == '' ? 'NO TIENE' : $negocio->ruc }}</td>
+            <th>Telefono/Cel</th>
+            <td colspan="3">{{ $negocio->tel_cel }}</td>
+        </tr>
+        <tr class="conborde">
+            <th>Actividad</th>
+            <td>{{ $negocio->actividad }}</td>
+            <th>Actividad Espec.</th>
+            <td colspan="4">{{ $negocio->descripcion }}</td>
+        </tr>
+        <tr class="conborde">
+            <th>Inicio de Actividad</th>
+            <td>{{ $negocio->inicioactividad }}</td>
+            <th colspan="2">TIEMPO DE ACTIVIDAD</th>
+            <td colspan="2">{{ $negocio->tiemponegocio }} años</td>
+        </tr>
+        <tr class="conborde">
+            <th style="padding-top:8px; padding-bottom:8px;" colspan="6" align="center">DIRECCIÓN NEGOCIO</th>
+        </tr>
+        <tr class="conborde">
+            <th>DEPARTAMENTO</th>
+            <td>{{ $ubicacionnegocio->distrito->provincia->departamento->nombre }}</td>
+            <th>PROVINCIA</th>
+            <td>{{ $ubicacionnegocio->distrito->provincia->nombre }}</td>
+            <th>DISTRITO</th>
+            <td>{{ $ubicacionnegocio->distrito->nombre }}</td>
+        </tr>
+        <tr class="conborde">
+            <td colspan="6">{{ $ubicacionnegocio->direccion }}</td>
+        </tr>
+        <tr class="conborde">
+            <th>Referencia : </th>
+            <td colspan="5" align="left">{{ $ubicacionnegocio->referencia }}</td>
+        </tr>
+    @else
+        <tr class="conborde">
+            <td colspan="6">NO POSEE</td>
+        </tr>
+    @endif
+
 </table>
 
 </body>

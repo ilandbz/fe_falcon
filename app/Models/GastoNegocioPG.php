@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GastoNegocioPG extends Model
 {
@@ -18,4 +19,9 @@ class GastoNegocioPG extends Model
         'gastosfinancieros',
         'otros',
     ];
+    public function perdidaGanancia(): BelongsTo
+    {
+        return $this->belongsTo(PerdidaGanancia::class, 'credito_id');
+    }
 }
+

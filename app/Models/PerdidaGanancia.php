@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PerdidaGanancia extends Model
 {
@@ -21,4 +23,17 @@ class PerdidaGanancia extends Model
         'utilidadneta',
         'utilnetdiaria',
     ];
+
+    public function venta(): HasOne
+    {
+        return $this->hasOne(VentaPG::class, 'credito_id');
+    }
+    public function gastosnegocio(): HasOne
+    {
+        return $this->hasOne(GastoNegocioPG::class, 'credito_id');
+    }
+    public function credito(): BelongsTo
+    {
+        return $this->belongsTo(Credito::class, 'credito_id');
+    }
 }

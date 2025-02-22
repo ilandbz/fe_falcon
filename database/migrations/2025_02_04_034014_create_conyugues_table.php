@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('conyugues', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('primer_persona_id')->constrained('menus')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('segunda_persona_id')->constrained('menus')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('primer_persona_id')->constrained('personas')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('segunda_persona_id')->constrained('personas')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

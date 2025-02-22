@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Cliente extends Model
 {
@@ -29,5 +31,15 @@ class Cliente extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }    
+
+    public function negocio(): HasOne
+    {
+        return $this->hasOne(Negocio::class, 'cliente_id')->latest();
+    }   
+
+    public function negocios(): HasMany
+    {
+        return $this->HasMany(Negocio::class, 'cliente_id');
+    }
 
 }

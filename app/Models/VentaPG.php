@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VentaPG extends Model
@@ -22,6 +23,7 @@ class VentaPG extends Model
         'cantproductos',
     ];
 
+    
     /**
      * Get all of the detalles for the VentaPG
      *
@@ -31,4 +33,12 @@ class VentaPG extends Model
     {
         return $this->hasMany(DetVentaPG::class, 'credito_id');
     }
+    public function perdidaGanancia(): BelongsTo
+    {
+        return $this->belongsTo(PerdidaGanancia::class, 'credito_id');
+    }
+
+
+
+
 }
