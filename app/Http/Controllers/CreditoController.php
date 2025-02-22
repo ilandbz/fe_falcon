@@ -195,11 +195,31 @@ class CreditoController extends Controller
             'mensaje' => 'Validacion Realizada',
         ],200);
     }
-    public function generarPDF(){
+    public function generarPDF(Request $request){
+        $tipo = $request->tipo;
+        $id = $request->credito_id;
 
-        $data = ['titulo' => "Documento de "];
-        $pdf = Pdf::loadView('solicitud', $data);
+        $credito = Credito::with([
+                'cliente:id,persona_id,estado',
+                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
+                'asesor:id,dni,name',
+                'asesor.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+                'cliente.persona.ubicacion:id,tipo,ubigeo',
+            ])
+            ->where('id', $id)->first();
 
+        $data = [
+            'credito'   => $credito,
+            'cliente'   => $credito->cliente,
+            'ubicacion' => $credito->cliente->persona->ubicacion,
+            'asesor'    => $credito->asesor,
+        ];
+
+
+        if($tipo=='solicitud'){
+            $pdf = Pdf::loadView('pdfs/solicitud', $data);
+        }
+        
         return Response::make($pdf->output(), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="documento.pdf"',

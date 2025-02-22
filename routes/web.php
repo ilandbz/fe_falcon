@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-Route::get('/generar-pdf',[CreditoController::class,'generarPDF']);
-
-
 Route::get('/', function () {
 
     return view('app');

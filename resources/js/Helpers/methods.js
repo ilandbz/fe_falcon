@@ -20,7 +20,26 @@ export const getConfigHeader = () => {
         }
     }
 }
+export const getConfigHeaderpdf = () => {
+    let tokenData = localStorage.getItem('token-api');
 
+    if (tokenData) {
+        let decode = JSON.parse(tokenData);
+        let token = decode.token;
+
+        return {
+            headers: {
+                'Authorization': 'JWT ' + token
+            },
+            responseType: "blob" 
+        };
+    }
+
+    return {
+        headers: {},
+        responseType: "blob"  
+    };
+};
 
 export const getConfigHeaderPost = () => {
     if(localStorage.getItem('token-api'))

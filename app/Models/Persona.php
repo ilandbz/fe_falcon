@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Persona extends Model
 {
@@ -31,10 +33,22 @@ class Persona extends Model
 
     protected $appends = ['apenom'];
 
+
+    public function ubicacion(): BelongsTo
+    {
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_domicilio_id');
+    }
+
     public function apenom(): Attribute
     {
         return Attribute::make(
             get: fn ($value, $attributes) => "{$attributes['ape_pat']} {$attributes['ape_mat']} {$attributes['primernombre']} " . ($attributes['otrosnombres'] ?? ''),
         );
+    }
+
+
+    public function getEdadAttribute()
+    {
+        return Carbon::parse($this->fecha_nac)->age;
     }
 }

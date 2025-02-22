@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { getConfigHeader, getdataParamsPagination } from '@/Helpers'
+import { getConfigHeader, getdataParamsPagination, getConfigHeaderpdf } from '@/Helpers'
 
 export default function useCredito() {
     const creditos = ref([])
     const errors = ref('')
+    const pdfUrl = ref('')
     const credito = ref({})
     const respuesta = ref([])
     const tiposCreditos = ref([])
@@ -13,11 +14,7 @@ export default function useCredito() {
         credito.value = respuesta.data
     }
 
-    const obtenerCreditoPdf = async(id) => {
-        let respuesta = await axios.get('credito/generar-pdf?id='+id, getConfigHeader())
-        credito.value = respuesta.data
-    }
-    
+   
     const listaCreditos = async()=>{
         let respuesta = await axios.get('credito/todos', getConfigHeader())
         creditos.value = respuesta.data        
@@ -85,7 +82,22 @@ export default function useCredito() {
             }
         }
     }
+    const generarPdf = async (data) => {
+        errors.value = "";
     
+        try {
+            let response = await axios.post("credito/generar-pdf",data,getConfigHeaderpdf());
+    
+            const file = new Blob([response.data], { type: "application/pdf" });
+            pdfUrl.value = URL.createObjectURL(file);
+    
+        } catch (error) {
+            console.error("Error al generar el PDF:", error);
+            if (error.response && error.response.status === 422) {
+                errors.value = error.response.data.errors;
+            }
+        }
+    };    
     const eliminarCredito = async(id) => {
         const respond = await axios.post('credito/eliminar', { id: id }, getConfigHeader())
         if (respond.data.ok == 1) {
@@ -97,6 +109,6 @@ export default function useCredito() {
         errors, creditos, listaCreditos, credito, obtenerCredito, obtenerCreditos, 
         agregarCredito, actualizarCredito, eliminarCredito, respuesta, tiposCreditos, 
         listaTiposCreditos, replicarEvaluacion, validarEvaluacionAsesor, respuesta,
-        cambiarEstado, obtenerCreditoPdf
+        cambiarEstado, generarPdf, pdfUrl
     }
 }
