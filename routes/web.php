@@ -1,12 +1,17 @@
 <?php
 
 use App\Http\Controllers\AgenciaController;
+use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+
+Route::get('/generar-pdf',[CreditoController::class,'generarPDF']);
+
 
 Route::get('/', function () {
 

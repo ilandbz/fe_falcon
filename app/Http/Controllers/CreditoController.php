@@ -7,6 +7,7 @@ use App\Http\Requests\Credito\UpdateCreditoRequest;
 use App\Models\AnalisisCualitativo;
 use App\Models\Balance;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Response;
 use App\Models\Credito;
 use App\Models\PerdidaGanancia;
 use App\Models\PropuestaCredito;
@@ -195,9 +196,15 @@ class CreditoController extends Controller
         ],200);
     }
     public function generarPDF(){
-        $data = ['titulo' => 'Ejemplo de PDF en Laravel'];        
-        $pdf = Pdf::loadView('pdf.documento', $data);
-        return $pdf->download('archivo.pdf');
+
+        $data = ['titulo' => "Documento de "];
+        $pdf = Pdf::loadView('solicitud', $data);
+
+        return Response::make($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="documento.pdf"',
+        ]);
+
     }
     
 }

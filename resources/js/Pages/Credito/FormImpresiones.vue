@@ -14,6 +14,8 @@ const {
 
 const { hideModal, Toast, openModal } = useHelper();
 
+const pdfUrl = ref('')
+
 const props = defineProps({
     credito: Object,
 });
@@ -41,28 +43,28 @@ const generarPdf = async(archivo)=>{
                             <div class="row">
                                 <!-- Botón Solicitud -->
                                 <div class="col-md-4">
-                                    <button @click="generarPdf" class="btn btn-primary btn-lg w-100 p-4" onclick="imprimir('solicitud')">
+                                    <button @click="generarPdf('solicitud')" class="btn btn-primary btn-lg w-100 p-4" onclick="imprimir('solicitud')">
                                         <i class="fas fa-file-alt fa-2x"></i> <br> Solicitud
                                     </button>
                                 </div>
     
                                 <!-- Botón Análisis Cualitativo -->
                                 <div class="col-md-4">
-                                    <button @click="generarPdf" class="btn btn-secondary btn-lg w-100 p-4" onclick="imprimir('analisis')">
+                                    <button @click="generarPdf('Analisis Cualitativo')" class="btn btn-secondary btn-lg w-100 p-4" onclick="imprimir('analisis')">
                                         <i class="fas fa-chart-line fa-2x"></i> <br> Análisis Cualitativo
                                     </button>
                                 </div>
     
                                 <!-- Botón Estados Financieros -->
                                 <div class="col-md-4">
-                                    <button @click="generarPdf" class="btn btn-success btn-lg w-100 p-4" onclick="imprimir('estados')">
+                                    <button @click="generarPdf('Estados Financieros')" class="btn btn-success btn-lg w-100 p-4" onclick="imprimir('estados')">
                                         <i class="fas fa-balance-scale fa-2x"></i> <br> Estados Financieros
                                     </button>
                                 </div>
     
                                 <!-- Botón Seguro Desgravamen -->
                                 <div class="col-md-4">
-                                    <button @click="generarPdf" class="btn btn-warning btn-lg w-100 p-4" onclick="imprimir('seguro')">
+                                    <button @click="generarPdf('Seguro')" class="btn btn-warning btn-lg w-100 p-4" onclick="imprimir('seguro')">
                                         <i class="fas fa-shield-alt fa-2x"></i> <br> Seguro Desgravamen
                                     </button>
                                 </div>
@@ -78,12 +80,11 @@ const generarPdf = async(archivo)=>{
                         <div class="card-footer"></div>
                     </div>
 
-
-
                     <div class="card border-info">
                         <div class="card-header bg-info text-white">VISUALIZACION</div>
                         <div class="card-body">
-
+                            <iframe v-if="pdfUrl" :src="pdfUrl" width="100%" height="500px"></iframe>
+                            <p v-else>Seleccione un documento para visualizar.</p>
                         </div>
                         <div class="card-footer">
                             
