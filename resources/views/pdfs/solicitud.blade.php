@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FINANCIERA EMPRENDER</title>
+    <title>SOLICITUD</title>
     <style type="text/css">
         @page {
             margin-top: 2em;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>FINANCIERA TU AMIGO</title>
+    <title>ESTADOS FINANCIEROS</title>
     <style type="text/css">
         @page {
             margin-top: 0.8em;

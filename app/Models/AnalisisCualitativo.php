@@ -29,5 +29,7 @@ class AnalisisCualitativo extends Model
     {
         return $this->belongsTo(Credito::class, 'credito_id');
     }
-    
+
+
+
 }

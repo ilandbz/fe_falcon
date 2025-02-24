@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Response;
 use App\Models\Credito;
 use App\Models\PerdidaGanancia;
 use App\Models\PropuestaCredito;
+use App\Models\SeguroDesgravamen;
 use Illuminate\Http\Request;
 
 class CreditoController extends Controller
 {
     public function store(StoreCreditoRequest $request)
     {
-        $request->validated();
+        //$request->validated();
+        $monto = $request->monto;
         $credito = Credito::create([
             'cliente_id'    => $request->cliente_id,
             'agencia_id'    => $request->agencia_id,
@@ -25,7 +27,7 @@ class CreditoController extends Controller
             'estado'        => $request->estado,
             'fecha_reg'     => $request->fecha_reg,
             'tipo'          => $request->tipo,
-            'monto'         => $request->monto,
+            'monto'         => $monto,
             'producto'      => $request->producto,
             'frecuencia'    => $request->frecuencia,
             'plazo'         => $request->plazo,
@@ -36,6 +38,22 @@ class CreditoController extends Controller
             'total'         => $request->total ?? 0.00,
             'costomora'     => $request->costomora ?? 0.00,
         ]);
+
+
+		if ($monto < 1000) {
+			$montopoliza = 2;
+		} else {
+			$montopoliza = floor($monto / 1000) * 2;
+		}
+
+        SeguroDesgravamen::Create([
+            'credito_id'  => $credito->id,
+            'monto'       => $montopoliza,
+            'fecha_reg'   => now()->toDateString(),
+            'hora_reg'    => now()->toTimeString(),
+        ]);
+
+
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Credito Registrado satisfactoriamente',
@@ -137,7 +155,26 @@ class CreditoController extends Controller
     
         return $query->orderBy('fecha_reg', 'Desc')->paginate($paginacion);
     }
+    public function listarCreditosPorEstado(Request $request){
+        $estado =$request->estado;
+        $agencia_id=$request->agencia_id;
 
+        $buscar = mb_strtoupper($request->buscar ?? '');
+        $paginacion = is_numeric($request->paginacion) ? $request->paginacion : 10; // Valor por defecto 10
+    
+        $query = Credito::with([
+            'cliente:id,estado,persona_id',
+            'agencia:id,nombre',
+            'asesor:id,name',
+            'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+        ])->where('estado', $estado);
+    
+        if (!empty($agencia_id)) {
+            $query->where('agencia_id', $agencia_id);
+        }
+    
+        return $query->orderBy('fecha_reg', 'Desc')->paginate($paginacion);
+    }
     public function cargarEvaluacionAnterior(Request $request)
     {
         $credito_id = $request->credito_id;
@@ -198,8 +235,6 @@ class CreditoController extends Controller
     public function generarPDF(Request $request){
         $tipo = $request->tipo;
         $id = $request->credito_id;
-
-
         if($tipo=='solicitud'){
             $credito = Credito::with([
                 'cliente:id,persona_id,estado',
@@ -250,8 +285,46 @@ class CreditoController extends Controller
 
             ];
             $pdf = Pdf::loadView('pdfs/estadosfinancieros', $data);
+        }elseif($tipo=='Analisis Cualitativo'){
+            $credito = Credito::with([
+                'cliente:id,persona_id,estado',
+                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
+                'analisis:credito_id,tipogarantia,cargafamiliar,riesgoedadmax,antecedentescred,recorpagoult,niveldesarr,tiempo_neg,control_ingegre,vent_totdec,compsubsector,totunidfamiliar,totunidempresa,total'
+
+            ])
+            ->where('id', $id)->first();
+            $data = [
+                'analisiscualitativo'           => $credito->analisis,
+            ];
+            $pdf = Pdf::loadView('pdfs/analisis', $data);
+        }elseif($tipo=='Seguro'){
+            $credito = Credito::with([
+                'cliente:id,persona_id,estado',
+                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
+                'seguro:id,credito_id,monto'
+
+            ])
+            ->where('id', $id)->first();
+            $data = [
+                'cliente'           => $credito->cliente,
+                'credito'           => $credito,
+                'poliza'           => $credito->seguro,
+            ];
+            $pdf = Pdf::loadView('pdfs/seguro', $data);
+        }elseif($tipo=='Propuesta'){
+            $credito = Credito::with([
+                'cliente:id,persona_id,estado',
+                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
+                'propuesta:credito_id,unidad_familiar,experiencia_cred,destino_prest,referencias'
+
+            ])
+            ->where('id', $id)->first();
+            $data = [
+                'cliente'           => $credito->cliente,
+                'credito'           => $credito,
+            ];
+            $pdf = Pdf::loadView('pdfs/propuestacredito', $data);
         }
-        
         return Response::make($pdf->output(), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="documento.pdf"',

@@ -15,4 +15,7 @@ class PropuestaCredito extends Model
         'destino_prest',
         'referencias',
     ];
+
+    
+
 }

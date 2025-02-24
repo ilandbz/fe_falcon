@@ -77,7 +77,7 @@ const generarPDF = async(archivo)=>{
         
                                     <!-- Botón Propuesta de Crédito -->
                                     <div class="mb-3">
-                                        <button class="btn btn-danger btn-sm w-100 p-4" onclick="imprimir('propuesta')">
+                                        <button class="btn btn-danger btn-sm w-100 p-4" @click="generarPDF('Propuesta')">
                                             <i class="fas fa-hand-holding-usd fa-2x"></i> <br> Propuesta de Crédito
                                         </button>
                                     </div>

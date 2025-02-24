@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('seguro_desgravamens', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('credito_id')->constrained('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('credito_id');
+            $table->primary('credito_id');
+            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('monto',7,2);
             $table->date('fecha_reg');
             $table->time('hora_reg');

@@ -21,6 +21,7 @@ import HabilitarAsesor from '@/Pages/HabilitarAsesor/Inicio.vue';
 import Tickets from '@/Pages/Tickets/Inicio.vue';
 import Registros from '@/Pages/Registros/Inicio.vue';
 import Devolucion from '@/Pages/Devolucion/Inicio.vue';
+import Evaluacion from '@/Pages/Evaluacion/Inicio.vue';
 const routes = [
     {
         path: '/', name:'Principal', component: Principal ,
@@ -103,7 +104,13 @@ const routes = [
         name: 'Devolucion',
         component: Devolucion,
         meta: { layout: LayoutDefault }
-    }
+    },
+    {
+        path: '/evaluar-credito',
+        name: 'Evaluacion',
+        component: Evaluacion,
+        meta: { layout: LayoutDefault }
+    }    
 ]
 
 export default createRouter({

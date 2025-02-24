@@ -49,6 +49,10 @@ class Credito extends Model
     {
         return $this->hasOne(Balance::class, 'credito_id');
     }
+    public function seguro(): HasOne
+    {
+        return $this->hasOne(SeguroDesgravamen::class, 'credito_id');
+    }    
     public function perdidas(): HasOne
     {
         return $this->hasOne(PerdidaGanancia::class, 'credito_id');

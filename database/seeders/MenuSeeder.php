@@ -109,6 +109,14 @@ class MenuSeeder extends Seeder
                 'orden' => 8,
             ],
             [
+                'nombre' => 'Evaluar',
+                'slug' => 'evaluar-credito',
+                'icono' => 'fa-solid fa-file-circle-check',
+                'padre_id' => null,
+                'grupo_id'  => GrupoMenu::where('titulo', 'Creditos')->value('id'),
+                'orden' => 8,
+            ],
+            [
                 'nombre' => 'Registros',
                 'slug' => 'gestion-registros',
                 'icono' => 'fas fa-clipboard-list',

@@ -123,6 +123,7 @@ Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::get('validar-evaluacion-asesor', [CreditoController::class, 'validarParaEvaluacion']);
     Route::post('cambiar-estado', [CreditoController::class, 'cambiarEstado']);
     Route::post('generar-pdf', [CreditoController::class, 'generarPDF']);
+    Route::post('listar-estado-agencia', [CreditoController::class, 'listarCreditosPorEstado']);
     
 });
 //analisis cualitativo
