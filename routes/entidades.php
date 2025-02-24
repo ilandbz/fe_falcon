@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalisisCualitativoController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\EvaluacionController;
 use App\Http\Controllers\GastoFamiliarPGController;
 use App\Http\Controllers\GastoNegocioPGController;
 use App\Http\Controllers\GrupoMenuController;
@@ -132,6 +133,13 @@ Route::group(['prefix' => 'analisis-cualitativo', 'middleware' => 'auth'], funct
     Route::post('eliminar', [AnalisisCualitativoController::class, 'destroy']);
     Route::post('guardar', [AnalisisCualitativoController::class, 'store']);
     Route::get('mostrar-analisis-cualitativo', [AnalisisCualitativoController::class, 'show']);
+});
+//evaluacion gerente
+Route::group(['prefix' => 'evaluacion-gerente', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [EvaluacionController::class, 'update']);
+    Route::post('eliminar', [EvaluacionController::class, 'destroy']);
+    Route::post('guardar', [EvaluacionController::class, 'store']);
+    Route::get('mostrar', [EvaluacionController::class, 'show']);
 });
 //balance
 Route::group(['prefix' => 'balance', 'middleware' => 'auth'], function () {

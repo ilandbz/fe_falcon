@@ -12,7 +12,8 @@
   import FormImpresiones from './FormImpresiones.vue';
   const props = defineProps({
     agencia: Object,
-    role: Object
+    role: Object,
+    usuario: Object,
 });
 
 const { agencia, role } = toRefs(props);
@@ -594,24 +595,23 @@ const { agencia, role } = toRefs(props);
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Editar" @click.prevent="editar(credito.id)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>&nbsp;
-                                            <button class="btn btn-danger btn-sm" style="font-size: .65rem;" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>&nbsp;
-                                            <!-- <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
-                                                <i class="fas fa-check"></i>
-                                            </button>&nbsp; -->
-                                            <button v-if="credito.estado=='REGISTRADO'" class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluacion(credito.id)">
-                                                <i class="fas fa-check"></i>
-                                            </button>&nbsp;
-                                            <button v-if="credito.estado=='REGISTRADO'" class="btn btn-primary btn-sm" style="font-size: .65rem;" title="Enviar a Gerencia" @click.prevent="enviar(credito.id)">
-                                                <i class="fa-solid fa-paper-plane"></i>
-                                            </button>&nbsp;
-                                            <button v-if="credito.estado=='PENDIENTE'" class="btn btn-success btn-sm" style="font-size: .65rem;" title="Archivos" @click.prevent="archivos(credito.id)">
+                                            <template v-if="credito.estado === 'REGISTRADO'">
+                                                <button class="btn btn-warning btn-sm btn-custom" title="Editar" @click.prevent="editar(credito.id)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-danger btn-sm btn-custom" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <button class="btn btn-info btn-sm btn-custom" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-primary btn-sm btn-custom" title="Enviar a Gerencia" @click.prevent="enviar(credito.id)">
+                                                    <i class="fa-solid fa-paper-plane"></i>
+                                                </button>
+                                            </template>
+                                            <button v-if="credito.estado === 'PENDIENTE'" class="btn btn-success btn-sm btn-custom" title="Archivos" @click.prevent="archivos(credito.id)">
                                                 <i class="fa-solid fa-file-pdf"></i>
-                                            </button>&nbsp;
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>

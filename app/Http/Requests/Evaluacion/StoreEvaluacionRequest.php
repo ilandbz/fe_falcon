@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Cargo;
+namespace App\Http\Requests\Evaluacion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCargoRequest extends FormRequest
+class StoreEvaluacionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,11 @@ class StoreCargoRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'     => 'required|max:25|string|unique:menus,nombre',
+            'credito_id' => 'required',
+            'usuario_id' => 'required',
+            'resultado' => 'required',
+            'fechahora' => 'required',
+            'tasainteres' => 'required',
         ];
     }
 

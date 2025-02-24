@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Cargo;
+namespace App\Http\Requests\Evaluacion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCargoRequest extends FormRequest
+class UpdateEvaluacionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,12 @@ class UpdateCargoRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'     => 'required|max:25|string|unique:cargos,nombre,'.$this->id,
+            'credito_id' => 'required',
+            'usuario_id' => 'required',
+            'resultado' => 'required',
+            'fechahora' => 'required',
+            'tasainteres' => 'required',
+
         ];
     }
 

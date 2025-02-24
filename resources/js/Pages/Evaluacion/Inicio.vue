@@ -7,10 +7,11 @@
 
     const props = defineProps({
         agencia: Object,
-        role: Object
+        role: Object,
+        usuario: Object,
     });
 
-    const { agencia, role } = toRefs(props);
+    const { agencia, usuario } = toRefs(props);
     const { openModal, Toast, Swal, formatoFecha } = useHelper();
     const {
         creditos, errors, credito, respuesta,
@@ -34,7 +35,7 @@
         credito_id : '',
         usuario_id : '',
         resultado : '',
-        fechahora : '',
+        fechahora : formatoFecha(null,"YYYY-MM-DD HH:mm:ss"),
         plazo:'',
         producto : '',
         monto: '',
@@ -44,6 +45,23 @@
         total: '',
         errors: []
     });
+    const limpiar=()=>{
+        form.value.id = '';
+        form.value.dni = '';
+        form.value.apenom = '';
+        form.value.credito_id = '';
+        form.value.usuario_id = usuario.value.id;
+        form.value.resultado = '';
+        form.value.fechahora = formatoFecha(null,"YYYY-MM-DD HH:mm:ss");
+        form.value.plazo = '';
+        form.value.producto = '';
+        form.value.monto = '';
+        form.value.comentario = '';
+        form.value.tasainteres = '';
+        form.value.medioorigen = '';
+        form.value.total = '';
+        form.value.errors = [];
+    }
 const calcularTotal=()=>{
     const tasas = {
         'CREDI-6': 6,
@@ -62,6 +80,7 @@ const calcularTotal=()=>{
     form.value.total = (monto * (1 + tasaDecimal)).toFixed(2);
 }
 const obtenerDatos = async(id)=>{
+    limpiar()
     await obtenerCredito(id);
     if (credito.value) {
         form.value.credito_id = credito.value.id
@@ -87,7 +106,7 @@ const aprobar = async(id) => {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            
+            form.value.estado = 'aprobar'
         }
     });
 };
@@ -332,6 +351,13 @@ const activarDiv=()=>{
         </div>
       </div>
     </div>
-    <EvaluacionForm :form="form" @calcularTotal="calcularTotal" :esActivodiv="esActivodiv" @activarDiv="activarDiv"></EvaluacionForm>
+    <EvaluacionForm 
+    @calcularTotal="calcularTotal"
+    @activarDiv="activarDiv"
+    @limpiar="limpiar"
+    :esActivodiv="esActivodiv"
+    :form="form" 
+    :currentPage="creditos.current_page"
+    ></EvaluacionForm>
 
 </template>
