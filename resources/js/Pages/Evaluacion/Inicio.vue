@@ -40,6 +40,7 @@
         monto: '',
         comentario : '',
         tasainteres : '',
+        medioorigen : '',
         total: '',
         errors: []
     });
@@ -63,12 +64,13 @@ const calcularTotal=()=>{
 const obtenerDatos = async(id)=>{
     await obtenerCredito(id);
     if (credito.value) {
+        form.value.credito_id = credito.value.id
         form.value.dni=credito.value.cliente.persona.dni
         form.value.apenom=credito.value.cliente.persona.apenom
         form.value.producto = credito.value.producto
         form.value.monto = credito.value.monto
         form.value.plazo = credito.value.plazo
-        //calcularTotal()
+        form.value.medioorigen = credito.value.medioorigen
     }
 }
 const aprobar = async(id) => {
@@ -89,6 +91,11 @@ const aprobar = async(id) => {
         }
     });
 };
+const esActivodiv=ref(false);
+
+const activarDiv=()=>{
+    esActivodiv.value=true
+}
 
     const listarCreditos = async(page=1) => {
         dato.value.page= page
@@ -108,13 +115,10 @@ const aprobar = async(id) => {
     const cambiarPaginacion = () => {
         listarCreditos()
     }
-
-    const data=ref({
-        id:'',
-        estado:'',
-    })
-
-    const evaluar = (id)=>{
+    const evaluar = async(id)=>{
+        esActivodiv.value=false
+        await obtenerDatos(id)
+        calcularTotal()
         openModal('#modalevaluacion')
         document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
@@ -260,12 +264,16 @@ const aprobar = async(id) => {
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
+                                            <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Observar" @click.prevent="observar(credito.id)">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </button>&nbsp;
                                             <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluar(credito.id)">
                                                 <i class="fa-solid fa-file-circle-check"></i>
                                             </button>&nbsp;
-                                            <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Aprobar" @click.prevent="aprobar(credito.id)">
+                                            <button class="btn btn-success btn-sm" style="font-size: .65rem;" title="Aprobar" @click.prevent="aprobar(credito.id)">
                                                 <i class="fa-solid fa-money-check-alt"></i>
                                             </button>&nbsp;
+
                                         </td>
                                     </tr>
                                 </tbody>
@@ -324,6 +332,6 @@ const aprobar = async(id) => {
         </div>
       </div>
     </div>
-    <EvaluacionForm :form="form"></EvaluacionForm>
+    <EvaluacionForm :form="form" @calcularTotal="calcularTotal" :esActivodiv="esActivodiv" @activarDiv="activarDiv"></EvaluacionForm>
 
 </template>
