@@ -7,7 +7,7 @@ const {
     pdfUrl, generarPdf
     } = useCredito();
 const { hideModal, Toast, Swal } = useHelper();
-const emit = defineEmits(['calcularTotal','activarDiv', 'limpiar', 'onListar']);
+const emit = defineEmits(['calcularTotal','activarDiv', 'limpiar', 'onListar', 'enviarRegistro']);
 const props = defineProps({
     form: Object,
     esActivodiv: Boolean,
@@ -38,92 +38,87 @@ const verSolicitud=async()=>{
     await generarPdf(data.value);
 }
 
-const enviarRegistro=async()=>{
-    await agregarEvaluacion(form.value);
-    if (errors.value) {
-        form.value.errors = errors.value;
-    }
-    if (respuesta.value.ok == 1) {
-        form.value.errors = [];
-        Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
-        emit('onListar', currentPage.value);
-    }    
-}
+
 const aprobar = async () => {
     form.value.resultado = 'APROBADO';
-    await enviarRegistro();
+    emit('enviarRegistro');
     hideModal('#modalevaluacion');
+    emit('onListar', currentPage.value);
 };
 
-const guardar = async (tipo) => {
-    Swal.fire({
-        title: `${tipo} : \nIngrese el motivo\nID: ${form.value.credito_id}`,
+const solicitarMotivo = async (tipo) => {
+    hideModal('#modalevaluacion');
+    const result = await Swal.fire({
+        title: `${tipo} : \nSolicitud ID: ${form.value.credito_id}\nIngrese el motivo`,
         input: "text",
         inputAttributes: {
             autocapitalize: "off",
             autofocus: "true",
-            class: "form-control" // Asegura que use el estilo de Bootstrap
+            class: "form-control"
         },
         showCancelButton: true,
         confirmButtonText: "Enviar",
         cancelButtonText: "Cancelar",
         showLoaderOnConfirm: true,
         preConfirm: (motivo) => {
-            const input = Swal.getInput(); // Obtiene el input de SweetAlert2
-
+            const input = Swal.getInput();
             if (!motivo) {
                 Swal.showValidationMessage(
-                    `<div class="text-danger fw-bold">Debe ingresar un motivo.</div>` // Mensaje en rojo con Bootstrap
+                    `<div class="text-danger fw-bold">Debe ingresar un motivo.</div>`
                 );
-
                 if (input) {
-                    input.classList.add("is-invalid"); // Aplica borde rojo de Bootstrap
+                    input.classList.add("is-invalid");
                 }
                 return false;
             }
-
-            // Si el usuario ingresa un motivo, remueve el borde rojo
             if (input) {
                 input.classList.remove("is-invalid");
             }
-
             return motivo;
         },
         allowOutsideClick: () => !Swal.isLoading(),
         didOpen: () => {
             const input = Swal.getInput();
             if (input) {
-                // Remueve el borde rojo cuando el usuario empieza a escribir
                 input.addEventListener("input", () => {
                     input.classList.remove("is-invalid");
                 });
             }
         }
     });
+    if (result.isConfirmed) {
+        return result.value;
+    }
+    return null;
 };
-
-
 const observar = async () => {
     form.value.resultado = 'OBSERVADO';
-    const motivo = await solicitarMotivo("Observar");
+    const motivo = await solicitarMotivo('OBSERVADO');
     if (motivo) {
         form.value.comentario = motivo;
-        await enviarRegistro();
+        emit('enviarRegistro');
+        emit('onListar', currentPage.value);
     }
-    hideModal('#modalevaluacion');
 };
-
 const rechazar = async () => {
     form.value.resultado = 'RECHAZADO';
-    const motivo = await solicitarMotivo("Rechazar");
+    const motivo = await solicitarMotivo('OBSERVADO');
     if (motivo) {
         form.value.comentario = motivo;
-        await enviarRegistro();
+        emit('enviarRegistro');
+        emit('onListar', currentPage.value);
     }
-    hideModal('#modalevaluacion');
-    
 };
-
+const verSolicitudes = () =>{
+    Swal.fire({
+        title: "Vigentes",
+        text: "Modal with a custom image.",
+        // imageUrl: "https://unsplash.it/400/200",
+        // imageWidth: 400,
+        // imageHeight: 200,
+        imageAlt: "Custom image"
+    });
+}
 
 </script>
 
@@ -137,18 +132,30 @@ const rechazar = async () => {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="input-group has-validation input-group-sm pb-1">
-                            <div class="form-floating is-invalid">
-                                <input type="text" class="form-control form-control-sm" :value="form.dni"
-                                placeholder="DNI Cliente" readonly>
-                                <label for="floatingInputGroup1">DNI Cliente</label>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" :value="form.dni"
+                                    placeholder="DNI Cliente" readonly>
+                                    <label for="floatingInputGroup1">DNI Cliente</label>
+                                </div>
+                                <span class="input-group-text">{{ form.apenom }}</span>
+                                <div class="invalid-feedback" v-for="error in form.errors.dni" :key="error">
+                                    {{ error }}
+                                </div>                                                                 
+                            </div>  
+                        </div>
+                        <div class="col">
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" :value="form.vigentes.length"
+                                    placeholder="Creditos Vigentes" readonly>
+                                    <label for="floatingInputGroup1">Creditos Vigentes</label>
+                                </div>
+                                <button v-if="form.vigentes.length>0" title="Ver Creditos Vigentes" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button>
                             </div>
-                            <span class="input-group-text">{{ form.apenom }}</span>
-                            <div class="invalid-feedback" v-for="error in form.errors.dni" :key="error">
-                                {{ error }}
-                            </div>                                                                 
-                        </div>  
+                        </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
@@ -211,6 +218,17 @@ const rechazar = async () => {
                             </div>                                
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="form-floating is-invalid">
+                                <input type="text" class="form-control form-control-sm" :value="form.tiposolicitud"
+                                placeholder="MEDIO ORIGEN" readonly>
+                                <label for="floatingInputGroup1">TIPO SOLICITUD</label>
+                            </div>                                    
+                        </div> 
+                        <div class="col"></div>
+                        <div class="col"></div>                            
+                    </div>
                     <div class="card border-info" v-if="esActivodiv">
                         <div class="card-header bg-info text-white">PRE VISUALIZACION</div>
                         <div class="card-body">
@@ -220,9 +238,9 @@ const rechazar = async () => {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-warning" title="Observar" @click.prevent="guardar('OBSERVADO')"><i class="fas fa-exclamation-circle"></i> Observar</button>
-                    <button type="button" class="btn btn-danger" @click="guardar('RECHAZADO')"><i class="fas fa-thumbs-down"></i> Rechazar</button>
-                    <button type="button" class="btn btn-success" @click="guardar('APROBADO')"><i class="fas fa-thumbs-up"></i> Aprobar</button>
+                    <button class="btn btn-warning" title="Observar" @click.prevent="observar()"><i class="fas fa-exclamation-circle"></i> Observar</button>
+                    <button type="button" class="btn btn-danger" @click="rechazar()"><i class="fas fa-thumbs-down"></i> Rechazar</button>
+                    <button type="button" class="btn btn-success" @click="aprobar()"><i class="fas fa-thumbs-up"></i> Aprobar</button>
                 </div>
             </div>
         </div>

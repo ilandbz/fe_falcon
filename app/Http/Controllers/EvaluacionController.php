@@ -19,8 +19,19 @@ class EvaluacionController extends Controller
             'comentario' => $request->comentario,
             'tasainteres' => $request->tasainteres,
         ]);
+
+        // if(($request->tiposolicitud=='Paralelo' || ($request->tiposolicitud==='Recurrente Con Saldo' && $cantidadvigentes>1)){
+        //     $estado='EVALUACION2';
+        // }else{
+        //     $estado='APROBADO';
+        // }
+
+
         $credito=Credito::where('id',$request->credito_id)
         ->update(['estado'=>$request->resultado]);
+
+
+
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Registrado satisfactoriamente'

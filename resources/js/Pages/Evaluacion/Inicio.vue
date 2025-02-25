@@ -4,7 +4,7 @@
   import useHelper from '@/Helpers'; 
   import useCredito from '@/Composables/Credito.js';
   import EvaluacionForm from './Form.vue'
-
+  import useEvaluacion from '@/Composables/Evaluacion.js';
     const props = defineProps({
         agencia: Object,
         role: Object,
@@ -14,11 +14,11 @@
     const { agencia, usuario } = toRefs(props);
     const { openModal, Toast, Swal, formatoFecha } = useHelper();
     const {
-        creditos, errors, credito, respuesta,
-        obtenerCreditosEstadoAgencia, obtenerCredito, eliminarCredito,
-        validarEvaluacionAsesor, cambiarEstado,
+        creditos, credito, obtenerCreditosEstadoAgencia, obtenerCredito,
     } = useCredito();
-
+    const {
+    respuesta, agregarEvaluacion, errors
+    } = useEvaluacion();
     const dato = ref({
         page:'',
         buscar:'',
@@ -42,6 +42,8 @@
         comentario : '',
         tasainteres : '',
         medioorigen : '',
+        tiposolicitud : '',
+        vigentes:[],
         total: '',
         errors: []
     });
@@ -59,6 +61,8 @@
         form.value.comentario = '';
         form.value.tasainteres = '';
         form.value.medioorigen = '';
+        form.value.tiposolicitud = '';
+        form.value.vigentes= [];
         form.value.total = '';
         form.value.errors = [];
     }
@@ -90,7 +94,26 @@ const obtenerDatos = async(id)=>{
         form.value.monto = credito.value.monto
         form.value.plazo = credito.value.plazo
         form.value.medioorigen = credito.value.medioorigen
+        form.value.tiposolicitud = credito.value.tipo
+        form.value.vigentes = credito.value.cliente.creditos
     }
+}
+const enviarRegistro=async()=>{
+    await agregarEvaluacion(form.value);
+    if (errors.value) {
+        form.value.errors = errors.value;
+    }
+    if (respuesta.value.ok == 1) {
+        form.value.errors = [];
+        //Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: respuesta.value.mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }    
 }
 const aprobar = async(id) => {
     await obtenerDatos(id)      
@@ -106,10 +129,14 @@ const aprobar = async(id) => {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            form.value.estado = 'aprobar'
+            form.value.resultado = 'APROBADO';
+            enviarRegistro();
+            listarCreditos()
         }
     });
 };
+
+
 const esActivodiv=ref(false);
 
 const activarDiv=()=>{
@@ -283,9 +310,6 @@ const activarDiv=()=>{
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Observar" @click.prevent="observar(credito.id)">
-                                                <i class="fas fa-exclamation-circle"></i>
-                                            </button>&nbsp;
                                             <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluar(credito.id)">
                                                 <i class="fa-solid fa-file-circle-check"></i>
                                             </button>&nbsp;
@@ -355,6 +379,8 @@ const activarDiv=()=>{
     @calcularTotal="calcularTotal"
     @activarDiv="activarDiv"
     @limpiar="limpiar"
+    @onListar="listarCreditos"
+    @enviarRegistro="enviarRegistro"
     :esActivodiv="esActivodiv"
     :form="form" 
     :currentPage="creditos.current_page"

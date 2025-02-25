@@ -197,14 +197,14 @@
                                     <a href="#" aria-label="Next" class="page-link"
                                         title="Página Siguiente"
                                         @click.prevent="cambiarPagina(agencias.current_page + 1)">
-                                        <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                        <span ><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
                                     <li v-if="agencias.current_page <= agencias.last_page-1" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
                                         @click.prevent="cambiarPagina(agencias.last_page)"
                                         title="Última Página">
-                                        <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
+                                        <span ><i class="fas fa-step-forward"></i></span>
                                     </a>
                                 </li>
                             </ul>
@@ -281,14 +281,14 @@
                                     <a href="#" aria-label="Next" class="page-link"
                                         title="Página Siguiente"
                                         @click.prevent="cambiarPagina(agencias.current_page + 1)">
-                                        <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                        <span ><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
                                     <li v-if="agencias.current_page <= agencias.last_page-1" class="page-item">
                                     <a href="#" aria-label="Next" class="page-link"
                                         @click.prevent="cambiarPagina(agencias.last_page)"
                                         title="Última Página">
-                                        <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
+                                        <span ><i class="fas fa-step-forward"></i></span>
                                     </a>
                                 </li>
                             </ul>

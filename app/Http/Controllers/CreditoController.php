@@ -67,6 +67,9 @@ class CreditoController extends Controller
             'agencia:id,nombre',
             'asesor:id,name',
             'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+            'cliente.creditos' => function ($query) {
+                $query->where('estado', 'DESEMBOLSADO');
+            }
         ])->where('id', $request->id)->first();
         return $credito;
     }

@@ -54,7 +54,7 @@ onMounted(() => {
 <template>
     <form @submit.prevent="guardar">
     <div class="modal fade" id="modalagencia" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalagenciaLabel" aria-hidden="true">
+        aria-labelledby="modalagenciaLabel" >
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">

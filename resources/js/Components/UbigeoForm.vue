@@ -120,14 +120,14 @@ const { form, regUbigeo2 } = toRefs(props)
                                         <a href="#" aria-label="Next" class="page-link"
                                             title="Página Siguiente"
                                             @click.prevent="cambiarPagina(distritos.current_page + 1)">
-                                            <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                            <span ><i class="fas fa-angle-right"></i></span>
                                         </a>
                                     </li>
                                         <li v-if="distritos.current_page <= distritos.last_page-1" class="page-item">
                                         <a href="#" aria-label="Next" class="page-link"
                                             @click.prevent="cambiarPagina(distritos.last_page)"
                                             title="Última Página">
-                                            <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
+                                            <span ><i class="fas fa-step-forward"></i></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -207,14 +207,14 @@ const { form, regUbigeo2 } = toRefs(props)
                                         <a href="#" aria-label="Next" class="page-link"
                                             title="Página Siguiente"
                                             @click.prevent="cambiarPagina(distritos.current_page + 1)">
-                                            <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                            <span ><i class="fas fa-angle-right"></i></span>
                                         </a>
                                     </li>
                                         <li v-if="distritos.current_page <= distritos.last_page-1" class="page-item">
                                         <a href="#" aria-label="Next" class="page-link"
                                             @click.prevent="cambiarPagina(distritos.last_page)"
                                             title="Última Página">
-                                            <span aria-hidden="true"><i class="fas fa-step-forward"></i></span>
+                                            <span ><i class="fas fa-step-forward"></i></span>
                                         </a>
                                     </li>
                                 </ul>

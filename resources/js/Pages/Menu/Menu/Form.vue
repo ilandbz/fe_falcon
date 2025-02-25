@@ -59,7 +59,7 @@ onMounted(() => {
 <template>
     <form @submit.prevent="guardar">
     <div class="modal fade" id="modalmenu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalmenuLabel" aria-hidden="true">
+        aria-labelledby="modalmenuLabel" >
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">

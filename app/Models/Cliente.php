@@ -41,5 +41,8 @@ class Cliente extends Model
     {
         return $this->HasMany(Negocio::class, 'cliente_id');
     }
-
+    public function creditos(): HasMany
+    {
+        return $this->HasMany(Credito::class, 'cliente_id');
+    }
 }

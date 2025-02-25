@@ -82,7 +82,7 @@ const limpiar=()=>{
 <template>
     <form @submit.prevent="guardar">
         <div class="modal fade" id="GastosNegocio" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="GastosNegocioLabel" aria-hidden="true">
+            aria-labelledby="GastosNegocioLabel" >
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">

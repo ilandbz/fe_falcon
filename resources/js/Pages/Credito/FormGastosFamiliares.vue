@@ -81,7 +81,7 @@ const calcularTotal = () =>{
 <template>
     <form @submit.prevent="guardar">
         <div class="modal fade" id="GastosFamiliar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="GastosFamiliarLabel" aria-hidden="true">
+            aria-labelledby="GastosFamiliarLabel" >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
