@@ -29,8 +29,9 @@ class ClienteController extends Controller
         }
         $file = $request->file('foto');
         if ($file) {
-            $nombre_archivo = $request->dni.".webp";
-            Storage::disk('personas')->put($nombre_archivo,File::get($file));
+            $nombre_archivo = $request->dni . ".webp";
+            Storage::disk('fotos')->makeDirectory('clientes');
+            Storage::disk('fotos')->put('clientes/' . $nombre_archivo, File::get($file));
         }
         $esconyugue = $request->estado_civil=='Casado' || $request->estado_civil=='Conviviente';
         if ($esconyugue && empty($request->conyugue_id)) {
@@ -112,8 +113,7 @@ class ClienteController extends Controller
     }
     public function update(UpdateClienteRequest $request)
     {
-        $request->validated();
-
+        $file = $request->file('foto');
         $persona = Cliente::where('id',$request->id)->first();
 
         $persona->nombre           = $request->nombre;
@@ -123,7 +123,11 @@ class ClienteController extends Controller
         $persona->grupo_id         = $request->grupo_id;
         $persona->orden            = $request->orden;
         $persona->save();
-
+        if ($file) {
+            $nombre_archivo = $request->dni . ".webp";
+            Storage::disk('fotos')->makeDirectory('clientes');
+            Storage::disk('fotos')->put('clientes/' . $nombre_archivo, File::get($file));
+        }
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Cliente modificado satisfactoriamente'

@@ -11,31 +11,49 @@ use Illuminate\Http\Request;
 class EvaluacionController extends Controller
 {
     public function store(StoreEvaluacionRequest $request){
-        $registro = Evaluacion::create([
-            'credito_id' => $request->credito_id,
-            'usuario_id' => $request->usuario_id,
-            'resultado' => $request->resultado,
-            'fechahora' => $request->fechahora,
-            'comentario' => $request->comentario,
+        $registro = Evaluacion::create($request->only([
+            'credito_id', 'usuario_id', 'resultado', 'fechahora', 'comentario', 'tasainteres'
+        ]));
+        if ($request->resultado === 'APROBADO') {
+            if ($request->tiposolicitud === 'Nuevo' && $request->monto > 1500) {
+                $estado = 'EVALUACION2';
+            } elseif ($request->tiposolicitud === 'Paralelo' || 
+                      ($request->tiposolicitud === 'Recurrente Con Saldo' && $request->cantvigentes > 1)) {
+                $estado = 'EVALUACION2';
+            } else {
+                $estado = 'APROBADO';
+            }
+        } else {
+            $estado = $request->resultado;
+        }
+        Credito::where('id', $request->credito_id)->update([
+            'estado' => $estado,
             'tasainteres' => $request->tasainteres,
+            'total'     => $request->total,
         ]);
-
-        // if(($request->tiposolicitud=='Paralelo' || ($request->tiposolicitud==='Recurrente Con Saldo' && $cantidadvigentes>1)){
-        //     $estado='EVALUACION2';
-        // }else{
-        //     $estado='APROBADO';
-        // }
-
-
-        $credito=Credito::where('id',$request->credito_id)
-        ->update(['estado'=>$request->resultado]);
-
-
-
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Registrado satisfactoriamente'
-        ],200);
+        ], 200);
+    }
+    public function store2(StoreEvaluacionRequest $request){
+        $registro = Evaluacion::create($request->only([
+            'credito_id', 'usuario_id', 'resultado', 'fechahora', 'comentario', 'tasainteres'
+        ]));
+        if ($request->resultado === 'APROBADO') {
+            $estado = 'APROBADO';
+        } else {
+            $estado = $request->resultado;
+        }
+        Credito::where('id', $request->credito_id)->update([
+            'estado' => $estado,
+            'tasainteres' => $request->tasainteres,
+            'total'     => $request->total,
+        ]);
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Registrado satisfactoriamente'
+        ], 200);
     }
     public function show(Request $request){
         $registro = Evaluacion::where('id', $request->id)->first();

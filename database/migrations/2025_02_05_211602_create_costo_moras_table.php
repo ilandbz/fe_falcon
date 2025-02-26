@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('costo_moras', function (Blueprint $table) {
             $table->id();
+            $table->decimal('costodiario', 6,2);
+            $table->decimal('montoinicial', 9,2);
+            $table->decimal('montofinal', 9,2);
             $table->timestamps();
         });
     }

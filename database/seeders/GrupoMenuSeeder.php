@@ -22,6 +22,7 @@ class GrupoMenuSeeder extends Seeder
             ['titulo' => 'Comprobantes'],
             ['titulo' => 'Recursos Humanos'],
             ['titulo' => 'Clientes'],
+            ['titulo' => 'Gerencia Zonal'],
         ];
 
         foreach($grupos as $grupo){

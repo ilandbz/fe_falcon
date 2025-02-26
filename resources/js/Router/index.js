@@ -22,6 +22,7 @@ import Tickets from '@/Pages/Tickets/Inicio.vue';
 import Registros from '@/Pages/Registros/Inicio.vue';
 import Devolucion from '@/Pages/Devolucion/Inicio.vue';
 import Evaluacion from '@/Pages/Evaluacion/Inicio.vue';
+import Evaluacion2 from '@/Pages/Evaluacion2/Inicio.vue';
 const routes = [
     {
         path: '/', name:'Principal', component: Principal ,
@@ -110,7 +111,13 @@ const routes = [
         name: 'Evaluacion',
         component: Evaluacion,
         meta: { layout: LayoutDefault }
-    }    
+    },
+    {
+        path: '/evaluar-credito-segundo-nivel',
+        name: 'Evaluacion2',
+        component: Evaluacion2,
+        meta: { layout: LayoutDefault }
+    },
 ]
 
 export default createRouter({

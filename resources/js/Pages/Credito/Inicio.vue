@@ -47,7 +47,7 @@ const { agencia, role } = toRefs(props);
         apenom : 'APELLIDOS Y NOMBRES',
         agencia_id : agencia.id ?? 1,
         asesor_id : '',
-        estado : 'REGISTRADO',
+        estado : 'PENDIENTE',
         fecha_reg : formatoFecha(null,"YYYY-MM-DD"),
         tipo : '',
         monto : '',
@@ -140,7 +140,7 @@ const { agencia, role } = toRefs(props);
         form.value.apenom = 'APELLIDOS Y NOMBRES';
         form.value.agencia_id = agencia.id ?? 1;
         form.value.asesor_id = '';
-        form.value.estado = 'REGISTRADO';
+        form.value.estado = 'PENDIENTE';
         form.value.fecha_reg = formatoFecha(null,"YYYY-MM-DD"),
         form.value.tipo = '';
         form.value.monto = '';
@@ -254,7 +254,7 @@ const { agencia, role } = toRefs(props);
     };
     const cambiarEstadoCredito=async(id)=>{
         data.value.id=id
-        data.value.estado='PENDIENTE'
+        data.value.estado='EVALUACION'
         await cambiarEstado(data.value)
     }
     const validarEnvio=async(id)=>{
@@ -447,10 +447,15 @@ const { agencia, role } = toRefs(props);
         openModal('#modalevaluacion')
         document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
-    const archivos=(id)=>{
-       buscarCredito(id)
-       openModal('#modalimpresiones')
-       document.getElementById("modalimpresionesLabel").innerHTML = 'Evaluacion Credito';        
+    const archivos=async(id)=>{
+       await validarEvaluacionAsesor(id)
+       if(respuesta.value.ok==1){
+           buscarCredito(id)
+           openModal('#modalimpresiones')
+           document.getElementById("modalimpresionesLabel").innerHTML = 'Evaluacion Credito';        
+       }else{
+            Swal.fire("Falta evaluar");
+        }  
     }
     const cambiarPagina =(pagina) => {
         listarCreditos(pagina)
@@ -595,7 +600,7 @@ const { agencia, role } = toRefs(props);
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <template v-if="credito.estado === 'REGISTRADO'">
+                                            <template v-if="credito.estado === 'PENDIENTE'">
                                                 <button class="btn btn-warning btn-sm btn-custom" title="Editar" @click.prevent="editar(credito.id)">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
@@ -609,7 +614,7 @@ const { agencia, role } = toRefs(props);
                                                     <i class="fa-solid fa-paper-plane"></i>
                                                 </button>
                                             </template>
-                                            <button v-if="credito.estado === 'PENDIENTE'" class="btn btn-success btn-sm btn-custom" title="Archivos" @click.prevent="archivos(credito.id)">
+                                            <button v-if="credito.estado === 'PENDIENTE' || credito.estado === 'EVALUACION'" class="btn btn-success btn-sm btn-custom" title="Archivos" @click.prevent="archivos(credito.id)">
                                                 <i class="fa-solid fa-file-pdf"></i>
                                             </button>
                                         </td>

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetCalendarioPagos extends Model
 {
-    //
+    Public $timestamps = false;
 }

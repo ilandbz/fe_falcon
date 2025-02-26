@@ -30,6 +30,21 @@ export default function useEvaluacion() {
             }
         }
     }
+    const agregarEvaluacionZonal = async(data) => {
+        errors.value = ''
+        try {
+            let respond = await axios.post('evaluacion-gerente/guardar-gerente-zonal',data,getConfigHeader())
+            errors.value =''
+            if(respond.data.ok==1){
+                respuesta.value=respond.data
+            }
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }    
     const actualizarEvaluacion = async(data) => {
         errors.value = ''
         try {
@@ -55,6 +70,6 @@ export default function useEvaluacion() {
     }
     return {
         errors, evaluaciones, evaluacion, obtenerEvaluacion, obtenerEvaluaciones, 
-        agregarEvaluacion, actualizarEvaluacion, eliminarEvaluacion, respuesta
+        agregarEvaluacion, actualizarEvaluacion, eliminarEvaluacion, respuesta, agregarEvaluacionZonal
     }
 }

@@ -29,16 +29,16 @@ class UserController extends Controller
             'primernombre'  => $request->primernombre,
             'otrosnombres'  => $request->otrosnombres,
         ]);
-        if ($file) {
-            $nombre_archivo = $request->dni.".webp";
-            //$nombre_archivo = $request->dni.".".mb_strtolower($file->extension());
-            Storage::disk('fotos')->put($nombre_archivo,File::get($file));
-        }
         $usuario = User::create([
             'name'          => $request->username,
             'dni'           => $request->dni,
             'password'      => Hash::make($request->username),
         ]);
+        if ($file) {
+            $nombre_archivo = $request->username . ".webp";
+            Storage::disk('fotos')->makeDirectory('usuarios');
+            Storage::disk('fotos')->put('usuarios/' . $nombre_archivo, File::get($file));
+        }
         $usuario->roles()->sync([$request->role_id]);
         return response()->json([
             'ok' => 1,
@@ -96,16 +96,17 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request){
         $file = $request->file('foto');
-        if ($file) {
-            $nombre_archivo = $request->dni.".webp";
-            Storage::disk('fotos')->put($nombre_archivo,File::get($file));
-        }
         $user = User::findOrFail($request->id);
         $user->update([
             'name'          => $request->username,
             'dni'       => $request->dni,
         ]);
         $user->save();
+        if ($file) {
+            $nombre_archivo = $request->username . ".webp";
+            Storage::disk('fotos')->makeDirectory('usuarios');
+            Storage::disk('fotos')->put('usuarios/' . $nombre_archivo, File::get($file));
+        }
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Se guardo Exito'
@@ -142,8 +143,9 @@ class UserController extends Controller
     }
     public function destroy(Request $request){
         $user = User::where('id', $request->id)->first();
-        if (Storage::disk('fotos')->exists($user->dni.'.webp')) {
-            Storage::disk('fotos')->delete($user->dni.'.webp');
+    
+        if ($user && Storage::disk('fotos')->exists('usuarios/'.$user->dni.'.webp')) {
+            Storage::disk('fotos')->delete('usuarios/'.$user->name.'.webp');
         }
         $user->delete();
         return response()->json([

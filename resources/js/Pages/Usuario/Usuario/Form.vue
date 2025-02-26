@@ -85,8 +85,8 @@ const cambiarFoto = (e)=>{
     }
 }
 const imagenNoEncontrada = (event)=>{
-      event.target.src = "/storage/fotos/default.png"; // Imagen por defecto
-    }
+    event.target.src = "/storage/fotos/default.png";
+}
 const generarUserName = ()=>{
     let username = form.value.primernombre.toUpperCase().substring(0,1)+
     form.value.apepat.toUpperCase().substring(0,5)+

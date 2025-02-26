@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalisisCualitativoController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\DesembolsoController;
 use App\Http\Controllers\EvaluacionController;
 use App\Http\Controllers\GastoFamiliarPGController;
 use App\Http\Controllers\GastoNegocioPGController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ProfesionController;
 use App\Http\Controllers\PropuestaCreditoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TesoreriaController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaPGController;
@@ -139,6 +141,7 @@ Route::group(['prefix' => 'evaluacion-gerente', 'middleware' => 'auth'], functio
     Route::post('actualizar', [EvaluacionController::class, 'update']);
     Route::post('eliminar', [EvaluacionController::class, 'destroy']);
     Route::post('guardar', [EvaluacionController::class, 'store']);
+    Route::post('guardar-gerente-zonal', [EvaluacionController::class, 'store2']);
     Route::get('mostrar', [EvaluacionController::class, 'show']);
 });
 //balance
@@ -148,6 +151,22 @@ Route::group(['prefix' => 'balance', 'middleware' => 'auth'], function () {
     Route::post('guardar', [BalanceController::class, 'store']);
     Route::get('mostrar', [BalanceController::class, 'show']);
 });
+//desembolso
+Route::group(['prefix' => 'desembolso', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [DesembolsoController::class, 'update']);
+    Route::post('eliminar', [DesembolsoController::class, 'destroy']);
+    Route::post('guardar', [DesembolsoController::class, 'store']);
+    Route::get('mostrar', [DesembolsoController::class, 'show']);
+});
+
+//tesoreria
+Route::group(['prefix' => 'tesoreria', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [TesoreriaController::class, 'update']);
+    Route::post('eliminar', [TesoreriaController::class, 'destroy']);
+    Route::post('guardar', [TesoreriaController::class, 'store']);
+    Route::get('mostrar', [TesoreriaController::class, 'show']);
+});
+
 //perdidas
 Route::group(['prefix' => 'perdidas-ganancias', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [PerdidaGananciaController::class, 'update']);

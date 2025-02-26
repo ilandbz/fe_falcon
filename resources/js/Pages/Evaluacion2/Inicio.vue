@@ -3,7 +3,8 @@
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers'; 
   import useCredito from '@/Composables/Credito.js';
-  import DesembolsoForm from './Form.vue'
+  import EvaluacionForm from './Form.vue'
+  import useEvaluacion from '@/Composables/Evaluacion.js';
     const props = defineProps({
         agencia: Object,
         role: Object,
@@ -13,8 +14,11 @@
     const { agencia, usuario } = toRefs(props);
     const { openModal, Toast, Swal, formatoFecha } = useHelper();
     const {
-        credito, creditos, obtenerCreditosEstadoAgencia, obtenerCredito,
+        creditos, credito, obtenerCreditosEstadoAgencia, obtenerCredito,
     } = useCredito();
+    const {
+    respuesta, agregarEvaluacionZonal, errors
+    } = useEvaluacion();
     const dato = ref({
         page:'',
         buscar:'',
@@ -25,83 +29,126 @@
         'agencia_id' : '',
     })
     const form = ref({
-        credito_id : '',
-        fecha : formatoFecha(null,"YYYY-MM-DD"),
-        hora : formatoFecha(null,"HH:mm:ss"),
-        user_id : usuario.value.id,
-        descontado : 0,
-        totalentregado : 0,
+        id: '',
         dni: '',
         apenom: '',
+        credito_id : '',
+        usuario_id : '',
+        resultado : '',
+        fechahora : formatoFecha(null,"YYYY-MM-DD HH:mm:ss"),
         plazo:'',
-        frecuencia: '',
         producto : '',
         monto: '',
+        comentario : '',
+        tasainteres : '',
         medioorigen : '',
         tiposolicitud : '',
-        tasainteres : '',
-        costomora: 0,
-        dondepagara : '',
-        total: 0,
-        asesor:'',
-        asesor_id: '',
         vigentes:[],
+        cantvigentes:0,
+        total: '',
         errors: []
     });
     const limpiar=()=>{
-        form.value.credito_id = '',
-        form.value.fecha = formatoFecha(null,"YYYY-MM-DD");
-        form.value.hora = formatoFecha(null,"HH:mm:ss");
-        form.value.user_id = usuario.value.id,
-        form.value.descontado = 0,
-        form.value.totalentregado = 0,
+        form.value.id = '';
         form.value.dni = '';
         form.value.apenom = '';
+        form.value.credito_id = '';
+        form.value.usuario_id = usuario.value.id;
+        form.value.resultado = '';
+        form.value.fechahora = formatoFecha(null,"YYYY-MM-DD HH:mm:ss");
         form.value.plazo = '';
-        form.value.frecuencia = '';
         form.value.producto = '';
+        form.value.monto = '';
+        form.value.comentario = '';
+        form.value.tasainteres = '';
         form.value.medioorigen = '';
         form.value.tiposolicitud = '';
-        form.value.dondepagara = '';
-        form.value.total = 0;
-        form.value.costomora = 0;
-        form.value.asesor=''
-        form.value.foto='/storage/fotos/default.png',
-        form.value.errors = []
+        form.value.vigentes= [];
+        form.value.cantvigentes = 0,
+        form.value.total = '';
+        form.value.errors = [];
     }
-    const desembolsar=(id)=>{
-        obtenerDatos(id)
-        openModal('#modaldesembolso')
-        document.getElementById("modaldesembolsoLabel").innerHTML = 'Desembolso de Credito';
+const calcularTotal=()=>{
+    const tasas = {
+        'CREDI-6': 6,
+        'CREDI-6/CREDI-INVERSION': 6,
+        'CREDI-INVERSION': 7,
+        'RECAUDADO': 7
+    };
+    let tasaInteres = tasas[form.value.producto] || 9;
+    if (form.value.producto === 'CONFIO EN TI' || form.value.plazo === 20) {
+        tasaInteres = 6;
     }
-
-    const obtenerDatos = async(id)=>{
-        limpiar()
-        await obtenerCredito(id);
-        if (credito.value) {
-            form.value.credito_id = credito.value.id
-            form.value.dni=credito.value.cliente.persona.dni
-            form.value.apenom=credito.value.cliente.persona.apenom
-            form.value.producto = credito.value.producto
-            form.value.monto = credito.value.monto
-            form.value.plazo = credito.value.plazo
-            form.value.frecuencia = credito.value.frecuencia
-            form.value.medioorigen = credito.value.medioorigen
-            form.value.tiposolicitud = credito.value.tipo
-            form.value.tasainteres = credito.value.tasainteres
-            form.value.dondepagara = credito.value.dondepagara
-            form.value.vigentes = credito.value.cliente.creditos
-            form.value.costomora = credito.value.costomora
-            form.value.total = credito.value.total
-            form.value.asesor = credito.value.asesor.name
-            form.value.asesor_id = credito.value.asesor.id
-            form.value.foto='/storage/fotos/usuarios/'+usuario.value.name+'.webp';
+    form.value.tasainteres = tasaInteres;
+    const monto = parseFloat(form.value.monto) || 0;
+    const tasaDecimal = parseFloat(tasaInteres) / 100;
+    form.value.monto=monto
+    form.value.total = (monto * (1 + tasaDecimal)).toFixed(2);
+}
+const obtenerDatos = async(id)=>{
+    limpiar()
+    await obtenerCredito(id);
+    if (credito.value) {
+        form.value.credito_id = credito.value.id
+        form.value.dni=credito.value.cliente.persona.dni
+        form.value.apenom=credito.value.cliente.persona.apenom
+        form.value.producto = credito.value.producto
+        form.value.monto = credito.value.monto
+        form.value.plazo = credito.value.plazo
+        form.value.medioorigen = credito.value.medioorigen
+        form.value.tiposolicitud = credito.value.tipo
+        form.value.vigentes = credito.value.cliente.creditos
+        form.value.cantvigentes = credito.value.cliente.creditos.length
+    }
+}
+const enviarRegistro=async()=>{
+    await agregarEvaluacionZonal(form.value);
+    if (errors.value) {
+        form.value.errors = errors.value;
+    }
+    if (respuesta.value.ok == 1) {
+        form.value.errors = [];
+        //Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: respuesta.value.mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }    
+}
+const aprobar = async(id) => {
+    await obtenerDatos(id)      
+    calcularTotal()
+    Swal.fire({
+        title: '¿Estás seguro de aprobar este crédito?',
+        text: `Recuerda que el monto es de S/. ${credito.value.monto}, la tasa de interés es de ${form.value.tasainteres}, y el total a pagar será de S/. ${form.value.total}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, aprobar crédito',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.value.resultado = 'APROBADO';
+            enviarRegistro();
+            listarCreditos()
         }
-    }
+    });
+};
+
+
+const esActivodiv=ref(false);
+
+const activarDiv=()=>{
+    esActivodiv.value=!esActivodiv.value
+}
 
     const listarCreditos = async(page=1) => {
         dato.value.page= page
-        dato2.value.estado='APROBADO'
+        dato2.value.estado='EVALUACION2'
         await obtenerCreditosEstadoAgencia(dato.value, dato2.value)
     }
 
@@ -117,6 +164,14 @@
     const cambiarPaginacion = () => {
         listarCreditos()
     }
+    const evaluar = async(id)=>{
+        esActivodiv.value=false
+        await obtenerDatos(id)
+        calcularTotal()
+        openModal('#modalevaluacion')
+        document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
+    }
+
     const cambiarPagina =(pagina) => {
         listarCreditos(pagina)
     }
@@ -222,7 +277,7 @@
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="14" class="text-center">Creditos</th>
+                                        <th colspan="12" class="text-center">Creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -230,11 +285,9 @@
                                         <th>DNI</th>
                                         <th>Apellidos y Nombres</th>
                                         <th>Monto</th>
-                                        <th>Tasa</th>
                                         <th>Plazo</th>
                                         <th>Fecha</th>
                                         <th>Frecuencia</th>
-                                        <th>Total</th>
                                         <th>Asesor</th>
                                         <th>Agencia</th>
                                         <th>Estado</th>
@@ -243,7 +296,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-if="creditos.total == 0">
-                                        <td class="text-danger text-center" colspan="14">
+                                        <td class="text-danger text-center" colspan="12">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
@@ -253,17 +306,18 @@
                                         <td>{{ credito.cliente.persona.dni }}</td>
                                         <td>{{ credito.cliente.persona.apenom }}</td>
                                         <td>{{ 'S/. ' + credito.monto }}</td>
-                                        <td>{{ credito.tasainteres + '%' }}</td>
                                         <td>{{ credito.plazo }}</td>
                                         <td>{{ credito.fecha_reg }}</td>
                                         <td>{{ credito.frecuencia }}</td>
-                                        <td>{{ 'S/. ' + credito.total }}</td>
                                         <td>{{ credito.asesor.name }}</td>
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <button class="btn btn-success btn-sm" style="font-size: .65rem;" title="Realizar Desembolso" @click.prevent="desembolsar(credito.id)">
-                                                <i class="fa-solid fa-money-bill"></i>
+                                            <button class="btn btn-info btn-sm" style="font-size: .65rem;" title="Evaluar" @click.prevent="evaluar(credito.id)">
+                                                <i class="fa-solid fa-file-circle-check"></i>
+                                            </button>&nbsp;
+                                            <button class="btn btn-success btn-sm" style="font-size: .65rem;" title="Aprobar" @click.prevent="aprobar(credito.id)">
+                                                <i class="fa-solid fa-money-check-alt"></i>
                                             </button>&nbsp;
 
                                         </td>
@@ -324,5 +378,15 @@
         </div>
       </div>
     </div>
-<DesembolsoForm :form="form"></DesembolsoForm>
+    <EvaluacionForm 
+    @calcularTotal="calcularTotal"
+    @activarDiv="activarDiv"
+    @limpiar="limpiar"
+    @onListar="listarCreditos"
+    @enviarRegistro="enviarRegistro"
+    :esActivodiv="esActivodiv"
+    :form="form" 
+    :currentPage="creditos.current_page"
+    ></EvaluacionForm>
+
 </template>

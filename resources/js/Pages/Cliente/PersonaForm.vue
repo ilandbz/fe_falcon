@@ -29,8 +29,6 @@ const regUbigeo = ref({
     departamento : 'Dep.',
 });
 const guardar = async() => {
-
-
     let formData = new FormData();
     formData.append('dni', form.value.dni);
     formData.append('ape_pat', form.value.ape_pat);

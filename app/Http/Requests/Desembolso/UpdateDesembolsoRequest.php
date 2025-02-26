@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Cargo;
+namespace App\Http\Requests\Desembolso;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCargoRequest extends FormRequest
+class UpdateDesembolsoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,12 @@ class StoreCargoRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'     => 'required|max:25|string|unique:menus,nombre',
+            'credito_id'     => 'required|exists:creditos,id',
+            'fecha'          => 'required|date',
+            'hora'           => 'required|date_format:H:i:s',
+            'user_id'        => 'required|exists:users,id',
+            'descontado'     => 'required|numeric|min:0',
+            'totalentregado' => 'required|numeric|min:0'
         ];
     }
 

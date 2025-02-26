@@ -71,4 +71,10 @@ class Credito extends Model
                !is_null($this->perdidas) && 
                !is_null($this->propuesta);
     }
+    public function getCostomoraAttribute()
+    {
+        return CostoMora::where('montoinicial', '<=', $this->monto)
+                        ->where('montofinal', '>=', $this->monto)
+                        ->value('costodiario');
+    }
 }

@@ -44,6 +44,7 @@
         medioorigen : '',
         tiposolicitud : '',
         vigentes:[],
+        cantvigentes:0,
         total: '',
         errors: []
     });
@@ -63,6 +64,7 @@
         form.value.medioorigen = '';
         form.value.tiposolicitud = '';
         form.value.vigentes= [];
+        form.value.cantvigentes = 0,
         form.value.total = '';
         form.value.errors = [];
     }
@@ -96,6 +98,7 @@ const obtenerDatos = async(id)=>{
         form.value.medioorigen = credito.value.medioorigen
         form.value.tiposolicitud = credito.value.tipo
         form.value.vigentes = credito.value.cliente.creditos
+        form.value.cantvigentes = credito.value.cliente.creditos.length
     }
 }
 const enviarRegistro=async()=>{
@@ -140,12 +143,12 @@ const aprobar = async(id) => {
 const esActivodiv=ref(false);
 
 const activarDiv=()=>{
-    esActivodiv.value=true
+    esActivodiv.value=!esActivodiv.value
 }
 
     const listarCreditos = async(page=1) => {
         dato.value.page= page
-        dato2.value.estado='Pendiente'
+        dato2.value.estado='EVALUACION'
         await obtenerCreditosEstadoAgencia(dato.value, dato2.value)
     }
 

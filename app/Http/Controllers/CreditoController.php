@@ -38,22 +38,17 @@ class CreditoController extends Controller
             'total'         => $request->total ?? 0.00,
             'costomora'     => $request->costomora ?? 0.00,
         ]);
-
-
 		if ($monto < 1000) {
 			$montopoliza = 2;
 		} else {
 			$montopoliza = floor($monto / 1000) * 2;
 		}
-
         SeguroDesgravamen::Create([
             'credito_id'  => $credito->id,
             'monto'       => $montopoliza,
             'fecha_reg'   => now()->toDateString(),
             'hora_reg'    => now()->toTimeString(),
         ]);
-
-
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Credito Registrado satisfactoriamente',
@@ -152,7 +147,9 @@ class CreditoController extends Controller
                   ->orWhereRaw("UPPER(ape_pat) LIKE ?", ["%$buscar%"])
                   ->orWhereRaw("UPPER(ape_mat) LIKE ?", ["%$buscar%"])
                   ->orWhereRaw("UPPER(primernombre) LIKE ?", ["%$buscar%"])
-                  ->orWhereRaw("UPPER(otrosnombres) LIKE ?", ["%$buscar%"]);
+                  ->orWhereRaw("UPPER(otrosnombres) LIKE ?", ["%$buscar%"])
+                  ->orWhereRaw("UPPER(CONCAT(personas.ape_pat, ' ', personas.ape_mat, ' ', personas.primernombre, ' ', IFNULL(personas.otrosnombres, ''))) LIKE ?", ['%' . $buscar . '%']);
+                  ;
             })->orwhere('id', $buscar);
         }
     
@@ -171,7 +168,17 @@ class CreditoController extends Controller
             'asesor:id,name',
             'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
         ])->where('estado', $estado);
-    
+        if (!empty($buscar)) {
+            $query->whereHas('cliente.persona', function ($q) use ($buscar) {
+                $q->whereRaw("UPPER(dni) LIKE ?", ["%$buscar%"])
+                  ->orWhereRaw("UPPER(ape_pat) LIKE ?", ["%$buscar%"])
+                  ->orWhereRaw("UPPER(ape_mat) LIKE ?", ["%$buscar%"])
+                  ->orWhereRaw("UPPER(primernombre) LIKE ?", ["%$buscar%"])
+                  ->orWhereRaw("UPPER(otrosnombres) LIKE ?", ["%$buscar%"])
+                  ->orWhereRaw("UPPER(CONCAT(personas.ape_pat, ' ', personas.ape_mat, ' ', personas.primernombre, ' ', IFNULL(personas.otrosnombres, ''))) LIKE ?", ['%' . $buscar . '%']);
+                  ;
+            })->orwhere('id', $buscar);
+        }
         if (!empty($agencia_id)) {
             $query->where('agencia_id', $agencia_id);
         }

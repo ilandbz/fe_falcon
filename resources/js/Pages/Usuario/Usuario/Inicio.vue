@@ -61,7 +61,7 @@
             form.value.apemat=usuario.value.persona.ape_mat;
             form.value.primernombre=usuario.value.persona.primernombre;
             form.value.otrosnombres=usuario.value.persona.otrosnombres;
-            form.value.foto=carpetaFotos+usuario.value.dni+'.webp';
+            form.value.foto=carpetaFotos+'/usuarios/'+usuario.value.name+'.webp';
         }
     }
     const editar = (id) => {

@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('det_calendario_pagos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('credito_id');
+            $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedInteger('nrocuota');
+            $table->date('fecha_prog');
+            $table->string('nombredia', 10);
+            $table->decimal('cuota', 9, 2);
+            $table->decimal('saldo', 9, 2);
+        
+            $table->primary(['credito_id', 'nrocuota']);
         });
     }
 

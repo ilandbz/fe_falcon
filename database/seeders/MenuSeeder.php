@@ -148,6 +148,14 @@ class MenuSeeder extends Seeder
                 'grupo_id'  => GrupoMenu::where('titulo', 'Junta')->value('id'),
                 'orden' => 4,
             ],
+            [
+                'nombre' => 'Evaluar',
+                'slug' => 'evaluar-credito-segundo-nivel',
+                'icono' => 'fa-solid fa-file-circle-check',
+                'padre_id' => null,
+                'grupo_id'  => GrupoMenu::where('titulo', 'Gerencia Zonal')->value('id'),
+                'orden' => 4,
+            ],            
 
 
         ];
