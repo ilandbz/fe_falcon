@@ -121,7 +121,7 @@ const enviarRegistro=async()=>{
 const aprobar = async(id) => {
     await obtenerDatos(id)      
     calcularTotal()
-    Swal.fire({
+    await Swal.fire({
         title: '¿Estás seguro de aprobar este crédito?',
         text: `Recuerda que el monto es de S/. ${credito.value.monto}, la tasa de interés es de ${form.value.tasainteres}, y el total a pagar será de S/. ${form.value.total}.`,
         icon: 'question',
@@ -134,9 +134,9 @@ const aprobar = async(id) => {
         if (result.isConfirmed) {
             form.value.resultado = 'APROBADO';
             enviarRegistro();
-            listarCreditos()
         }
     });
+    listarCreditos()
 };
 
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Credito extends Model
 {
+    protected $appends = ['moradiaria'];
     protected $fillable = [
         'cliente_id',
         'agencia_id',
@@ -71,7 +72,7 @@ class Credito extends Model
                !is_null($this->perdidas) && 
                !is_null($this->propuesta);
     }
-    public function getCostomoraAttribute()
+    public function getMoradiariaAttribute()
     {
         return CostoMora::where('montoinicial', '<=', $this->monto)
                         ->where('montofinal', '>=', $this->monto)

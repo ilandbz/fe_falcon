@@ -68,6 +68,7 @@
         form.value.asesor=''
         form.value.foto='/storage/fotos/default.png',
         form.value.errors = []
+        form.value.vigentes = []
     }
     const desembolsar=(id)=>{
         obtenerDatos(id)
@@ -91,7 +92,7 @@
             form.value.tasainteres = credito.value.tasainteres
             form.value.dondepagara = credito.value.dondepagara
             form.value.vigentes = credito.value.cliente.creditos
-            form.value.costomora = credito.value.costomora
+            form.value.costomora = credito.value.moradiaria
             form.value.total = credito.value.total
             form.value.asesor = credito.value.asesor.name
             form.value.asesor_id = credito.value.asesor.id

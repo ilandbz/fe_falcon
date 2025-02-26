@@ -9,6 +9,7 @@ use App\Models\Balance;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Response;
 use App\Models\Credito;
+use App\Models\CreditosCancelar;
 use App\Models\PerdidaGanancia;
 use App\Models\PropuestaCredito;
 use App\Models\SeguroDesgravamen;
@@ -18,7 +19,6 @@ class CreditoController extends Controller
 {
     public function store(StoreCreditoRequest $request)
     {
-        //$request->validated();
         $monto = $request->monto;
         $credito = Credito::create([
             'cliente_id'    => $request->cliente_id,
@@ -43,6 +43,14 @@ class CreditoController extends Controller
 		} else {
 			$montopoliza = floor($monto / 1000) * 2;
 		}
+        if($request->tipo==='Recurrente Con Saldo'){
+            foreach ($request->creditos_seleccionados as $fila) {
+                CreditosCancelar::create([
+                    'credito_id'            => $credito->id,
+                    'credito_pagar_id'      => $fila['id'],
+                ]);
+            }
+        }
         SeguroDesgravamen::Create([
             'credito_id'  => $credito->id,
             'monto'       => $montopoliza,

@@ -10,9 +10,9 @@ const { hideModal, Toast, openModal, Swal } = useHelper();
 
 const props = defineProps({
     form: Object,
-    currentPage: Number
+    currentPage: Number,
 });
-
+const vigentes = ref([]);
 const { form, currentPage } = toRefs(props);
 const {
     usuarios, obtenerUsuariosTipoAgencia
@@ -76,17 +76,23 @@ const examinarClientes = ()=>{
     document.getElementById("modalClienteLabel").innerHTML = 'Buscar Cliente';
     openModal('#modalCliente')
 }
-
+const cambiarTipo=()=>{
+    if(form.value.tipo=='Paralelo'){
+        form.value.creditos_seleccionados=[]
+    }
+}
 const guardar = () => {
     crud[form.value.estadoCrud]();
 };
 const buscarCliente = async(dni) =>{
+    vigentes.value=[]
     form.value.dni_cliente=dni
     await obtenerClientePorDni(dni)
     form.value.apenom = cliente.value.persona.apenom
     await listaTiposCreditos(cliente.value.id)
     form.value.tipo = tiposCreditos.value[0]
     form.value.cliente_id=cliente.value.id
+    vigentes.value = cliente.value.creditos
 }
 const listaAsesores = async()=>{
     await obtenerUsuariosTipoAgencia(5, 0)
@@ -122,8 +128,7 @@ onMounted(() => {
 
 <template>
     <form @submit.prevent="guardar">
-        <div class="modal fade" id="modalcredito" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="modalcreditoLabel" >
+        <div class="modal fade" id="modalcredito" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -155,9 +160,7 @@ onMounted(() => {
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <span class="input-group-text">S/.</span>
                                 <div class="form-floating is-invalid">
-                                    <input type="text" class="form-control form-control-sm" v-model="form.monto"
-                                    @change="buscarCliente(form.dni_cliente)"
-                                    @keyup.enter="buscarCliente(form.dni_cliente)" placeholder="Monto">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.monto">
                                     <label for="monto">Monto</label>
                                 </div>
                                 <div class="invalid-feedback" v-for="error in form.errors.monto" :key="error">
@@ -166,7 +169,7 @@ onMounted(() => {
                             </div>
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <select class="form-select" v-model="form.tipo" @change="cambiarFuente" :disabled="tiposCreditos.length==0">
+                                    <select class="form-select" v-model="form.tipo" @change="cambiarTipo" :disabled="tiposCreditos.length==0">
                                         <option :value="registro" v-for="registro in tiposCreditos">{{ registro }}</option>
                                     </select>
                                     <label for="tipo">Tipo</label>
@@ -276,7 +279,50 @@ onMounted(() => {
                             </div>
 
 
-                        </div>                                               
+                        </div>  
+                        <div class="card" v-if="vigentes.length>0">
+                            <div class="card-header">Creditos Vigentes</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm small table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>FECHA</th>
+                                                <th>MONTO</th>
+                                                <th>PLAZO</th>
+                                                <th>TIPO</th>
+                                                <th>ESTADO</th>
+                                                <th v-if="form.tipo=='Recurrente Con Saldo'">Accion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="vigente in vigentes" :key="vigente.id">
+                                                <td>{{ vigente.id }}</td>
+                                                <td>{{ vigente.fecha_reg }}</td>
+                                                <td>{{ vigente.monto }}</td>
+                                                <td>{{ vigente.plazo }}</td>
+                                                <td>{{ vigente.tipo }}</td>
+                                                <td>{{ vigente.estado }}</td>
+                                                <td v-if="form.tipo=='Recurrente Con Saldo'">
+                                                    <div class="form-check">
+                                                        <input 
+                                                            class="form-check-input" 
+                                                            type="checkbox" 
+                                                            :value="vigente" 
+                                                            v-model="form.creditos_seleccionados"
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="alert alert-danger" v-for="error in form.errors.creditos_seleccionados" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>                                             
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

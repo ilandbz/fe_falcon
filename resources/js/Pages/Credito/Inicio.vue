@@ -17,52 +17,55 @@
 });
 
 const { agencia, role } = toRefs(props);
-    const { openModal, Toast, Swal, formatoFecha } = useHelper();
-    const {
-        creditos, errors, credito, respuesta,
-        obtenerCreditos, obtenerCredito, eliminarCredito,
-        validarEvaluacionAsesor, cambiarEstado,
-    } = useCredito();
-    const {
-        obtenerAnalisisCredito, analisis
-    } = useAnalisisCualitativo();
-    const {
-        obtenerBalance, balance
-    } = useBalance();
-    const {
-        obtenerPerdidas, perdidas
-    } = usePerdidas();
-    const {
-        obtenerPropuesta, propuesta
-    } = usePropuesta();
-    const dato = ref({
-        page:'',
-        buscar:'',
-        paginacion: 10
-    });
-    const form = ref({
-        id: '',
-        cliente_id : '',
-        dni_cliente : '',
-        apenom : 'APELLIDOS Y NOMBRES',
-        agencia_id : agencia.id ?? 1,
-        asesor_id : '',
-        estado : 'PENDIENTE',
-        fecha_reg : formatoFecha(null,"YYYY-MM-DD"),
-        tipo : '',
-        monto : '',
-        producto : 'CAPITAL',
-        frecuencia : 'DIARIO',
-        plazo : '30',
-        medioorigen : 'Asesores de Negocio',
-        dondepagara : 'Campo',
-        fuenterecursos : 'PROPIO',
-        tasainteres : 9,
-        total : 0.00,
-        costomora : 0.00,        
-        estadoCrud: '',
-        errors: []
-    });
+const { openModal, Toast, Swal, formatoFecha } = useHelper();
+const {
+    creditos, errors, credito, respuesta,
+    obtenerCreditos, obtenerCredito, eliminarCredito,
+    validarEvaluacionAsesor, cambiarEstado,
+} = useCredito();
+const {
+    obtenerAnalisisCredito, analisis
+} = useAnalisisCualitativo();
+const {
+    obtenerBalance, balance
+} = useBalance();
+const {
+    obtenerPerdidas, perdidas
+} = usePerdidas();
+const {
+    obtenerPropuesta, propuesta
+} = usePropuesta();
+const dato = ref({
+    page:'',
+    buscar:'',
+    paginacion: 10
+});
+
+const form = ref({
+    id: '',
+    cliente_id : '',
+    dni_cliente : '',
+    apenom : 'APELLIDOS Y NOMBRES',
+    agencia_id : agencia.id ?? 1,
+    asesor_id : '',
+    estado : 'PENDIENTE',
+    fecha_reg : formatoFecha(null,"YYYY-MM-DD"),
+    tipo : '',
+    monto : '',
+    producto : 'CAPITAL',
+    frecuencia : 'DIARIO',
+    plazo : '30',
+    medioorigen : 'Asesores de Negocio',
+    dondepagara : 'Campo',
+    fuenterecursos : 'PROPIO',
+    tasainteres : 9,
+    total : 0.00,
+    costomora : 0.00,
+    creditos_seleccionados : [],
+    estadoCrud: '',
+    errors: []
+});
+
     const formAnalisis = ref({
         credito_id: '',
         tipogarantia: '',
@@ -155,7 +158,9 @@ const { agencia, role } = toRefs(props);
         form.value.costomora = 0.00;
         form.value.estadoCrud = '';
         form.value.errors = [];
+        form.value.creditos_seleccionados = [];
         errors.value = [];
+        
     };
     const obtenerDatos = async (id) => {
         await obtenerCredito(id);
@@ -180,6 +185,7 @@ const { agencia, role } = toRefs(props);
             form.value.tasainteres = credito.value.tasainteres;
             form.value.total = credito.value.total;
             form.value.costomora = credito.value.costomora;
+            form.value.creditos_seleccionados = [];
         }
     };
     const editar = (id) => {
@@ -675,7 +681,11 @@ const { agencia, role } = toRefs(props);
         </div>
       </div>
     </div>
-    <CreditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page" @evaluar="evaluacion"></CreditoForm>
+    <CreditoForm
+    :form="form"
+    @onListar="listarCreditos"
+    :currentPage="creditos.current_page"
+    @evaluar="evaluacion"></CreditoForm>
     <EvaluacionForm :formAnalisis="formAnalisis"
     :credito="credito"
     :analisis="analisis"

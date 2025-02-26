@@ -74,7 +74,7 @@ onMounted(() => {
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="card">
+                            <div class="card mb-2">
                                 <div class="card-header">
                                     CREDITO
                                 </div>
@@ -174,15 +174,57 @@ onMounted(() => {
                                             </div>                              
                                         </div>
                                         <div class="col">
-                                            <div class="input-group has-validation input-group-sm pb-1">
+                                            <div class="form-floating is-invalid">
+                                                <input type="text" class="form-control form-control-sm" :value="'S/.' + form.costomora"
+                                                placeholder="COSTO MORA" readonly>
+                                                <label for="floatingInputGroup1">COSTO MORA</label>
+                                            </div>                                             
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div v-if="form.vigentes.length>0" class="input-group has-validation input-group-sm pb-1">
                                                 <div class="form-floating is-invalid">
                                                     <input type="text" class="form-control form-control-sm" :value="form.vigentes.length"
                                                     placeholder="Creditos Vigentes" readonly>
                                                     <label for="floatingInputGroup1">Creditos Vigentes</label>
                                                 </div>
-                                                <button v-if="form.vigentes.length>0" title="Ver Creditos Vigentes" @click="verSolicitudes" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button>
+                                                <!-- <button title="Ver Creditos Vigentes" @click="verSolicitudes" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button> -->
                                             </div>
-                                        </div> 
+                                        </div>
+                                        <div class="col"></div>
+                                        <div class="col"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" v-if="form.vigentes.length>0">
+                                <div class="card-header">Creditos Vigentes</div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm small table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>FECHA</th>
+                                                    <th>MONTO</th>
+                                                    <th>PLAZO</th>
+                                                    <th>TIPO</th>
+                                                    <th>ESTADO</th>
+                                                    <th>Accion</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="vigente in form.vigentes" :key="vigente.id">
+                                                    <td>{{ vigente.id }}</td>
+                                                    <td>{{ vigente.fecha_reg }}</td>
+                                                    <td>{{ vigente.monto }}</td>
+                                                    <td>{{ vigente.plazo }}</td>
+                                                    <td>{{ vigente.tipo }}</td>
+                                                    <td>{{ vigente.estado }}</td>
+                                                    <td><button type="button" class="btn btn-sm btn-success" title="Cancelar Credito"><i class="fa-solid fa-money-bill"></i></button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
