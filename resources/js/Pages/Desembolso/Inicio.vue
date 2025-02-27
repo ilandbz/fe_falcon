@@ -4,6 +4,7 @@
   import useHelper from '@/Helpers'; 
   import useCredito from '@/Composables/Credito.js';
   import DesembolsoForm from './Form.vue'
+  import useEvaluacion from '@/Composables/Evaluacion.js';
     const props = defineProps({
         agencia: Object,
         role: Object,
@@ -15,6 +16,9 @@
     const {
         credito, creditos, obtenerCreditosEstadoAgencia, obtenerCredito,
     } = useCredito();
+    const {
+    respuesta, agregarEvaluacion, errors
+    } = useEvaluacion();
     const dato = ref({
         page:'',
         buscar:'',
@@ -28,7 +32,8 @@
         credito_id : '',
         fecha : formatoFecha(null,"YYYY-MM-DD"),
         hora : formatoFecha(null,"HH:mm:ss"),
-        user_id : usuario.value.id,
+        fechahora : formatoFecha(null,"YYYY-MM-DD HH:mm:ss"),
+        usuario_id : usuario.value.id,
         descontado : 0,
         totalentregado : 0,
         dni: '',
@@ -40,6 +45,8 @@
         medioorigen : '',
         tiposolicitud : '',
         tasainteres : '',
+        resultado:'',
+        comentario:'',
         costomora: 0,
         dondepagara : '',
         total: 0,
@@ -52,7 +59,7 @@
         form.value.credito_id = '',
         form.value.fecha = formatoFecha(null,"YYYY-MM-DD");
         form.value.hora = formatoFecha(null,"HH:mm:ss");
-        form.value.user_id = usuario.value.id,
+        form.value.usuario_id = usuario.value.id,
         form.value.descontado = 0,
         form.value.totalentregado = 0,
         form.value.dni = '';
@@ -75,7 +82,74 @@
         openModal('#modaldesembolso')
         document.getElementById("modaldesembolsoLabel").innerHTML = 'Desembolso de Credito';
     }
-
+    const solicitarMotivo = async (tipo) => {
+        const result = await Swal.fire({
+            title: `${tipo} : \nSolicitud ID: ${form.value.credito_id}\nIngrese el motivo`,
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off",
+                autofocus: "true",
+                class: "form-control"
+            },
+            showCancelButton: true,
+            confirmButtonText: "Enviar",
+            cancelButtonText: "Cancelar",
+            showLoaderOnConfirm: true,
+            preConfirm: (motivo) => {
+                const input = Swal.getInput();
+                if (!motivo) {
+                    Swal.showValidationMessage(
+                        `<div class="text-danger fw-bold">Debe ingresar un motivo.</div>`
+                    );
+                    if (input) {
+                        input.classList.add("is-invalid");
+                    }
+                    return false;
+                }
+                if (input) {
+                    input.classList.remove("is-invalid");
+                }
+                return motivo;
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+            didOpen: () => {
+                const input = Swal.getInput();
+                if (input) {
+                    input.addEventListener("input", () => {
+                        input.classList.remove("is-invalid");
+                    });
+                }
+            }
+        });
+        if (result.isConfirmed) {
+            return result.value;
+        }
+        return null;
+    };
+    const observar = async (id) => {
+        limpiar();
+        await obtenerDatos(id)
+        form.value.resultado = 'OBSERVADO';
+        const motivo = await solicitarMotivo('OBSERVADO');
+        if (motivo) {
+            form.value.comentario = motivo;
+            await agregarEvaluacion(form.value);
+            if (errors.value) {
+                form.value.errors = errors.value;
+            }
+            if (respuesta.value.ok == 1) {
+                form.value.errors = [];
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: respuesta.value.mensaje,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } 
+            listarCreditos()
+        }
+    };
     const obtenerDatos = async(id)=>{
         limpiar()
         await obtenerCredito(id);
@@ -267,6 +341,9 @@
                                                 <i class="fa-solid fa-money-bill"></i>
                                             </button>&nbsp;
 
+                                            <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Observar" @click.prevent="observar(credito.id)">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </button>&nbsp;
                                         </td>
                                     </tr>
                                 </tbody>
@@ -325,5 +402,5 @@
         </div>
       </div>
     </div>
-<DesembolsoForm :form="form"></DesembolsoForm>
+<DesembolsoForm :form="form" @observar="observar"></DesembolsoForm>
 </template>

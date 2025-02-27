@@ -16,7 +16,7 @@ const {
     obtenerUsuario, usuario
 } = useUsuario();
 
-const  emit  =defineEmits(['onListar'])
+const  emit  =defineEmits(['onListar', 'observar'])
 const imagenNoEncontrada = (event)=>{
     event.target.src = "/storage/fotos/default.png";
 }
@@ -37,7 +37,10 @@ const verAsesor = async(id) => {
         }
     });
 }
-
+const Observar = () => {
+    hideModal('#modaldesembolso');
+    emit('observar', form.value.credito_id)
+}
 
 onMounted(() => {
     
@@ -45,13 +48,12 @@ onMounted(() => {
 </script>
 <template>
     <form @submit.prevent="guardar">
-    <div class="modal fade" id="modaldesembolso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modaldesembolsoLabel" >
+    <div class="modal fade" id="modaldesembolso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-1" id="modaldesembolsoLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -234,6 +236,7 @@ onMounted(() => {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Desembolsar</button>
+                    <button type="button" class="btn btn-warning" @click="Observar">Observar</button>
                 </div>
             </div>
         </div>

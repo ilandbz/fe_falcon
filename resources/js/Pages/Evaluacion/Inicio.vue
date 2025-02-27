@@ -108,7 +108,6 @@ const enviarRegistro=async()=>{
     }
     if (respuesta.value.ok == 1) {
         form.value.errors = [];
-        //Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
         Swal.fire({
             position: "top-end",
             icon: "success",
@@ -139,9 +138,25 @@ const aprobar = async(id) => {
     listarCreditos()
 };
 
-
+const aprobarTodos = ()=>{
+    Swal.fire({
+        title: '¿Estás seguro de aprobar todos los créditos?',
+        text: `Recuerda que se aprobarán todos los créditos de la lista.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, aprobar créditos',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            creditos.value.data.forEach(async(credito) => {
+                
+            });
+        }
+    });
+}
 const esActivodiv=ref(false);
-
 const activarDiv=()=>{
     esActivodiv.value=!esActivodiv.value
 }
@@ -171,7 +186,6 @@ const activarDiv=()=>{
         openModal('#modalevaluacion')
         document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
     }
-
     const cambiarPagina =(pagina) => {
         listarCreditos(pagina)
     }
@@ -207,11 +221,6 @@ const activarDiv=()=>{
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-1 mb-1">
-                        <button  type="button" class="btn btn-danger" @click.prevent="nuevo">
-                            <i class="fas fa-plus"></i> Nuevo
-                        </button>                        
-                    </div>
                     <div class="col-md-2 mb-1">
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Mostrar</span>
@@ -222,7 +231,7 @@ const activarDiv=()=>{
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Buscar</span>
                             <input class="form-control" placeholder="Ingrese nombre, código" type="text" v-model="dato.buscar"
@@ -269,6 +278,11 @@ const activarDiv=()=>{
                                 </li>
                             </ul>
                         </nav>
+                    </div>
+                    <div class="col-md-2 mb-1">
+                        <button  type="button" class="btn btn-danger" @click.prevent="aprobarTodos">
+                            <i class="fa-solid fa-check-double"></i> Aprobar a Todos
+                        </button>                        
                     </div>
                 </div>
                 <div class="row">

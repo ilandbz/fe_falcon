@@ -606,7 +606,7 @@ const form = ref({
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <template v-if="credito.estado === 'PENDIENTE'">
+                                            <template v-if="credito.estado === 'PENDIENTE' || credito.estado === 'OBSERVADO'">
                                                 <button class="btn btn-warning btn-sm btn-custom" title="Editar" @click.prevent="editar(credito.id)">
                                                     <i class="fas fa-edit"></i>
                                                 </button>

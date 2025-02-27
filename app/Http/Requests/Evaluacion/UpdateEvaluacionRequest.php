@@ -29,7 +29,7 @@ class UpdateEvaluacionRequest extends FormRequest
             'resultado' => 'required',
             'fechahora' => 'required',
             'tasainteres' => 'required',
-
+            'total' => 'required',
         ];
     }
 

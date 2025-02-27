@@ -12,6 +12,6 @@ class Evaluacion extends Model
         'resultado',
         'fechahora',
         'comentario',
-        'tasainteres'
+        'tasainteres',
     ];
 }
