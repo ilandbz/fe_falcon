@@ -6,10 +6,11 @@
   import ClienteForm from './Form.vue'
   const props = defineProps({
     agencia: Object,
-    role: Object
+    role: Object,
+    usuario: Object
 });
 
-const { agencia, role } = toRefs(props);
+const { agencia, role, usuario } = toRefs(props);
     const { openModal, Toast, Swal } = useHelper();
     const {
         clientes, errors, cliente, respuesta,
