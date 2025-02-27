@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Desembolso\StoreDesembolsoRequest;
 use App\Http\Requests\Desembolso\UpdateDesembolsoRequest;
+use App\Models\Credito;
+use App\Models\CreditosCancelar;
 use App\Models\Desembolso;
+use App\Models\SeguroDesgravamen;
 use Illuminate\Http\Request;
 
 class DesembolsoController extends Controller
@@ -71,5 +74,13 @@ class DesembolsoController extends Controller
         $paginacion = $request->paginacion;
         return Desembolso::with(['padre:id,nombre', 'grupo:id,titulo'])->whereRaw('UPPER(nombre) LIKE ?', ['%'.$buscar.'%'])
             ->paginate($paginacion);
+    }
+
+    public function obtenerDescuentos(Request $request){
+        $montosolicitado = $request->monto;
+        $credito_id= $request->credito_id;
+        $montoseguro = SeguroDesgravamen::where('credito_id', $credito_id)->value('monto');
+        $montoconfigoenti = $montosolicitado * 0.10;
+        // $montocreditos=CreditosCancelar::where('credito_id')
     }
 }

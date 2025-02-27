@@ -60,7 +60,7 @@ onMounted(() => {
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <small>CLIENTE : </small>{{ form.apenom }}
+                                    <small>CLIENTEsdfsd : </small>{{ form.apenom }}
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -78,19 +78,10 @@ onMounted(() => {
                         <div class="col-md-8">
                             <div class="card mb-2">
                                 <div class="card-header">
-                                    CREDITO
+                                    CREDITO ID : {{ form.credito_id }}
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-3">
-                                        <div class="col">
-                                            <div class="input-group has-validation input-group-sm pb-1">
-                                                <div class="form-floating is-invalid">
-                                                    <input type="text" class="form-control form-control-sm" :value="form.credito_id"
-                                                    placeholder="ID SOLICITUD" readonly>
-                                                    <label for="floatingInputGroup1">ID SOLICITUD</label>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="col">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" :value="form.producto"
@@ -105,8 +96,6 @@ onMounted(() => {
                                                 <label for="floatingInputGroup1">Monto</label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
                                         <div class="col">
                                             <div class="input-group has-validation input-group-sm pb-1">
                                                 <div class="form-floating is-invalid">
@@ -117,6 +106,8 @@ onMounted(() => {
                                                 <span class="input-group-text">%</span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row mb-3">
                                         <div class="col">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" :value="'S/.'+form.total"
@@ -131,8 +122,6 @@ onMounted(() => {
                                                 <label for="floatingInputGroup1">PLAZO</label>
                                             </div> 
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
                                         <div class="col">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" :value="form.frecuencia"
@@ -140,15 +129,15 @@ onMounted(() => {
                                                 <label for="floatingInputGroup1">FRECUENCIA</label>
                                             </div> 
                                         </div>                                        
+                                    </div>
+                                    <div class="row mb-3">
                                         <div class="col">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" :value="form.tiposolicitud"
                                                 placeholder="TIPO SOLICITUD" readonly>
                                                 <label for="floatingInputGroup1">TIPO SOLICITUD</label>
-                                            </div>                                    
-
+                                            </div>
                                         </div>
-
                                         <div class="col">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" :value="form.medioorigen"
@@ -156,8 +145,6 @@ onMounted(() => {
                                                 <label for="floatingInputGroup1">MEDIO ORIGEN</label>
                                             </div>                                    
                                         </div>                                
-                                    </div>
-                                    <div class="row mb-3">
                                         <div class="col">
                                             <div class="input-group has-validation input-group-sm pb-1">
                                                 <div class="form-floating is-invalid">
@@ -167,7 +154,9 @@ onMounted(() => {
                                                 </div>
                                                 <button title="Ver Asesor" @click="verAsesor(form.asesor_id)" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button>
                                             </div>
-                                        </div>                            
+                                        </div>                    
+                                    </div>
+                                    <div class="row mb-3">
                                         <div class="col">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" :value="form.dondepagara"
@@ -181,9 +170,7 @@ onMounted(() => {
                                                 placeholder="COSTO MORA" readonly>
                                                 <label for="floatingInputGroup1">COSTO MORA</label>
                                             </div>                                             
-                                        </div> 
-                                    </div>
-                                    <div class="row">
+                                        </div>
                                         <div class="col">
                                             <div v-if="form.vigentes.length>0" class="input-group has-validation input-group-sm pb-1">
                                                 <div class="form-floating is-invalid">
@@ -191,11 +178,34 @@ onMounted(() => {
                                                     placeholder="Creditos Vigentes" readonly>
                                                     <label for="floatingInputGroup1">Creditos Vigentes</label>
                                                 </div>
-                                                <!-- <button title="Ver Creditos Vigentes" @click="verSolicitudes" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button> -->
                                             </div>
                                         </div>
-                                        <div class="col"></div>
-                                        <div class="col"></div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header"></div>
+                                        <div class="card-body">
+                                            <div class="row mb-3">
+                                                <div class="col">
+                                                    <div class="form-floating is-invalid">
+                                                        <input type="text" class="form-control form-control-sm" :value="form.descontado"
+                                                        placeholder="DESCUENTO" readonly>
+                                                        <label for="floatingInputGroup1">DESCUENTO</label>
+                                                    </div>                              
+                                                </div>
+                                                <div class="col">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">S/.</span>
+                                                        <div class="form-floating is-invalid">
+                                                            <input type="text" class="form-control form-control-sm" :value="Number(form.total)-Number(form.descontado)"
+                                                            placeholder="TOTAL ENTREGAR" readonly>
+                                                            <label for="floatingInputGroup1">TOTAL ENTREGAR</label>
+                                                        </div>   
+                                                    </div>
+                                                </div>
+                                                <div class="col"></div>                                         
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>

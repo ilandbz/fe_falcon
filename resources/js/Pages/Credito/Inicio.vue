@@ -579,6 +579,7 @@ const form = ref({
                                         <th>Apellidos y Nombres</th>
                                         <th>Monto</th>
                                         <th>Plazo</th>
+                                        <th>Tipo</th>
                                         <th>Fecha</th>
                                         <th>Frecuencia</th>
                                         <th>Asesor</th>
@@ -600,6 +601,7 @@ const form = ref({
                                         <td>{{ credito.cliente.persona.apenom }}</td>
                                         <td>{{ 'S/. ' + credito.monto }}</td>
                                         <td>{{ credito.plazo }}</td>
+                                        <td>{{ credito.tipo }}</td>
                                         <td>{{ credito.fecha_reg }}</td>
                                         <td>{{ credito.frecuencia }}</td>
                                         <td>{{ credito.asesor.name }}</td>

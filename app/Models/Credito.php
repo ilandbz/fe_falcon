@@ -78,4 +78,5 @@ class Credito extends Model
                         ->where('montofinal', '>=', $this->monto)
                         ->value('costodiario');
     }
+
 }

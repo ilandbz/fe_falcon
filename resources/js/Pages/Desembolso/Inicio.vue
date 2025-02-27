@@ -227,11 +227,6 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-1 mb-1">
-                        <button  type="button" class="btn btn-danger" @click.prevent="nuevo">
-                            <i class="fas fa-plus"></i> Nuevo
-                        </button>                        
-                    </div>
                     <div class="col-md-2 mb-1">
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Mostrar</span>
@@ -297,7 +292,7 @@
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="14" class="text-center">Creditos</th>
+                                        <th colspan="15" class="text-center">Creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -307,6 +302,7 @@
                                         <th>Monto</th>
                                         <th>Tasa</th>
                                         <th>Plazo</th>
+                                        <th>Tipo</th>
                                         <th>Fecha</th>
                                         <th>Frecuencia</th>
                                         <th>Total</th>
@@ -318,7 +314,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-if="creditos.total == 0">
-                                        <td class="text-danger text-center" colspan="14">
+                                        <td class="text-danger text-center" colspan="15">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
@@ -330,6 +326,7 @@
                                         <td>{{ 'S/. ' + credito.monto }}</td>
                                         <td>{{ credito.tasainteres + '%' }}</td>
                                         <td>{{ credito.plazo }}</td>
+                                        <td>{{ credito.tipo }}</td>
                                         <td>{{ credito.fecha_reg }}</td>
                                         <td>{{ credito.frecuencia }}</td>
                                         <td>{{ 'S/. ' + credito.total }}</td>
