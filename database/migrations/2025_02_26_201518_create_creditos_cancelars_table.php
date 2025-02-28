@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('creditos_cancelars', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('credito_id')->constrained('creditos')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('credito_pagar_id')->constrained('creditos')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('credito_pagar_id');
+            $table->foreign('credito_pagar_id')->references('credito_id')->on('desembolsos')->onUpdate('cascade')->onDelete('cascade');
             $table->string('estado')->default('debe');
+            $table->primary(['credito_id', 'credito_pagar_id']);
             $table->timestamps();
         });
     }

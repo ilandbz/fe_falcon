@@ -4,13 +4,17 @@
   import useHelper from '@/Helpers'; 
   import useCredito from '@/Composables/Credito.js';
   import DesembolsoForm from './Form.vue'
+  import DescuentosForm from './FormDescuentos.vue'  
   import useEvaluacion from '@/Composables/Evaluacion.js';
+  import useDesembolso from '@/Composables/Desembolso.js';
     const props = defineProps({
         agencia: Object,
         role: Object,
         usuario: Object,
     });
-
+    const {
+        obtenerDescuentos, descuentos
+    } = useDesembolso();
     const { agencia, usuario } = toRefs(props);
     const { openModal, Toast, Swal, formatoFecha } = useHelper();
     const {
@@ -150,8 +154,15 @@
             listarCreditos()
         }
     };
+    const data=ref({
+        credito_id:'',
+        monto:'',
+        tipo : '',
+        producto : '',
+    })
     const obtenerDatos = async(id)=>{
         limpiar()
+        
         await obtenerCredito(id);
         if (credito.value) {
             form.value.credito_id = credito.value.id
@@ -171,6 +182,12 @@
             form.value.asesor = credito.value.asesor.name
             form.value.asesor_id = credito.value.asesor.id
             form.value.foto='/storage/fotos/usuarios/'+usuario.value.name+'.webp';
+            data.value.credito_id = form.value.credito_id
+            data.value.monto = form.value.monto
+            data.value.tipo = form.value.tiposolicitud
+            data.value.producto = form.value.producto
+            await obtenerDescuentos(data.value)
+            form.value.descontado=descuentos.value.deudatotal
         }
     }
 
@@ -337,7 +354,6 @@
                                             <button class="btn btn-success btn-sm" style="font-size: .65rem;" title="Realizar Desembolso" @click.prevent="desembolsar(credito.id)">
                                                 <i class="fa-solid fa-money-bill"></i>
                                             </button>&nbsp;
-
                                             <button class="btn btn-warning btn-sm" style="font-size: .65rem;" title="Observar" @click.prevent="observar(credito.id)">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </button>&nbsp;
@@ -400,4 +416,5 @@
       </div>
     </div>
 <DesembolsoForm :form="form" @observar="observar"></DesembolsoForm>
+<DescuentosForm :form="descuentos"></DescuentosForm>
 </template>

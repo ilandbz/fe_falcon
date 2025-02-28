@@ -54,11 +54,11 @@ class UserSeeder extends Seeder
                         'es_activo' => $estado=='ACTIVO' ? 1 : 0,
                     ]
                 );
-                if($rol != 'NULL'){
+                if($rol != 'NULL' && $rol != '\N'){
                     $roleId = Role::whereRaw("LOWER(nombre) = LOWER(?)", $rol)->value('id');
                     $user->roles()->sync([$roleId]);
                 }
-                if($agencia != 'NULL'){
+                if($agencia != 'NULL' && $agencia != '\N'){
                     $agenciaId = Agencia::where('nombre', $agencia)->value('id');
                     $user->agencias()->sync([$agenciaId]);
                 }

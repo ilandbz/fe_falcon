@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Agencia;
+use App\Models\CreditosCancelar;
 use App\Models\GrupoMenu;
 use App\Models\Menu;
 use App\Models\TipoGerente;
@@ -31,7 +32,6 @@ class DatabaseSeeder extends Seeder
             TipoActivoSeeder::class,
             TipoActividadSeeder::class,
             ProfesionSeeder::class,
-            PersonaSeeder::class,
             ClienteSeeder::class,
             CreditoSeeder::class,
             AnalisisCualitativoSeeder::class,
@@ -40,6 +40,10 @@ class DatabaseSeeder extends Seeder
             PropuestaCreditoSeeder::class,
             DetBalanceSeeder::class,
             CostoMoraSeeder::class,
+            DesembolsoSeeder::class,
+            CreditosCancelarSeeder::class,
+            ConyugueSeeder::class,
+            SeguroDesgravamenSeeder::class,
         ]);
     }
 }

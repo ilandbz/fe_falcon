@@ -7,7 +7,7 @@ export default function usedesembolso() {
     const errors = ref('')
     const desembolso = ref({})
     const respuesta = ref([])
-    
+    const descuentos=ref({})
     const obtenerDesembolso = async(id) => {
         let respuesta = await axios.get('desembolso/mostrar?id='+id, getConfigHeader())
         desembolso.value = respuesta.data
@@ -48,13 +48,18 @@ export default function usedesembolso() {
         }
     }
     const eliminarDesembolso = async(id) => {
-        const respond = await axios.post('desembolso/eliminar', { id: id }, getConfigHeader())
+        const respond = await axios.post('desembolso/destroy', { id:id }, getConfigHeader())
         if (respond.data.ok == 1) {
             respuesta.value = respond.data
         }
     }
+    const obtenerDescuentos = async(data) => {
+        const respond = await axios.post('desembolso/obtener-descuentos',  data , getConfigHeader())
+        descuentos.value = respond.data
+    }
     return {
         errors, desembolsos, desembolso, obtenerDesembolso, obtenerDesembolsos, 
-        agregarDesembolso, actualizarDesembolso, eliminarDesembolso, respuesta
+        agregarDesembolso, actualizarDesembolso, eliminarDesembolso, respuesta,
+        obtenerDescuentos, descuentos
     }
 }

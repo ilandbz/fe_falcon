@@ -570,7 +570,7 @@ const form = ref({
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="12" class="text-center">Creditos</th>
+                                        <th colspan="13" class="text-center">Creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -590,7 +590,7 @@ const form = ref({
                                 </thead>
                                 <tbody>
                                     <tr v-if="creditos.total == 0">
-                                        <td class="text-danger text-center" colspan="12">
+                                        <td class="text-danger text-center" colspan="13">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Conyugue;
 use App\Models\Distrito;
 use App\Models\Persona;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -53,6 +54,7 @@ class PersonaSeeder extends Seeder
             // echo "DNI: $dni, Nombre: $nombres, Apellido Paterno: $apepat Genero: $genero\n";
             
             if($dni!=''){
+                //$this->command->getOutput()->writeln($dni);
                 $distrito = removerAcentos($distrito);
                 $provincia = removerAcentos($provincia);
                 $ubigeo = Distrito::whereRaw("LOWER(nombre) = LOWER(?)", [$distrito])
@@ -66,30 +68,29 @@ class PersonaSeeder extends Seeder
                 $primernombre = $nombreArray[0]; // Primer palabra siempre es el primer nombre
                 $otrosnombres = isset($nombreArray[1]) ? $nombreArray[1] : ''; 
                 $usuario = Persona::firstOrCreate(
-                        ['dni' => $dni],
-                        [
-                        'ape_pat'          => $apepat,
-                        'ape_mat'          => $apemat,
-                        'primernombre'     => $primernombre, // Mapeo correcto según tu variable
-                        'otrosnombres'     => $otrosnombres,
-                        'fecha_nac'        => $fecha_nac === '0000-00-00' ? '2000-01-01' : $fecha_nac,
-                        'ubigeo_nac'       => $ubigeo->ubigeo ?? null,
-                        'genero'           => $genero,
-                        'celular'          => $celular ?? null,
-                        'email'            => $email ?? null,
-                        'ruc'              => $ruc ?? null,
-                        'estado_civil'     => $estadocivil ?? 'SOLTERO',
-                        'profesion'        => $profesion ?? 'NINGUNO',
-                        'nacionalidad'     => $nacionalidad ?? 'PERUANO',
-                        'grado_instr'      => $grado_instr ?? null,
-                        'tipo_trabajador'  => $tipo_trabajador ?? 'INDEPENDIENTE',
-                        'ocupacion'        => $ocupacion ?? 'NINGUNO',
-                        'institucion_lab'  => $institucion_lab ?? 'NINGUNO',
-                        'ubicacion_domicilio_id' => ($ubicaciondomicilio || $ubicaciondomicilio=='NULL') ?? null,
-                    ]);                
-            }
+                    ['dni' => $dni],
+                    [
+                    'ape_pat'          => $apepat,
+                    'ape_mat'          => $apemat,
+                    'primernombre'     => $primernombre, // Mapeo correcto según tu variable
+                    'otrosnombres'     => $otrosnombres,
+                    'fecha_nac'        => $fecha_nac === '0000-00-00' ? '2000-01-01' : $fecha_nac,
+                    'ubigeo_nac'       => $ubigeo->ubigeo ?? null,
+                    'genero'           => $genero,
+                    'celular'          => $celular ?? null,
+                    'email'            => $email ?? null,
+                    'ruc'              => $ruc ?? null,
+                    'estado_civil'     => $estadocivil ?? 'SOLTERO',
+                    'profesion'        => $profesion ?? 'NINGUNO',
+                    'nacionalidad'     => $nacionalidad ?? 'PERUANO',
+                    'grado_instr'      => $grado_instr ?? null,
+                    'tipo_trabajador'  => $tipo_trabajador ?? 'INDEPENDIENTE',
+                    'ocupacion'        => $ocupacion ?? 'NINGUNO',
+                    'institucion_lab'  => $institucion_lab ?? 'NINGUNO',
+                    'ubicacion_domicilio_id' => ($ubicaciondomicilio || $ubicaciondomicilio=='NULL') ?? null,
+                ]);
 
-            usleep(1000);
+            }
             $progressBar->advance();
         }
 

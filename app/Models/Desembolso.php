@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Desembolso extends Model
 {
+    protected $appends = ['Totalpagado', 'Saldo'];
     protected $primaryKey = 'credito_id';
     public $incrementing = false;
     protected $fillable = [
@@ -25,4 +27,18 @@ class Desembolso extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function kardex(): HasMany
+    {
+        return $this->hasMany(KardexCredito::class, 'credito_id');
+    }
+    public function getTotalpagadoAttribute()
+    {
+        return $this->kardex()->sum('montopagado');
+    }
+    public function getSaldoAttribute()
+    {
+        return optional($this->credito)->total - $this->kardex()->sum('montopagado');
+    }
+
+
 }

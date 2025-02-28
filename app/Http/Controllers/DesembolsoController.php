@@ -77,10 +77,36 @@ class DesembolsoController extends Controller
     }
 
     public function obtenerDescuentos(Request $request){
+
+        $credito_id = $request->credito_id;
         $montosolicitado = $request->monto;
-        $credito_id= $request->credito_id;
-        $montoseguro = SeguroDesgravamen::where('credito_id', $credito_id)->value('monto');
-        $montoconfigoenti = $montosolicitado * 0.10;
-        // $montocreditos=CreditosCancelar::where('credito_id')
+        $producto = $request->producto;
+        // Obtener monto del seguro
+        $montoseguro = SeguroDesgravamen::where('credito_id', $credito_id)->pluck('monto')->first() ?? 0;
+        // Calcular monto "Confío en Ti"
+        $montoconfioenti = ($producto === 'CONFIO EN TI') ? ($montosolicitado * 0.10) : 0;
+        // Obtener desembolsos y calcular saldo total
+        $desembolsos = CreditosCancelar::with([
+            'credito_pagar:credito_id',
+            'credito_pagar.credito:id,monto,total,estado'
+        ])->where('credito_id', $credito_id)->get();
+        $saldototal = 0;
+        $detalles = $desembolsos->map(function ($item) use (&$saldototal) {
+            $creditoPagar = $item->credito_pagar;
+            $saldototal += $creditoPagar->Saldo;
+            return [
+                "credito_id" => $item->credito_id,
+                "credito_pagar_id" => $item->credito_pagar_id,
+                "credito_id_pago" => $creditoPagar->credito_id,
+                "Totalpagado" => $creditoPagar->Totalpagado,
+                "Saldo" => $creditoPagar->Saldo,
+                "Monto" => $creditoPagar->credito->monto,
+                "Total" => $creditoPagar->credito->total,
+                "Estado" => $creditoPagar->credito->estado,
+            ];
+        });
+        // Calcular deuda total
+        $deudatotal = $montoseguro + $montoconfioenti + $saldototal;
+        return compact('deudatotal', 'montoseguro', 'montoconfioenti', 'saldototal', 'detalles');        
     }
 }

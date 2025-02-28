@@ -157,6 +157,7 @@ Route::group(['prefix' => 'desembolso', 'middleware' => 'auth'], function () {
     Route::post('eliminar', [DesembolsoController::class, 'destroy']);
     Route::post('guardar', [DesembolsoController::class, 'store']);
     Route::get('mostrar', [DesembolsoController::class, 'show']);
+    Route::post('obtener-descuentos', [DesembolsoController::class, 'obtenerDescuentos']);
 });
 
 //tesoreria

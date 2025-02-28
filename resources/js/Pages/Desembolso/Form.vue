@@ -1,21 +1,23 @@
 <script setup>
-import { toRefs, onMounted } from 'vue';
-import useAgencia from '@/Composables/Agencia.js';
+import { toRefs, onMounted, ref } from 'vue';
 import useUsuario from '@/Composables/Usuario.js';
+import useDesembolso from '@/Composables/Desembolso.js';
 import useHelper from '@/Helpers';  
-const { hideModal, Toast, Swal } = useHelper();
+const { hideModal, openModal, Toast, Swal } = useHelper();
 const props = defineProps({
     form: Object,
-    currentPage : Number
+    currentPage : Number,
+    descuentos: Object,
 });
 const { form, currentPage } = toRefs(props)
-const {
-    errors, respuesta, agregarAgencia, actualizarAgencia, listaAgencias, agencias
-} = useAgencia();
+
 const {
     obtenerUsuario, usuario
 } = useUsuario();
 
+const {
+    obtenerDescuentos, descuentos
+} = useDesembolso();
 const  emit  =defineEmits(['onListar', 'observar'])
 const imagenNoEncontrada = (event)=>{
     event.target.src = "/storage/fotos/default.png";
@@ -42,6 +44,11 @@ const Observar = () => {
     emit('observar', form.value.credito_id)
 }
 
+const verDescuentos = async()=>{
+    openModal('#modaldescuentos')
+    document.getElementById("modaldescuentosLabel").innerHTML = 'Descuentos';
+}
+
 onMounted(() => {
     
 })
@@ -60,7 +67,7 @@ onMounted(() => {
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <small>CLIENTEsdfsd : </small>{{ form.apenom }}
+                                    <small>CLIENTE : </small>{{ form.apenom }}
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -186,11 +193,16 @@ onMounted(() => {
                                         <div class="card-body">
                                             <div class="row mb-3">
                                                 <div class="col">
-                                                    <div class="form-floating is-invalid">
-                                                        <input type="text" class="form-control form-control-sm" :value="form.descontado"
-                                                        placeholder="DESCUENTO" readonly>
-                                                        <label for="floatingInputGroup1">DESCUENTO</label>
-                                                    </div>                              
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">S/.</span>
+                                                        <div class="form-floating is-invalid">
+                                                            
+                                                            <input type="text" class="form-control form-control-sm" :value="form.descontado"
+                                                            placeholder="DESCUENTO" readonly>
+                                                            <label for="floatingInputGroup1">DESCUENTO</label>
+                                                        </div>
+                                                        <button title="Ver Descuentos" @click="verDescuentos()" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button>           
+                                                    </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="input-group">
@@ -201,8 +213,7 @@ onMounted(() => {
                                                             <label for="floatingInputGroup1">TOTAL ENTREGAR</label>
                                                         </div>   
                                                     </div>
-                                                </div>
-                                                <div class="col"></div>                                         
+                                                </div>                                       
                                             </div>
 
                                         </div>
@@ -210,7 +221,7 @@ onMounted(() => {
                                 </div>
                             </div>
                             <div class="card" v-if="form.vigentes.length>0">
-                                <div class="card-header">Creditos Vigentes</div>
+                                <div class="card-header">Creditos Vigentes del Cliente</div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-sm small table-hover table-bordered">

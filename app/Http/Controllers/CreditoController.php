@@ -71,7 +71,7 @@ class CreditoController extends Controller
             'asesor:id,name',
             'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
             'cliente.creditos' => function ($query) {
-                $query->where('estado', 'DESEMBOLSADO');
+                $query->where('estado', 'DESEMBOLSADO')->orwhere('estado', 'PAGAR POR RCS');
             }
         ])->where('id', $request->id)->first();
         return $credito;

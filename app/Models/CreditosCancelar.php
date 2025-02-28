@@ -18,6 +18,6 @@ class CreditosCancelar extends Model
     }
     public function credito_pagar(): BelongsTo
     {
-        return $this->belongsTo(Credito::class, 'credito_pagar_id');
+        return $this->belongsTo(Desembolso::class, 'credito_pagar_id');
     }
 }
