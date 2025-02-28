@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('kardex_creditos', function (Blueprint $table) {
             $table->unsignedBigInteger('credito_id');
             $table->foreign('credito_id')->references('credito_id')->on('desembolsos')->onUpdate('cascade')->onDelete('cascade');
-           
             $table->unsignedInteger('nro');
             $table->date('fecha');
             $table->time('hora');

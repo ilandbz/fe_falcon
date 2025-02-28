@@ -43,7 +43,7 @@ const { form } = toRefs(props)
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="8" class="text-center">Creditos</th>
+                                        <th colspan="8" class="text-center">Creditos Seleccionados</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>

@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Credito extends Model
-{
-    protected $appends = ['moradiaria'];
+{    
+    protected $appends = ['moradiaria', 'Saldo', 'Totalpagado'];
     protected $fillable = [
         'cliente_id',
         'agencia_id',
@@ -77,6 +78,19 @@ class Credito extends Model
         return CostoMora::where('montoinicial', '<=', $this->monto)
                         ->where('montofinal', '>=', $this->monto)
                         ->value('costodiario');
+    }
+    public function getTotalpagadoAttribute()
+    {
+        return $this->kardex()->sum('montopagado');
+    }
+    public function kardex(): HasMany
+    {
+        return $this->hasMany(KardexCredito::class, 'credito_id');
+    }
+    public function getSaldoAttribute()
+    {
+        return $this->total - $this->kardex()->sum('montopagado');
+
     }
 
 }

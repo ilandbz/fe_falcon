@@ -18,13 +18,13 @@ class PersonaSeeder extends Seeder
     public function run(): void
     {
 
-        function removerAcentos($texto) {
-            return str_replace(
-                ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú'],
-                ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'],
-                $texto
-            );
-        }
+        // function removerAcentos($texto) {
+        //     return str_replace(
+        //         ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú'],
+        //         ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'],
+        //         $texto
+        //     );
+        // }
 
         $csvFile = fopen(base_path('archivos/persona.csv'), 'r');
         $nro_registros = -1;

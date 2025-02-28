@@ -7,6 +7,7 @@ use App\Http\Requests\Desembolso\UpdateDesembolsoRequest;
 use App\Models\Credito;
 use App\Models\CreditosCancelar;
 use App\Models\Desembolso;
+use App\Models\KardexCredito;
 use App\Models\SeguroDesgravamen;
 use Illuminate\Http\Request;
 
@@ -108,5 +109,25 @@ class DesembolsoController extends Controller
         // Calcular deuda total
         $deudatotal = $montoseguro + $montoconfioenti + $saldototal;
         return compact('deudatotal', 'montoseguro', 'montoconfioenti', 'saldototal', 'detalles');        
+    }
+    public function cancelarCredito(Request $request){
+        $nro = KardexCredito::getNextNro($request->credito_id);
+        $regkardex = KardexCredito::created([
+            'credito_id' => $request->credito_id,
+            'nro' => $request->nro,
+            'fecha' => $request->fecha,
+            'hora' => $request->hora,
+            'montopagado' => $request->montopagado,
+            'user_id' => $request->user_id,
+            'mediopago' => $request->mediopago,
+        ]);
+        $credito = Credito::where('id', $request->credito_id)->first();
+        $credito->estado = 'FINALIZADO';
+        $credito->save();
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Credito Cancelado con Exito'
+        ],200);
+
     }
 }

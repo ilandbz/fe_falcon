@@ -57,9 +57,24 @@ export default function usedesembolso() {
         const respond = await axios.post('desembolso/obtener-descuentos',  data , getConfigHeader())
         descuentos.value = respond.data
     }
+    const cancelarCredito = async(data) => {
+        errors.value = ''
+        try {
+            let respond = await axios.post('desembolso/cancelar-credito', data, getConfigHeader())
+            errors.value = ''
+            if (respond.data.ok == 1) {
+                respuesta.value = respond.data
+            }
+        } catch (error) {
+            errors.value = ""
+            if (error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }    
     return {
         errors, desembolsos, desembolso, obtenerDesembolso, obtenerDesembolsos, 
         agregarDesembolso, actualizarDesembolso, eliminarDesembolso, respuesta,
-        obtenerDescuentos, descuentos
+        obtenerDescuentos, descuentos, cancelarCredito
     }
 }

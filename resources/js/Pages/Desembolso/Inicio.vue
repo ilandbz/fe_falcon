@@ -265,14 +265,14 @@
                         <nav>
                             <ul class="pagination">
                                 <li v-if="creditos.current_page >= 2" class="page-item">
-                                    <a href="#" aria-label="Previous" class="page-link"
+                                    <a href="#" class="page-link"
                                         title="Primera Página"
                                         @click.prevent="cambiarPagina(1)">
                                         <span><i class="fas fa-backward"></i></span>
                                     </a>
                                 </li>
                                 <li v-if="creditos.current_page > 1" class="page-item">
-                                    <a href="#" aria-label="Previous" class="page-link"
+                                    <a href="#" class="page-link"
                                         title="Página Anterior"
                                         @click.prevent="cambiarPagina(creditos.current_page - 1)">
                                         <span><i class="fas fa-angle-left"></i></span>
@@ -286,14 +286,14 @@
                                         @click.prevent="cambiarPagina(page)">{{ page }}</a>
                                 </li>
                                 <li v-if="creditos.current_page < creditos.last_page" class="page-item">
-                                    <a href="#" aria-label="Next" class="page-link"
+                                    <a href="#" class="page-link"
                                         title="Página Siguiente"
                                         @click.prevent="cambiarPagina(creditos.current_page + 1)">
                                         <span><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
                                     <li v-if="creditos.current_page <= creditos.last_page-1" class="page-item">
-                                    <a href="#" aria-label="Next" class="page-link"
+                                    <a href="#" class="page-link"
                                         @click.prevent="cambiarPagina(creditos.last_page)"
                                         title="Última Página">
                                         <span><i class="fas fa-step-forward"></i></span>
@@ -372,14 +372,14 @@
                         <nav>
                             <ul class="pagination">
                                 <li v-if="creditos.current_page >= 2" class="page-item">
-                                    <a href="#" aria-label="Previous" class="page-link"
+                                    <a href="#" class="page-link"
                                         title="Primera Página"
                                         @click.prevent="cambiarPagina(1)">
                                         <span><i class="fas fa-backward"></i></span>
                                     </a>
                                 </li>
                                 <li v-if="creditos.current_page > 1" class="page-item">
-                                    <a href="#" aria-label="Previous" class="page-link"
+                                    <a href="#" class="page-link"
                                         title="Página Anterior"
                                         @click.prevent="cambiarPagina(creditos.current_page - 1)">
 
@@ -394,14 +394,14 @@
                                         @click.prevent="cambiarPagina(page)">{{ page }}</a>
                                 </li>
                                 <li v-if="creditos.current_page < creditos.last_page" class="page-item">
-                                    <a href="#" aria-label="Next" class="page-link"
+                                    <a href="#" class="page-link"
                                         title="Página Siguiente"
                                         @click.prevent="cambiarPagina(creditos.current_page + 1)">
                                         <span><i class="fas fa-angle-right"></i></span>
                                     </a>
                                 </li>
                                     <li v-if="creditos.current_page <= creditos.last_page-1" class="page-item">
-                                    <a href="#" aria-label="Next" class="page-link"
+                                    <a href="#" class="page-link"
                                         @click.prevent="cambiarPagina(creditos.last_page)"
                                         title="Última Página">
                                         <span><i class="fas fa-step-forward"></i></span>

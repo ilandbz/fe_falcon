@@ -16,8 +16,51 @@ const {
 } = useUsuario();
 
 const {
-    obtenerDescuentos, descuentos
+    cancelarCredito, errors, respuesta
 } = useDesembolso();
+
+
+const formDesembolsoCancelar=ref({
+    credito_id:form.value.credito_id,
+    nro:'',
+    fecha:form.value.fecha,
+    hora:form.value.hora,
+    user_id:form.value.usuario_id,
+    montopagado:'',
+    mediopago:'Efectivo',
+    errors:[]
+})
+
+const limpiar =()=>{
+    formDesembolsoCancelar.value.credito_id=form.value.credito_id,
+    formDesembolsoCancelar.value.nro='',
+    formDesembolsoCancelar.value.fecha=form.value.fecha,
+    formDesembolsoCancelar.value.hora=form.value.hora,
+    formDesembolsoCancelar.value.user_id=form.value.usuario_id,
+    formDesembolsoCancelar.value.montopagado='',
+    formDesembolsoCancelar.value.mediopago='Efectivo',
+    formDesembolsoCancelar.value.errors=[]
+}
+
+const cancelar=async(registro)=>{
+    limpiar()
+    formDesembolsoCancelar.value.montopagado=registro.Saldo
+    await cancelarCredito(formDesembolsoCancelar.value)
+    if (errors.value) {
+        formDesembolsoCancelar.value.errors = errors.value;
+    }
+    if (respuesta.value.ok == 1) {
+        formDesembolsoCancelar.value.errors = [];
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: respuesta.value.mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    } 
+}
+
 const  emit  =defineEmits(['onListar', 'observar'])
 const imagenNoEncontrada = (event)=>{
     event.target.src = "/storage/fotos/default.png";
@@ -197,7 +240,7 @@ onMounted(() => {
                                                         <span class="input-group-text">S/.</span>
                                                         <div class="form-floating is-invalid">
                                                             
-                                                            <input type="text" class="form-control form-control-sm" :value="form.descontado"
+                                                            <input type="text" class="form-control form-control-sm" :value="form.descontado.toFixed(2)"
                                                             placeholder="DESCUENTO" readonly>
                                                             <label for="floatingInputGroup1">DESCUENTO</label>
                                                         </div>
@@ -208,7 +251,7 @@ onMounted(() => {
                                                     <div class="input-group">
                                                         <span class="input-group-text">S/.</span>
                                                         <div class="form-floating is-invalid">
-                                                            <input type="text" class="form-control form-control-sm" :value="Number(form.total)-Number(form.descontado)"
+                                                            <input type="text" class="form-control form-control-sm" :value="(Number(form.total)-Number(form.descontado)).toFixed(2)"
                                                             placeholder="TOTAL ENTREGAR" readonly>
                                                             <label for="floatingInputGroup1">TOTAL ENTREGAR</label>
                                                         </div>   
@@ -220,36 +263,38 @@ onMounted(() => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card" v-if="form.vigentes.length>0">
-                                <div class="card-header">Creditos Vigentes del Cliente</div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-sm small table-hover table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>FECHA</th>
-                                                    <th>MONTO</th>
-                                                    <th>PLAZO</th>
-                                                    <th>TIPO</th>
-                                                    <th>ESTADO</th>
-                                                    <th>Accion</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="vigente in form.vigentes" :key="vigente.id">
-                                                    <td>{{ vigente.id }}</td>
-                                                    <td>{{ vigente.fecha_reg }}</td>
-                                                    <td>{{ vigente.monto }}</td>
-                                                    <td>{{ vigente.plazo }}</td>
-                                                    <td>{{ vigente.tipo }}</td>
-                                                    <td>{{ vigente.estado }}</td>
-                                                    <td><button type="button" class="btn btn-sm btn-success" title="Cancelar Credito"><i class="fa-solid fa-money-bill"></i></button></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="card" v-if="form.vigentes.length>0">
+                        <div class="card-header">Creditos Vigentes del Cliente</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm small table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>FECHA</th>
+                                            <th>MONTO</th>
+                                            <th>PLAZO</th>
+                                            <th>TIPO</th>
+                                            <th>ESTADO</th>
+                                            <th>SALDO</th>
+                                            <th>Accion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="vigente in form.vigentes" :key="vigente.id">
+                                            <td>{{ vigente.id }}</td>
+                                            <td>{{ vigente.fecha_reg }}</td>
+                                            <td>{{ vigente.monto }}</td>
+                                            <td>{{ vigente.plazo }}</td>
+                                            <td>{{ vigente.tipo }}</td>
+                                            <td>{{ vigente.estado }}</td>
+                                            <td>{{ vigente.Saldo }}</td>
+                                            <td><button type="button" @click="cancelar(vigente)" class="btn btn-sm btn-success" title="Cancelar Credito"><i class="fa-solid fa-money-bill"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
