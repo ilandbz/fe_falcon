@@ -42,6 +42,8 @@ class CreditosCancelarSeeder extends Seeder
                 ],
                 [
                     'estado' => $estado,
+                    'saldopagar' => $saldocuota,
+                    'morapagar' => $saldomora
                 ]
             );                   
             //usleep(1000);

@@ -3,6 +3,11 @@ import { toRefs, onMounted, ref } from 'vue';
 const props = defineProps({
     form: Object,
 });
+const  emit  =defineEmits(['cancelar'])
+const cancelarC=(fila)=>{
+    emit('cancelar', fila)
+}
+
 const { form } = toRefs(props)
 </script>
 <template>
@@ -43,7 +48,7 @@ const { form } = toRefs(props)
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="8" class="text-center">Creditos Seleccionados</th>
+                                        <th colspan="9" class="text-center">Creditos Seleccionados</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -53,25 +58,27 @@ const { form } = toRefs(props)
                                         <th>Saldo</th>
                                         <th>Mora</th>
                                         <th>Estado</th>
+                                        <th>PRCS</th>
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-if="!form.detalles?.length">
-                                        <td class="text-danger text-center" colspan="8">
+                                        <td class="text-danger text-center" colspan="9">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
-                                    <tr v-else v-for="(credito,index) in form.detalles" :key="credito.credito_id">
+                                    <tr v-else v-for="(credito,index) in form.detalles" :key="credito.id">
                                         <td>{{ index+1 }}</td>
-                                        <td>{{ credito.credito_id }}</td>
+                                        <td>{{ credito.id }}</td>
                                         <td>S/. {{ Number(credito.Monto).toFixed(2) }}</td>
                                         <td>S/. {{ Number(credito.Total).toFixed(2) }}</td>
                                         <td>S/. {{ Number(credito.Saldo).toFixed(2) }}</td>
                                         <td></td>
                                         <td>{{ credito.Estado }}</td>
+                                        <td>{{ credito.estado_rcs }}</td>
                                         <td>
-                                            <button class="btn btn-success btn-sm" style="font-size: .65rem;" title="Realizar Pago" @click.prevent="pagar(credito.id)">
+                                            <button v-if="credito.estado_rcs=='DEBE'" class="btn btn-success btn-sm" style="font-size: .65rem;" title="Realizar Pago" @click.prevent="cancelarC(credito)">
                                                 <i class="fa-solid fa-money-bill"></i>
                                             </button>&nbsp;
                                         </td>

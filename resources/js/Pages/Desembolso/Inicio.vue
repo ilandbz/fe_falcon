@@ -4,7 +4,6 @@
   import useHelper from '@/Helpers'; 
   import useCredito from '@/Composables/Credito.js';
   import DesembolsoForm from './Form.vue'
-  import DescuentosForm from './FormDescuentos.vue'  
   import useEvaluacion from '@/Composables/Evaluacion.js';
   import useDesembolso from '@/Composables/Desembolso.js';
     const props = defineProps({
@@ -162,7 +161,6 @@
     })
     const obtenerDatos = async(id)=>{
         limpiar()
-        
         await obtenerCredito(id);
         if (credito.value) {
             form.value.credito_id = credito.value.id
@@ -239,7 +237,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h6 class="card-title">
-                    Creditos a Evaluar
+                    Creditos a Desembolsar
                 </h6>
             </div>
             <div class="card-body">
@@ -415,6 +413,7 @@
         </div>
       </div>
     </div>
-<DesembolsoForm :form="form" @observar="observar"></DesembolsoForm>
-<DescuentosForm :form="descuentos"></DescuentosForm>
+<DesembolsoForm :form="form" :descuentos="descuentos"
+@observar="observar"
+@obtenerDatos="obtenerDatos"></DesembolsoForm>
 </template>

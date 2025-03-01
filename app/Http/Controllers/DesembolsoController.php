@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelarCredito\StoreCancelarCreditoRequest;
 use App\Http\Requests\Desembolso\StoreDesembolsoRequest;
 use App\Http\Requests\Desembolso\UpdateDesembolsoRequest;
 use App\Models\Credito;
@@ -78,7 +79,6 @@ class DesembolsoController extends Controller
     }
 
     public function obtenerDescuentos(Request $request){
-
         $credito_id = $request->credito_id;
         $montosolicitado = $request->monto;
         $producto = $request->producto;
@@ -88,46 +88,64 @@ class DesembolsoController extends Controller
         $montoconfioenti = ($producto === 'CONFIO EN TI') ? ($montosolicitado * 0.10) : 0;
         // Obtener desembolsos y calcular saldo total
         $desembolsos = CreditosCancelar::with([
-            'credito_pagar:credito_id',
-            'credito_pagar.credito:id,monto,total,estado'
+            'credito_pagar:credito_id',//desembolso
+            'credito_pagar.credito:id,monto,total,estado'//desembolso con su credito
         ])->where('credito_id', $credito_id)->get();
         $saldototal = 0;
         $detalles = $desembolsos->map(function ($item) use (&$saldototal) {
             $creditoPagar = $item->credito_pagar;
             $saldototal += $creditoPagar->Saldo;
             return [
-                "credito_id" => $item->credito_id,
-                "credito_pagar_id" => $item->credito_pagar_id,
+                "id" => $item->credito_pagar_id,
                 "credito_id_pago" => $creditoPagar->credito_id,
                 "Totalpagado" => $creditoPagar->Totalpagado,
                 "Saldo" => $creditoPagar->Saldo,
                 "Monto" => $creditoPagar->credito->monto,
                 "Total" => $creditoPagar->credito->total,
                 "Estado" => $creditoPagar->credito->estado,
+                "estado_rcs"    => $item->estado,
             ];
         });
         // Calcular deuda total
         $deudatotal = $montoseguro + $montoconfioenti + $saldototal;
         return compact('deudatotal', 'montoseguro', 'montoconfioenti', 'saldototal', 'detalles');        
     }
-    public function cancelarCredito(Request $request){
-        $nro = KardexCredito::getNextNro($request->credito_id);
-        $regkardex = KardexCredito::created([
-            'credito_id' => $request->credito_id,
-            'nro' => $request->nro,
-            'fecha' => $request->fecha,
-            'hora' => $request->hora,
-            'montopagado' => $request->montopagado,
-            'user_id' => $request->user_id,
-            'mediopago' => $request->mediopago,
-        ]);
-        $credito = Credito::where('id', $request->credito_id)->first();
-        $credito->estado = 'FINALIZADO';
-        $credito->save();
+    public function cancelarCredito(StoreCancelarCreditoRequest $request){
+
+        if($request->tipo_cancelar=='RCS'){  //debe ser incluido mora y otros
+            $nro = KardexCredito::getNextNro($request->credito_id);
+            $regkardex = KardexCredito::create([
+                'credito_id' => $request->credito_id,
+                'nro' =>$nro,
+                'fecha' => $request->fecha,
+                'hora' => $request->hora,
+                'montopagado' => $request->montopagado,
+                'user_id' => $request->user_id,
+                'mediopago' => $request->mediopago,
+            ]);
+            $credito = Credito::where('id', $request->credito_id)->first();
+            $credito->estado = 'FINALIZADO';
+            $credito->save(); 
+            CreditosCancelar::where('credito_id', $request->credito_id_principal)->where('credito_pagar_id', $request->credito_id)->update(['estado' => 'PAGO']);
+        }else{
+            $nro = KardexCredito::getNextNro($request->credito_id);
+            $regkardex = KardexCredito::create([
+                'credito_id' => $request->credito_id,
+                'nro' =>$nro,
+                'fecha' => $request->fecha,
+                'hora' => $request->hora,
+                'montopagado' => $request->montopagado,
+                'user_id' => $request->user_id,
+                'mediopago' => $request->mediopago,
+            ]);
+            $credito = Credito::where('id', $request->credito_id)->first();
+            $credito->estado = 'FINALIZADO';
+            $credito->save();            
+        }
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Credito Cancelado con Exito'
         ],200);
-
     }
+
 }

@@ -2,6 +2,7 @@
 import { toRefs, onMounted, ref } from 'vue';
 import useUsuario from '@/Composables/Usuario.js';
 import useDesembolso from '@/Composables/Desembolso.js';
+import DescuentosForm from './FormDescuentos.vue'  
 import useHelper from '@/Helpers';  
 const { hideModal, openModal, Toast, Swal } = useHelper();
 const props = defineProps({
@@ -9,8 +10,8 @@ const props = defineProps({
     currentPage : Number,
     descuentos: Object,
 });
-const { form, currentPage } = toRefs(props)
-
+const { form, currentPage, descuentos } = toRefs(props)
+const  emit  =defineEmits(['onListar', 'observar', 'obtenerDatos'])
 const {
     obtenerUsuario, usuario
 } = useUsuario();
@@ -20,37 +21,21 @@ const {
 } = useDesembolso();
 
 
-const formDesembolsoCancelar=ref({
-    credito_id:form.value.credito_id,
-    nro:'',
-    fecha:form.value.fecha,
-    hora:form.value.hora,
-    user_id:form.value.usuario_id,
-    montopagado:'',
-    mediopago:'Efectivo',
-    errors:[]
-})
-
-const limpiar =()=>{
-    formDesembolsoCancelar.value.credito_id=form.value.credito_id,
-    formDesembolsoCancelar.value.nro='',
-    formDesembolsoCancelar.value.fecha=form.value.fecha,
-    formDesembolsoCancelar.value.hora=form.value.hora,
-    formDesembolsoCancelar.value.user_id=form.value.usuario_id,
-    formDesembolsoCancelar.value.montopagado='',
-    formDesembolsoCancelar.value.mediopago='Efectivo',
-    formDesembolsoCancelar.value.errors=[]
-}
-
 const cancelar=async(registro)=>{
-    limpiar()
-    formDesembolsoCancelar.value.montopagado=registro.Saldo
-    await cancelarCredito(formDesembolsoCancelar.value)
+    let formData = new FormData();
+    formData.append('credito_id_principal', form.value.credito_id);
+    formData.append('credito_id', registro.id);
+    formData.append('fecha', form.value.fecha);
+    formData.append('hora', form.value.hora);
+    formData.append('user_id', form.value?.usuario_id || ''); // Verifica si existe
+    formData.append('montopagado', String(registro.Saldo)); // Asegura conversión a string
+    formData.append('mediopago', 'Efectivo');
+    formData.append('tipo_cancelar', 'RCS');
+    await cancelarCredito(formData)
     if (errors.value) {
-        formDesembolsoCancelar.value.errors = errors.value;
+        console.log(errors.value);
     }
     if (respuesta.value.ok == 1) {
-        formDesembolsoCancelar.value.errors = [];
         Swal.fire({
             position: "top-end",
             icon: "success",
@@ -58,10 +43,19 @@ const cancelar=async(registro)=>{
             showConfirmButton: false,
             timer: 1500
         });
+        actualizarTipoSolicitud()
     } 
 }
+const actualizarTipoSolicitud = () => {
+    emit('obtenerDatos', form.value.credito_id)
+    //tiene que volver a buscar a los vigentes:
+    // if(form.value.tiposolicitud=='Recurrente Con Saldo'){
+    //     if(descuentos.value.saldototal==0 && form.vigentes.length==0){
+    //         form.value.tiposolicitud = 'Recurrente Sin Saldo';
+    //     }        
+    // }
+}
 
-const  emit  =defineEmits(['onListar', 'observar'])
 const imagenNoEncontrada = (event)=>{
     event.target.src = "/storage/fotos/default.png";
 }
@@ -250,13 +244,17 @@ onMounted(() => {
                                                 <div class="col">
                                                     <div class="input-group">
                                                         <span class="input-group-text">S/.</span>
-                                                        <div class="form-floating is-invalid">
-                                                            <input type="text" class="form-control form-control-sm" :value="(Number(form.total)-Number(form.descontado)).toFixed(2)"
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                            :class="(Number(form.total)-Number(form.descontado))<=1 ? 'is-invalid' : ''"
+                                                            :value="(Number(form.total)-Number(form.descontado)).toFixed(2)"
                                                             placeholder="TOTAL ENTREGAR" readonly>
                                                             <label for="floatingInputGroup1">TOTAL ENTREGAR</label>
                                                         </div>   
                                                     </div>
-                                                </div>                                       
+                                                </div>                    
+
+
                                             </div>
 
                                         </div>
@@ -279,7 +277,6 @@ onMounted(() => {
                                             <th>TIPO</th>
                                             <th>ESTADO</th>
                                             <th>SALDO</th>
-                                            <th>Accion</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -291,7 +288,6 @@ onMounted(() => {
                                             <td>{{ vigente.tipo }}</td>
                                             <td>{{ vigente.estado }}</td>
                                             <td>{{ vigente.Saldo }}</td>
-                                            <td><button type="button" @click="cancelar(vigente)" class="btn btn-sm btn-success" title="Cancelar Credito"><i class="fa-solid fa-money-bill"></i></button></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -308,4 +304,5 @@ onMounted(() => {
         </div>
     </div>
     </form>
+    <DescuentosForm :form="descuentos" @cancelar="cancelar"></DescuentosForm>
 </template>
