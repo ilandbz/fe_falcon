@@ -155,7 +155,7 @@ Route::group(['prefix' => 'balance', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'desembolso', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [DesembolsoController::class, 'update']);
     Route::post('eliminar', [DesembolsoController::class, 'destroy']);
-    Route::post('guardar', [DesembolsoController::class, 'store']);
+    Route::post('procesar', [DesembolsoController::class, 'procesarDesembolso']);
     Route::get('mostrar', [DesembolsoController::class, 'show']);
     Route::post('obtener-descuentos', [DesembolsoController::class, 'obtenerDescuentos']);
     Route::post('cancelar-credito', [DesembolsoController::class, 'cancelarCredito']);

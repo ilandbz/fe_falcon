@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Desembolso;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDesembolsoRequest extends FormRequest
 {
@@ -29,7 +30,8 @@ class StoreDesembolsoRequest extends FormRequest
             'hora'           => 'required|date_format:H:i:s',
             'user_id'        => 'required|exists:users,id',
             'descontado'     => 'required|numeric|min:0',
-            'totalentregado' => 'required|numeric|min:0'
+            'totalentregado' => 'required|numeric|min:0',
+            'rcsdebe'        => ['required', Rule::in(['pago'])],
         ];
     }
 
@@ -40,7 +42,8 @@ class StoreDesembolsoRequest extends FormRequest
             'max' => 'Ingrese Máximo :max caracteres',
             'string' => 'Ingrese caracteres alfanuméricos',
             'number' => 'Ingrese solo numeros',
-            'unique' => 'El valor ya existe'
+            'unique' => 'El valor ya existe',
+            'rcsdebe.in' => 'Aun debe creditos',
         ];
     }
 

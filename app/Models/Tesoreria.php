@@ -12,7 +12,7 @@ class Tesoreria extends Model
         'nro',
         'fecha',
         'hora',
-        'tipo',
+        'tipo',  //ingreso o salida
         'user_id',
         'monto',
         'saldo',
@@ -32,5 +32,10 @@ class Tesoreria extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public static function getNextNro($agencia_id)
+    {
+        $ultimoNro = self::where('agencia_id', $agencia_id)->max('nro');
+        return $ultimoNro ? $ultimoNro + 1 : 1;
     }
 }

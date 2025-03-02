@@ -37,11 +37,13 @@
         hora : formatoFecha(null,"HH:mm:ss"),
         fechahora : formatoFecha(null,"YYYY-MM-DD HH:mm:ss"),
         usuario_id : usuario.value.id,
+        agencia_id : agencia.value ? agencia.value.id : 1,
         descontado : 0,
         totalentregado : 0,
         dni: '',
         apenom: '',
         plazo:'',
+        apenom:'',
         frecuencia: '',
         producto : '',
         monto: '',
@@ -50,8 +52,10 @@
         tasainteres : '',
         resultado:'',
         comentario:'',
+        rcsdebe:'',//si debe recurrente con saldo
         costomora: 0,
         dondepagara : '',
+        totalentregar: 0,
         total: 0,
         asesor:'',
         asesor_id: '',
@@ -65,6 +69,7 @@
         form.value.usuario_id = usuario.value.id,
         form.value.descontado = 0,
         form.value.totalentregado = 0,
+        form.value.apenom=''
         form.value.dni = '';
         form.value.apenom = '';
         form.value.plazo = '';
@@ -72,9 +77,15 @@
         form.value.producto = '';
         form.value.medioorigen = '';
         form.value.tiposolicitud = '';
+        form.value.agencia_id = agencia.value ? agencia.value.id : 1;
         form.value.dondepagara = '';
         form.value.total = 0;
         form.value.costomora = 0;
+        form.value.tasainteres = '';
+        form.value.resultado = '';
+        form.value.comentario = '';
+        form.value.rcsdebe = '';
+        form.value.totalentregar = 0;
         form.value.asesor=''
         form.value.foto='/storage/fotos/default.png',
         form.value.errors = []
@@ -166,6 +177,7 @@
             form.value.credito_id = credito.value.id
             form.value.dni=credito.value.cliente.persona.dni
             form.value.apenom=credito.value.cliente.persona.apenom
+            form.value.apenom=credito.value.cliente.persona.apenom
             form.value.producto = credito.value.producto
             form.value.monto = credito.value.monto
             form.value.plazo = credito.value.plazo
@@ -185,7 +197,9 @@
             data.value.tipo = form.value.tiposolicitud
             data.value.producto = form.value.producto
             await obtenerDescuentos(data.value)
+            form.value.rcsdebe = descuentos.value.estado
             form.value.descontado=descuentos.value.deudatotal
+            form.value.totalentregar=Number(form.value.monto)-Number(form.value.descontado)
         }
     }
 
@@ -413,7 +427,10 @@
         </div>
       </div>
     </div>
-<DesembolsoForm :form="form" :descuentos="descuentos"
+<DesembolsoForm
+:form="form"
+:descuentos="descuentos"
 @observar="observar"
-@obtenerDatos="obtenerDatos"></DesembolsoForm>
+@obtenerDatos="obtenerDatos"
+@onListar="listarCreditos"></DesembolsoForm>
 </template>

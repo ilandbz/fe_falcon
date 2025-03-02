@@ -10,13 +10,16 @@ use App\Models\CreditosCancelar;
 use App\Models\Desembolso;
 use App\Models\KardexCredito;
 use App\Models\SeguroDesgravamen;
+use App\Models\Tesoreria;
+use App\Http\Traits\DesembolsoTrait;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 class DesembolsoController extends Controller
 {
+    use DesembolsoTrait;
     public function store(StoreDesembolsoRequest $request)
     {
-
         $desembolso = Desembolso::create([
             'credito_id'     => $request->credito_id,
             'fecha'          => $request->fecha,
@@ -25,12 +28,76 @@ class DesembolsoController extends Controller
             'descontado'     => $request->descontado,
             'totalentregado' => $request->totalentregado
         ]);
-        
+        Credito::where('id', $request->credito_id)->update(['estado' => 'DESEMBOLSADO']);
+
         return response()->json([
             'ok' => 1,
             'mensaje' => 'Desembolso Registrado satisfactoriamente'
         ],200);
     }
+    
+    public function procesarDesembolso(StoreDesembolsoRequest $request)
+    {
+        DB::beginTransaction(); // Iniciamos la transacción
+    
+        try {
+            $desembolso = Desembolso::create([
+                'credito_id'     => $request->credito_id,
+                'fecha'          => $request->fecha,
+                'hora'           => $request->hora,
+                'user_id'        => $request->user_id,
+                'descontado'     => $request->descontado,
+                'totalentregado' => $request->totalentregado
+            ]);
+            Credito::where('id', $request->credito_id)->update(['estado' => 'DESEMBOLSADO']);
+            $nro = Tesoreria::getNextNro($request->credito_id);
+            Tesoreria::create([
+                'tipo_entidad_id' => 1, // CAJA
+                'agencia_id'      => $request->agencia_id,
+                'nro'             => $nro, // Usamos el número obtenido sin modificar
+                'fecha'           => $request->fecha,
+                'hora'            => $request->hora,
+                'tipo'            => 'SALIDA', // Es un desembolso (salida de dinero)
+                'user_id'         => $request->user_id,
+                'monto'           => $request->totalentregado,
+                'saldo'           => 0, // Ajusta la lógica para calcular saldo si es necesario
+                'descripcion'     => 'Desembolso crédito ID: ' . $request->credito_id.' Cliente: '.$request->apenom
+            ]);
+             if ($request->montoseguro > 0) { // Aseguramos que el monto del seguro sea válido
+                Tesoreria::create([
+                    'tipo_entidad_id' => 1, // CAJA
+                    'agencia_id'      => $request->agencia_id,
+                    'nro'             => $nro + 1, // Asignamos un número consecutivo SOLO si es necesario
+                    'fecha'           => $request->fecha,
+                    'hora'            => $request->hora,
+                    'tipo'            => 'INGRESO', // Es un desembolso (salida de dinero)
+                    'user_id'         => $request->user_id,
+                    'monto'           => $request->montoseguro,
+                    'saldo'           => 0, // Ajusta la lógica para calcular saldo si es necesario
+                    'descripcion'     => 'Seguro crédito ID: ' . $request->credito_id.' Cliente: '.$request->apenom
+                ]);
+            }
+            $this->generarCalendarioPagos($request);
+            DB::commit();
+            return response()->json([
+                'ok' => 1,
+                'mensaje' => 'Desembolso y caja registrados correctamente'
+            ], 200);
+        } catch (QueryException $qe) {
+            DB::rollBack(); // Revertimos cambios en caso de error de base de datos
+            return response()->json([
+                'ok' => 0,
+                'error' => 'Error en la base de datos: ' . $qe->getMessage()
+            ], 500);
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revertimos cambios en caso de error general
+            return response()->json([
+                'ok' => 0,
+                'error' => 'Error al procesar el desembolso: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
     public function show(Request $request)
     {
         $menu = Desembolso::where('id', $request->id)->first();
@@ -92,14 +159,16 @@ class DesembolsoController extends Controller
             'credito_pagar.credito:id,monto,total,estado'//desembolso con su credito
         ])->where('credito_id', $credito_id)->get();
         $saldototal = 0;
-        $detalles = $desembolsos->map(function ($item) use (&$saldototal) {
+        $estado = 'pago';
+        $detalles = $desembolsos->map(function ($item) use (&$saldototal, &$estado) {
             $creditoPagar = $item->credito_pagar;
-            $saldototal += $creditoPagar->Saldo;
+            $saldototal += $item->saldopagar;
+            $estado = strtolower($item->estado) == 'debe' ? 'debe' : 'pago'; 
             return [
                 "id" => $item->credito_pagar_id,
                 "credito_id_pago" => $creditoPagar->credito_id,
                 "Totalpagado" => $creditoPagar->Totalpagado,
-                "Saldo" => $creditoPagar->Saldo,
+                "Saldo" => $item->saldopagar,
                 "Monto" => $creditoPagar->credito->monto,
                 "Total" => $creditoPagar->credito->total,
                 "Estado" => $creditoPagar->credito->estado,
@@ -108,7 +177,7 @@ class DesembolsoController extends Controller
         });
         // Calcular deuda total
         $deudatotal = $montoseguro + $montoconfioenti + $saldototal;
-        return compact('deudatotal', 'montoseguro', 'montoconfioenti', 'saldototal', 'detalles');        
+        return compact('deudatotal', 'montoseguro', 'montoconfioenti', 'saldototal', 'estado', 'detalles');        
     }
     public function cancelarCredito(StoreCancelarCreditoRequest $request){
 

@@ -11,6 +11,8 @@ class CreditosCancelar extends Model
         'credito_id',
         'credito_pagar_id',
         'estado',
+        'saldopagar',
+        'morapagar',
     ];
     public function credito(): BelongsTo
     {

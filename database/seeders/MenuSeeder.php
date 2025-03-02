@@ -117,6 +117,14 @@ class MenuSeeder extends Seeder
                 'orden' => 8,
             ],
             [
+                'nombre' => 'Extornar',
+                'slug' => 'extornar-desembolso',
+                'icono' => 'fas fa-undo-alt',
+                'padre_id' => null,
+                'grupo_id'  => GrupoMenu::where('titulo', 'Creditos')->value('id'),
+                'orden' => 8,
+            ],            
+            [
                 'nombre' => 'Registros',
                 'slug' => 'gestion-registros',
                 'icono' => 'fas fa-clipboard-list',

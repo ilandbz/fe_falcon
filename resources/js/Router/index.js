@@ -23,6 +23,7 @@ import Registros from '@/Pages/Registros/Inicio.vue';
 import Devolucion from '@/Pages/Devolucion/Inicio.vue';
 import Evaluacion from '@/Pages/Evaluacion/Inicio.vue';
 import Evaluacion2 from '@/Pages/Evaluacion2/Inicio.vue';
+import Extornar from '@/Pages/Extornar/Inicio.vue';
 const routes = [
     {
         path: '/', name:'Principal', component: Principal ,
@@ -118,6 +119,12 @@ const routes = [
         component: Evaluacion2,
         meta: { layout: LayoutDefault }
     },
+    {
+        path: '/extornar-desembolso',
+        name: 'Extornar',
+        component: Extornar,
+        meta: { layout: LayoutDefault }
+    },    
 ]
 
 export default createRouter({

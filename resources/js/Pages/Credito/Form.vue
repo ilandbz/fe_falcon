@@ -283,16 +283,18 @@ onMounted(() => {
                         <div class="card" v-if="vigentes.length>0">
                             <div class="card-header">Creditos Vigentes</div>
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <div class="table-responsive small">
                                     <table class="table table-sm small table-hover table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>FECHA</th>
-                                                <th>MONTO</th>
-                                                <th>PLAZO</th>
-                                                <th>TIPO</th>
-                                                <th>ESTADO</th>
+                                                <th>Id</th>
+                                                <th>Fecha</th>
+                                                <th>Monto</th>
+                                                <th>Frecuencia</th>
+                                                <th>Tipo</th>
+                                                <th>Estado</th>
+                                                <th>Saldo</th>
+                                                <th>Mora</th>
                                                 <th v-if="form.tipo=='Recurrente Con Saldo'">Accion</th>
                                             </tr>
                                         </thead>
@@ -301,9 +303,11 @@ onMounted(() => {
                                                 <td>{{ vigente.id }}</td>
                                                 <td>{{ vigente.fecha_reg }}</td>
                                                 <td>{{ vigente.monto }}</td>
-                                                <td>{{ vigente.plazo }}</td>
+                                                <td>{{ vigente.frecuencia }}</td>
                                                 <td>{{ vigente.tipo }}</td>
                                                 <td>{{ vigente.estado }}</td>
+                                                <td>S/. {{ Number(vigente.Saldo).toFixed(2) }}</td>
+                                                <td></td>
                                                 <td v-if="form.tipo=='Recurrente Con Saldo'">
                                                     <div class="form-check">
                                                         <input 

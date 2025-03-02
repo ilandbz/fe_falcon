@@ -138,7 +138,7 @@ const aprobar = async(id) => {
     listarCreditos()
 };
 
-const aprobarTodos = ()=>{
+const aprobarTodos = () => {
     Swal.fire({
         title: '¿Estás seguro de aprobar todos los créditos?',
         text: `Recuerda que se aprobarán todos los créditos de la lista.`,
@@ -148,14 +148,14 @@ const aprobarTodos = ()=>{
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, aprobar créditos',
         cancelButtonText: 'Cancelar'
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            creditos.value.data.forEach(async(credito) => {
-                
-            });
+            for (const credito of creditos.value.data) { // <-- Usamos `for...of`
+                await aprobar(credito.id)
+            }
         }
     });
-}
+};
 const esActivodiv=ref(false);
 const activarDiv=()=>{
     esActivodiv.value=!esActivodiv.value
@@ -291,7 +291,7 @@ const activarDiv=()=>{
                             <table class="table table-bordered table-hover table-sm table-striped small">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th colspan="12" class="text-center">Creditos</th>
+                                        <th colspan="13" class="text-center">Creditos</th>
                                     </tr>
                                     <tr>
                                         <th>#</th>
@@ -302,6 +302,7 @@ const activarDiv=()=>{
                                         <th>Plazo</th>
                                         <th>Fecha</th>
                                         <th>Frecuencia</th>
+                                        <th>Tipo</th>
                                         <th>Asesor</th>
                                         <th>Agencia</th>
                                         <th>Estado</th>
@@ -310,7 +311,7 @@ const activarDiv=()=>{
                                 </thead>
                                 <tbody>
                                     <tr v-if="creditos.total == 0">
-                                        <td class="text-danger text-center" colspan="12">
+                                        <td class="text-danger text-center" colspan="13">
                                             -- Datos No Registrados - Tabla Vacía --
                                         </td>
                                     </tr>
@@ -323,6 +324,7 @@ const activarDiv=()=>{
                                         <td>{{ credito.plazo }}</td>
                                         <td>{{ credito.fecha_reg }}</td>
                                         <td>{{ credito.frecuencia }}</td>
+                                        <td>{{ credito.tipo }}</td>
                                         <td>{{ credito.asesor.name }}</td>
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>

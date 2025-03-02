@@ -17,18 +17,22 @@ export default function usedesembolso() {
         let respuesta = await axios.get('desembolso/listar' + getdataParamsPagination(data), getConfigHeader())
         desembolsos.value = respuesta.data
     }
-    const agregarDesembolso = async(data) => {
+    const agregarDesembolso = async (data) => {
         errors.value = ''
         try {
-            let respond = await axios.post('desembolso/guardar', data, getConfigHeader())
-            errors.value = ''
-            if (respond.data.ok == 1) {
-                respuesta.value = respond.data
+            let response = await axios.post('desembolso/procesar', data, getConfigHeader()) // NUEVO ENDPOINT
+            
+            if (response.data.ok == 1) {
+                respuesta.value = response.data
+            } else {
+                errors.value = response.data.error || "Ocurrió un error inesperado"
             }
         } catch (error) {
             errors.value = ""
-            if (error.response.status === 422) {
+            if (error.response && error.response.status === 422) {
                 errors.value = error.response.data.errors
+            } else {
+                errors.value = "Error en la conexión con el servidor"
             }
         }
     }

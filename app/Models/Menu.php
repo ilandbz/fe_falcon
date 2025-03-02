@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Menu extends Model
 {
     protected $fillable =['id','nombre','slug','icono','padre_id','orden', 'grupo_id'];
+
+    
     public function roles()
     {
         return $this->belongsToMany(Role::class);

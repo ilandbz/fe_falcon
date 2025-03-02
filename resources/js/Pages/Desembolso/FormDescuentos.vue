@@ -78,7 +78,7 @@ const { form } = toRefs(props)
                                         <td>{{ credito.Estado }}</td>
                                         <td>{{ credito.estado_rcs }}</td>
                                         <td>
-                                            <button v-if="credito.estado_rcs=='DEBE'" class="btn btn-success btn-sm" style="font-size: .65rem;" title="Realizar Pago" @click.prevent="cancelarC(credito)">
+                                            <button v-if="credito.estado_rcs.toLowerCase() === 'debe'" class="btn btn-success btn-sm" style="font-size: .65rem;" title="Realizar Pago" @click.prevent="cancelarC(credito)">
                                                 <i class="fa-solid fa-money-bill"></i>
                                             </button>&nbsp;
                                         </td>

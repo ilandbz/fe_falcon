@@ -2,7 +2,8 @@
 import { toRefs, onMounted, ref } from 'vue';
 import useUsuario from '@/Composables/Usuario.js';
 import useDesembolso from '@/Composables/Desembolso.js';
-import DescuentosForm from './FormDescuentos.vue'  
+import DescuentosForm from './FormDescuentos.vue' 
+import CalendarioForm from './FormCalendarioPagos.vue' 
 import useHelper from '@/Helpers';  
 const { hideModal, openModal, Toast, Swal } = useHelper();
 const props = defineProps({
@@ -17,7 +18,7 @@ const {
 } = useUsuario();
 
 const {
-    cancelarCredito, errors, respuesta
+    cancelarCredito, errors, respuesta, agregarDesembolso
 } = useDesembolso();
 
 
@@ -31,6 +32,9 @@ const cancelar=async(registro)=>{
     formData.append('montopagado', String(registro.Saldo)); // Asegura conversión a string
     formData.append('mediopago', 'Efectivo');
     formData.append('tipo_cancelar', 'RCS');
+    formData.append('agencia_id', form.value.agencia_id);
+    formData.append('apenom', form.value.apenom);
+    formData.append('montoseguro', descuentos.value.montoseguro);
     await cancelarCredito(formData)
     if (errors.value) {
         console.log(errors.value);
@@ -48,14 +52,62 @@ const cancelar=async(registro)=>{
 }
 const actualizarTipoSolicitud = () => {
     emit('obtenerDatos', form.value.credito_id)
-    //tiene que volver a buscar a los vigentes:
-    // if(form.value.tiposolicitud=='Recurrente Con Saldo'){
-    //     if(descuentos.value.saldototal==0 && form.vigentes.length==0){
-    //         form.value.tiposolicitud = 'Recurrente Sin Saldo';
-    //     }        
-    // }
 }
+const registrarDesembolso = async() => {
+    let formData = new FormData();
+    formData.append('credito_id', form.value.credito_id);
+    formData.append('fecha', form.value.fecha);
+    formData.append('hora', form.value.hora);
+    formData.append('user_id', form.value?.usuario_id); // Verifica si existe
+    formData.append('descontado', form.value.descontado);
+    formData.append('totalentregado', form.value.totalentregar);
+    formData.append('rcsdebe', form.value.rcsdebe);
+    formData.append('agencia_id', form.value.agencia_id);
+    formData.append('apenom', form.value.apenom);
+    formData.append('montoseguro', descuentos.value.montoseguro);
+    formData.append('total', form.value.total);
+    formData.append('plazo', form.value.plazo);
+    formData.append('frecuencia', form.value.frecuencia);
+    await agregarDesembolso(formData)
 
+    form.value.errors = []
+    if(errors.value)
+    {
+        form.value.errors = errors.value
+    }
+    if (respuesta.value.ok == 1) {
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: respuesta.value.mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        });
+        hideModal('#modaldesembolso');
+        emit('onListar', currentPage.value)
+        verCalendarioPagos(form.value.credito_id);
+    } 
+}
+const verCalendarioPagos = (id) => {
+    openModal('#modalcalendariopagos')
+    document.getElementById("modalcalendariopagosLabel").innerHTML = 'Calendario de Pagos';
+}
+const guardar = () =>{
+    Swal.fire({
+        title: 'Desembolsar',
+        text: `¿Está seguro de desembolsar el crédito ${form.value.credito_id}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, desembolsar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            registrarDesembolso()
+        }
+    })
+}
 const imagenNoEncontrada = (event)=>{
     event.target.src = "/storage/fotos/default.png";
 }
@@ -230,15 +282,19 @@ onMounted(() => {
                                         <div class="card-body">
                                             <div class="row mb-3">
                                                 <div class="col">
-                                                    <div class="input-group">
+                                                    <div class="input-group has-validation">
                                                         <span class="input-group-text">S/.</span>
                                                         <div class="form-floating is-invalid">
-                                                            
-                                                            <input type="text" class="form-control form-control-sm" :value="form.descontado.toFixed(2)"
+                                                            <input type="text" class="form-control form-control-sm"
+                                                            :class="descuentos.estado=='debe' ? 'is-invalid' : ''"
+                                                            :value="form.descontado.toFixed(2)"
                                                             placeholder="DESCUENTO" readonly>
                                                             <label for="floatingInputGroup1">DESCUENTO</label>
                                                         </div>
-                                                        <button title="Ver Descuentos" @click="verDescuentos()" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button>           
+                                                        <button type="button" title="Ver Descuentos" @click="verDescuentos()" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></button>                                                             
+                                                        <div class="invalid-feedback" v-for="error in form.errors.rcsdebe" :key="error">
+                                                            {{ error }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col">
@@ -246,8 +302,8 @@ onMounted(() => {
                                                         <span class="input-group-text">S/.</span>
                                                         <div class="form-floating">
                                                             <input type="text" class="form-control form-control-sm"
-                                                            :class="(Number(form.total)-Number(form.descontado))<=1 ? 'is-invalid' : ''"
-                                                            :value="(Number(form.total)-Number(form.descontado)).toFixed(2)"
+                                                            :class="(form.totalentregar)<=1 ? 'is-invalid' : ''"
+                                                            :value="(form.totalentregar).toFixed(2)"
                                                             placeholder="TOTAL ENTREGAR" readonly>
                                                             <label for="floatingInputGroup1">TOTAL ENTREGAR</label>
                                                         </div>   
@@ -292,6 +348,7 @@ onMounted(() => {
                                     </tbody>
                                 </table>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -305,4 +362,5 @@ onMounted(() => {
     </div>
     </form>
     <DescuentosForm :form="descuentos" @cancelar="cancelar"></DescuentosForm>
+    <CalendarioForm></CalendarioForm>
 </template>
