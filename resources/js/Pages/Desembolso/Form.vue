@@ -137,7 +137,11 @@ const verDescuentos = async()=>{
     openModal('#modaldescuentos')
     document.getElementById("modaldescuentosLabel").innerHTML = 'Descuentos';
 }
-
+const generarPDF = async(archivo)=>{
+    data.value.credito_id = credito.value.id;
+    data.value.tipo = archivo;
+    await generarPdf(data.value);
+}
 onMounted(() => {
     
 })

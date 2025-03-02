@@ -23,7 +23,7 @@ const  emit  =defineEmits(['onListar', 'observar', 'obtenerDatos'])
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-
+                    <iframe v-if="pdfUrl" :src="pdfUrl" width="100%" height="700px"></iframe>
                 </div>
                 <div class="modal-footer">
 
