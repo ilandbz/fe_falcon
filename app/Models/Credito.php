@@ -85,7 +85,7 @@ class Credito extends Model
     }
     public function getTotalpagadoAttribute()
     {
-        return $this->kardex()->sum('montopagado');
+        return 0;//return $this->kardex()->sum('montopagado');
     }
     public function kardex(): HasMany
     {
@@ -93,7 +93,8 @@ class Credito extends Model
     }
     public function getSaldoAttribute()
     {
-        return $this->total - $this->kardex()->sum('montopagado');
+        //return $this->total - $this->kardex()->sum('montopagado');
+        return $this->total - 0;
 
     }
 

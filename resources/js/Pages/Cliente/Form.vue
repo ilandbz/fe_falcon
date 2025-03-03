@@ -511,6 +511,7 @@ onMounted(() => {
                                                     <option value="Soltero">Soltero</option>
                                                     <option value="Casado">Casado</option>
                                                     <option value="Divorciado">Divorciado</option>
+                                                    <option value="Viudo">Viudo</option>
                                                 </select>
                                                 <label for="estadocivil">Estado Civil</label>
                                             </div>
