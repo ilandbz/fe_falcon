@@ -216,6 +216,8 @@ class DesembolsoController extends Controller
             'mensaje' => 'Credito Cancelado con Exito'
         ],200);
     }
+
+
     public function calendariopagosPDF(Request $request){
         $tipo = $request->tipo;
         $id = $request->credito_id;
