@@ -34,7 +34,6 @@ const {errors, loginUsuario } = useAutenticacion();
                         <p class="opacity-75 text-white">TU SOCIO EN LOS NEGOCIOS</p>
                     </div>
                     </div>
-
                 </div>
                 <div class="col-md-7 d-flex flex-center">
                     <div class="p-4 p-md-5 flex-grow-1">

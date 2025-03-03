@@ -320,7 +320,7 @@ class CreditoController extends Controller
             $credito = Credito::with([
                 'cliente:id,persona_id,estado',
                 'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
-                'seguro:id,credito_id,monto'
+                'seguro:credito_id,monto'
 
             ])
             ->where('id', $id)->first();

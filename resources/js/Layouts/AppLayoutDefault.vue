@@ -12,11 +12,11 @@ const {usuario, roles, menus, cambiarAgencia, role, cambiarRole, agencia } = use
 
 const router = useRouter();
 
-const tiempoRestante = ref(6); // 10 minutos en segundos
+const tiempoRestante = ref(600); 
 let temporizador;
 
 const resetearTemporizador = () => {
-    tiempoRestante.value = 6; // Reinicia el tiempo cada vez que el usuario interactúa
+    tiempoRestante.value = 600;
 };
 
 const iniciarTemporizador = () => {
