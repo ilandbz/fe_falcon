@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
 
             CreditoSeeder::class,
             DesembolsoSeeder::class,
+            DetCalendarioPagosSeeder::class,
             CreditosCancelarSeeder::class,
             KardexCreditoSeeder::class,
             AnalisisCualitativoSeeder::class,

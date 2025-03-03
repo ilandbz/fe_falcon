@@ -11,6 +11,8 @@ trait DesembolsoTrait
 
     function generarCalendarioPagos(Request $request)
     {
+        setlocale(LC_TIME, 'es_ES.UTF-8');
+        Carbon::setLocale('es');
         $total      = $request->total;
         $plazo      = $request->plazo;
         $credito_id = $request->credito_id;

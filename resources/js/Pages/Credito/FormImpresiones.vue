@@ -16,19 +16,15 @@ const { hideModal, Toast, openModal } = useHelper();
 
 
 const props = defineProps({
-    credito: Object,
+    form: Object,
 });
-const { credito } = toRefs(props);
+const { form } = toRefs(props);
 
-const data=ref({
-    credito_id : '',
-    tipo : '',
-})
 
 const generarPDF = async(archivo)=>{
-    data.value.credito_id = credito.value.id;
-    data.value.tipo = archivo;
-    await generarPdf(data.value);
+    form.value.tipo = archivo;
+    await generarPdf(form.value);
+    form.value.url = pdfUrl.value;
 }
 
 </script>
@@ -86,7 +82,7 @@ const generarPDF = async(archivo)=>{
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">PRE VISUALIZACION</div>
                                         <div class="card-body">
-                                            <iframe v-if="pdfUrl" :src="pdfUrl" width="100%" height="500px"></iframe>
+                                            <iframe v-if="form.url" :src="form.url" width="100%" height="500px"></iframe>
                                             <p v-else>Seleccione un documento para visualizar.</p>
                                         </div>
                                         <div class="card-footer">

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Agencia extends Model
 {
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'telefono', 'direccion'];
     /**
      * The users that belong to the Agencia
      *

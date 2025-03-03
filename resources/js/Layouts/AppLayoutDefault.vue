@@ -1,4 +1,6 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import useDatosSession from '@/Composables/session';
 import NavBar from '@/Components/NavBar.vue';
 import SideBar from '@/Components/SideBar.vue';
@@ -7,6 +9,43 @@ const {usuario, roles, menus, cambiarAgencia, role, cambiarRole, agencia } = use
 
 // const ls = localStorage.getItem('userSession');
 // const desencripado = ls ? JSON.parse( JSON.stringify(jwtDecode(ls).roleid)) : null;
+
+const router = useRouter();
+
+const tiempoRestante = ref(6); // 10 minutos en segundos
+let temporizador;
+
+const resetearTemporizador = () => {
+    tiempoRestante.value = 6; // Reinicia el tiempo cada vez que el usuario interactúa
+};
+
+const iniciarTemporizador = () => {
+    temporizador = setInterval(() => {
+        tiempoRestante.value--;
+        if (tiempoRestante.value <= 0) {
+            clearInterval(temporizador);
+            alert("Sesión suspendida por inactividad.");
+            localStorage.removeItem('userSession');
+            router.push('/login');
+        }
+    }, 1000);
+};
+
+onMounted(() => {
+    iniciarTemporizador();
+    
+    window.addEventListener('mousemove', resetearTemporizador);
+    window.addEventListener('keydown', resetearTemporizador);
+    window.addEventListener('click', resetearTemporizador);
+});
+
+onUnmounted(() => {
+    clearInterval(temporizador);
+    window.removeEventListener('mousemove', resetearTemporizador);
+    window.removeEventListener('keydown', resetearTemporizador);
+    window.removeEventListener('click', resetearTemporizador);
+});
+
 
 
 </script>

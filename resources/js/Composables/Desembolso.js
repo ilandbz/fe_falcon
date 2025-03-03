@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { getConfigHeader, getdataParamsPagination } from '@/Helpers'
+import { getConfigHeader, getdataParamsPagination, getConfigHeaderpdf } from '@/Helpers'
 
 export default function usedesembolso() {
     const desembolsos = ref([])
@@ -8,6 +8,7 @@ export default function usedesembolso() {
     const desembolso = ref({})
     const respuesta = ref([])
     const descuentos=ref({})
+    const pdfUrl = ref('')
     const obtenerDesembolso = async(id) => {
         let respuesta = await axios.get('desembolso/mostrar?id='+id, getConfigHeader())
         desembolso.value = respuesta.data
@@ -76,9 +77,25 @@ export default function usedesembolso() {
             }
         }
     }    
+    const generarPdf = async (data) => {
+        errors.value = "";
+    
+        try {
+            let response = await axios.post("desembolso/generar-pdf",data,getConfigHeaderpdf());
+    
+            const file = new Blob([response.data], { type: "application/pdf" });
+            pdfUrl.value = URL.createObjectURL(file);
+    
+        } catch (error) {
+            console.error("Error al generar el PDF:", error);
+            if (error.response && error.response.status === 422) {
+                errors.value = error.response.data.errors;
+            }
+        }
+    };    
     return {
         errors, desembolsos, desembolso, obtenerDesembolso, obtenerDesembolsos, 
         agregarDesembolso, actualizarDesembolso, eliminarDesembolso, respuesta,
-        obtenerDescuentos, descuentos, cancelarCredito
+        obtenerDescuentos, descuentos, cancelarCredito, generarPdf, pdfUrl
     }
 }

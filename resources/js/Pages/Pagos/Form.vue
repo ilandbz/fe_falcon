@@ -50,7 +50,7 @@ const guardar = () => {
 };
 
 onMounted(() => {
-    listaCreditos();
+    
 });
 </script>
 

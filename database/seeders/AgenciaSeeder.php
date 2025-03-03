@@ -14,14 +14,37 @@ class AgenciaSeeder extends Seeder
     public function run(): void
     {
         $agencias = [
-            ['nombre' => 'HUANUCO'],
-            ['nombre' => 'TINGO MARIA'],
-            ['nombre' => 'HUANUCO2'],
-            ['nombre' => 'PANAO'],
+            [
+                'id'    => 1,
+                'nombre' => 'HUANUCO',
+                'direccion' => 'Jr. Tarapaca 591',
+                'telefono' => '062-286809',
+            ],
+            [
+                'id'    => 2,
+                'nombre' => 'TINGO MARIA',
+                'direccion' => 'Jr. Tito Jaime 697',
+                'telefono' => '062-797215',
+            ],
+            [
+                'id'    => 3,
+                'nombre' => 'HUANUCO2',
+                'direccion' => 'Jr. Tarapaca 591',
+                'telefono' => '062-612543',
+            ],
+            [
+                'id'    => 4,
+                'nombre' => 'PANAO',
+                'direccion' => 'Calle Lima 031',
+                'telefono' => '932052255',
+            ],
         ];
 
-        foreach($agencias as $grupo){
-            Agencia::firstorCreate($grupo);            
+        foreach($agencias as $registro){
+            Agencia::updateOrCreate(
+                ['id' => $registro['id']],  // Buscar por ID
+                $registro                   // Datos para actualizar o crear
+            );
         }
     }
 }

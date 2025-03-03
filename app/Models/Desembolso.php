@@ -39,6 +39,10 @@ class Desembolso extends Model
     {
         return optional($this->credito)->total - $this->kardex()->sum('montopagado');
     }
+    public function detCalendarioPagos(): HasMany
+    {
+        return $this->hasMany(DetCalendarioPagos::class, 'credito_id');
+    }
 
 
 }

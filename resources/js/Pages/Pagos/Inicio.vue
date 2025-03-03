@@ -1,15 +1,20 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, toRefs } from 'vue';
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers';  
   import useCredito from '@/Composables/Credito.js';
   import CreditoForm from './Form.vue'
-  import useDatosSession from '@/Composables/session';
-  const { agencia } = useDatosSession();
+  import FormImpresiones from './FormImpresiones.vue';
+  const props = defineProps({
+        agencia: Object,
+        role: Object,
+        usuario: Object,
+    });
+    const { agencia, usuario, role } = toRefs(props);
     const { openModal, Toast, Swal } = useHelper();
     const {
         creditos, errors, credito, respuesta,
-        obtenerCreditos, obtenerCredito, eliminarCredito
+        obtenerCreditosEstadoAgencia, obtenerCredito, eliminarCredito
         
     } = useCredito();
     const dato = ref({
@@ -17,6 +22,16 @@
         buscar:'',
         paginacion: 10
     });
+    const datoImpresiones=ref({
+        credito_id: '',
+        tipo: '',
+        url:'',
+    });
+    const limpiarDatosImpresiones = () => {
+        datoImpresiones.value.credito_id = '';
+        datoImpresiones.value.tipo = '';
+        datoImpresiones.value.url = '';
+    }
     const form = ref({
         id: '',
         dni:'',
@@ -101,52 +116,23 @@
             form.value.hora_reg = credito.value.hora_reg;
         }
     };
-    const editar = (id) => {
-        limpiar();
-        obtenerDatos(id)
-        form.value.estadoCrud = 'editar'
-        document.getElementById("modalcreditoLabel").innerHTML = 'Editar credito';
-        openModal('#modalcredito')
+    const dato2=ref({
+        'estado' : '',
+        'agencia_id' : '',
+    })
+    const archivos = (id) => {
+        limpiarDatosImpresiones();
+        datoImpresiones.value.credito_id = id;
+        document.getElementById("modalimpresionesLabel").innerHTML = 'Editar credito';
+        openModal('#modalimpresiones')
     }
-    const nuevo = () => {
-        limpiar()
-        form.value.estadoCrud = 'nuevo'
-        openModal('#modalcredito')
-        document.getElementById("modalcreditoLabel").innerHTML = 'Nuevo credito';
-        //titulo.textContent = 'Editar Datos Personales';
-    }
+
     const listarCreditos = async(page=1) => {
         dato.value.page= page
-        await obtenerCreditos(dato.value)
+        dato2.value.estado='DESEMBOLSADO'
+        await obtenerCreditosEstadoAgencia(dato.value, dato2.value)
     }
-    const eliminar = (id) => {
-        Swal.fire({
-            title: '¿Estás seguro de Eliminar?',
-            text: "Menu",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminalo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                elimina(id)
-            }
-        })
-    }
-    const elimina = async(id) => {
-        await eliminarCredito(id)
-        form.value.errors = []
-        if(errors.value)
-        {
-            form.value.errors = errors.value
-        }
-        if(respuesta.value.ok==1){
-            form.value.errors = []
-            Toast.fire({icon:'success', title:respuesta.value.mensaje})
-            listarCreditos(creditos.value.current_page)
-        }
-    }
+
     // PAGINACION
     const isActived = () => {
         return creditos.value.current_page
@@ -179,6 +165,7 @@
     }
     // CARGA
     onMounted(() => {
+        dato2.value.agencia_id=agencia.value ? agencia.value.id : '0'
         listarCreditos()
     })
 </script>
@@ -300,12 +287,12 @@
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" title="Editar" @click.prevent="editar(credito.id)">
-                                                <i class="fas fa-edit"></i>
+                                            <button class="btn btn-warning btn-sm" title="Realizar Pago" @click.prevent="realizarPago(credito.id)">
+                                                <i class="fa-solid fa-money-bill"></i>
                                             </button>&nbsp;
-                                            <button class="btn btn-danger btn-sm" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <button class="btn btn-success btn-sm btn-custom" title="Archivos" @click.prevent="archivos(credito.id)">
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                            </button>                                    
                                         </td>
                                     </tr>
                                 </tbody>
@@ -365,4 +352,5 @@
       </div>
     </div>
     <creditoForm :form="form" @onListar="listarCreditos" :currentPage="creditos.current_page"></creditoForm>
+    <FormImpresiones :form="datoImpresiones"></FormImpresiones>
 </template>
