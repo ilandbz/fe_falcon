@@ -7,10 +7,8 @@ import useHelper from '@/Helpers';
 const { hideModal, openModal, Toast, Swal } = useHelper();
 const props = defineProps({
     form: Object,
-    currentPage : Number,
-    descuentos: Object,
 });
-const { form, currentPage, descuentos } = toRefs(props)
+const { form } = toRefs(props);
 const  emit  =defineEmits(['onListar', 'observar', 'obtenerDatos'])
 
 </script>
@@ -23,7 +21,7 @@ const  emit  =defineEmits(['onListar', 'observar', 'obtenerDatos'])
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <iframe v-if="pdfUrl" :src="pdfUrl" width="100%" height="700px"></iframe>
+                    <iframe v-if="form.url" :src="form.url" width="100%" height="700px"></iframe>
                 </div>
                 <div class="modal-footer">
 

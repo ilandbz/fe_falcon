@@ -18,7 +18,7 @@ const {
 } = useUsuario();
 
 const {
-    cancelarCredito, errors, respuesta, agregarDesembolso
+    cancelarCredito, errors, respuesta, agregarDesembolso, generarPdf, pdfUrl
 } = useDesembolso();
 
 
@@ -88,7 +88,24 @@ const registrarDesembolso = async() => {
         verCalendarioPagos(form.value.credito_id);
     } 
 }
+const datoImpresiones=ref({
+    credito_id: '',
+    tipo: '',
+    url:'',
+});
+const limpiarDatosImpresiones = () => {
+    datoImpresiones.value.credito_id = '';
+    datoImpresiones.value.tipo = 'calendario';
+    datoImpresiones.value.url = '';
+}
+const verPdf=async()=>{
+    await generarPdf(datoImpresiones.value);
+    form.value.url = pdfUrl.value;
+}
 const verCalendarioPagos = (id) => {
+    limpiarDatosImpresiones();
+    datoImpresiones.value.credito_id = id;
+    verPdf();
     openModal('#modalcalendariopagos')
     document.getElementById("modalcalendariopagosLabel").innerHTML = 'Calendario de Pagos';
 }
@@ -137,11 +154,7 @@ const verDescuentos = async()=>{
     openModal('#modaldescuentos')
     document.getElementById("modaldescuentosLabel").innerHTML = 'Descuentos';
 }
-const generarPDF = async(archivo)=>{
-    data.value.credito_id = credito.value.id;
-    data.value.tipo = archivo;
-    await generarPdf(data.value);
-}
+
 onMounted(() => {
     
 })
@@ -366,5 +379,5 @@ onMounted(() => {
     </div>
     </form>
     <DescuentosForm :form="descuentos" @cancelar="cancelar"></DescuentosForm>
-    <CalendarioForm></CalendarioForm>
+    <CalendarioForm :form="datoImpresiones"></CalendarioForm>
 </template>

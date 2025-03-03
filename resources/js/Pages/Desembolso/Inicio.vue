@@ -14,7 +14,7 @@
     const {
         obtenerDescuentos, descuentos
     } = useDesembolso();
-    const { agencia, usuario } = toRefs(props);
+    const { agencia, usuario, role } = toRefs(props);
     const { openModal, Toast, Swal, formatoFecha } = useHelper();
     const {
         credito, creditos, obtenerCreditosEstadoAgencia, obtenerCredito,

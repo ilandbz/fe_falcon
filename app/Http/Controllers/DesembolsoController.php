@@ -12,9 +12,14 @@ use App\Models\KardexCredito;
 use App\Models\SeguroDesgravamen;
 use App\Models\Tesoreria;
 use App\Http\Traits\DesembolsoTrait;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 class DesembolsoController extends Controller
 {
     use DesembolsoTrait;
@@ -216,104 +221,54 @@ class DesembolsoController extends Controller
             'mensaje' => 'Credito Cancelado con Exito'
         ],200);
     }
+<<<<<<< HEAD
 
 
     public function calendariopagosPDF(Request $request){
+=======
+    public function generarPDF(Request $request){
+>>>>>>> 04ac818ffc4093815847df5be6b1f114c5038ad6
         $tipo = $request->tipo;
-        $id = $request->credito_id;
-        if($tipo=='solicitud'){
+        $credito_id = $request->credito_id;
+        if($tipo=='calendario'){
             $credito = Credito::with([
-                'cliente:id,persona_id,estado',
-                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
-                'asesor:id,dni,name',
-                'asesor.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+                'agencia:id,nombre,direccion,telefono',
+                'asesor:id,name',
+                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,ubicacion_domicilio_id',
                 'cliente.persona.ubicacion:id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
                 'cliente.persona.ubicacion.distrito:id,ubigeo,nombre,provincia_id',
                 'cliente.persona.ubicacion.distrito.provincia:id,nombre,departamento_id',
                 'cliente.persona.ubicacion.distrito.provincia.departamento:id,nombre',
-                'cliente.negocio:id,cliente_id,razonsocial,ruc,tel_cel,tipo_actividad_id,descripcion,inicioactividad,ubicacion_id',
-                'cliente.negocio.ubicacion:id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
-                'cliente.negocio.ubicacion.distrito:id,ubigeo,nombre,provincia_id',
-                'cliente.negocio.ubicacion.distrito.provincia:id,nombre,departamento_id',
-                'cliente.negocio.ubicacion.distrito.provincia.departamento:id,nombre',
-            ])
-            ->where('id', $id)->first();
-
+                'cliente.negocio:id,cliente_id,ubicacion_id',
+                'desembolso:credito_id,fecha,totalentregado,descontado',
+                'desembolso.detCalendarioPagos:credito_id,nrocuota,fecha_prog,nombredia,cuota,saldo',
+            ])->where('id', $credito_id)->first();
+            if($credito->cliente->negocio){	
+                $data['domicilionegocio']=Ubicacion::where('id', $credito->cliente->negocio->idubicacion)->first();	
+            }
+    
+    
+    
             $data = [
                 'credito'           => $credito,
                 'cliente'           => $credito->cliente,
-                'domicilio'         => $credito->cliente->persona->ubicacion,
+                'agencia'           => $credito->agencia,
                 'asesor'            => $credito->asesor,
-                'negocio'           => $credito->cliente->negocio,
-                'ubicacionnegocio'  =>  optional($credito->cliente->negocio)->ubicacion
+                'desembolso'        => $credito->desembolso,
+                'cuotapagos'        => $credito->desembolso->detCalendarioPagos,
+                'domicilio'         => $credito->cliente->persona->ubicacion,
+    
             ];
-
-            $pdf = Pdf::loadView('pdfs/solicitud', $data);
-        }elseif($tipo=='Estados Financieros'){
-            $credito = Credito::with([
-                'cliente:id,persona_id,estado',
-                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
-                'asesor.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
-                'balance:credito_id,total_activo,total_pasivo,patrimonio,activocaja,activobancos,activoctascobrar,activoinventarios,pasivodeudaprove,pasivodeudaent,pasivodeudaempre,activomueble,activootrosact,activodepre,pasivolargop,otrascuentaspagar,totalacorriente,totalpcorriente,totalancorriente,totalpncorriente,fecha',
-                'perdidas:credito_id,ventas,costo,utilidad,costonegocio,utiloperativa,otrosing,otrosegr,gast_fam,utilidadneta,utilnetdiaria',
-                'perdidas.venta:credito_id,tot_ing_mensual,tot_cosprimo_m,margen_tot,ventas_cred,irrecuperable,cantproductos',
-                'perdidas.venta.detalles',
-                'perdidas.gastosnegocio:credito_id,alquiler,servicios,personal,sunat,transporte,gastosfinancieros,otros'
-            ])
-            ->where('id', $id)->first();
-            $data = [
-                'credito'           => $credito,
-                'cliente'           => $credito->cliente,
-                'balance'           => $credito->balance,
-                'perdidasganancias' => $credito->perdidas,
-                'ventaspyg'         => $credito->perdidas->venta,
-                'gastosnegocios'    => $credito->gastosnegocio,
-
-            ];
-            $pdf = Pdf::loadView('pdfs/estadosfinancieros', $data);
-        }elseif($tipo=='Analisis Cualitativo'){
-            $credito = Credito::with([
-                'cliente:id,persona_id,estado',
-                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
-                'analisis:credito_id,tipogarantia,cargafamiliar,riesgoedadmax,antecedentescred,recorpagoult,niveldesarr,tiempo_neg,control_ingegre,vent_totdec,compsubsector,totunidfamiliar,totunidempresa,total'
-
-            ])
-            ->where('id', $id)->first();
-            $data = [
-                'analisiscualitativo'           => $credito->analisis,
-            ];
-            $pdf = Pdf::loadView('pdfs/analisis', $data);
-        }elseif($tipo=='Seguro'){
-            $credito = Credito::with([
-                'cliente:id,persona_id,estado',
-                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
-                'seguro:id,credito_id,monto'
-
-            ])
-            ->where('id', $id)->first();
-            $data = [
-                'cliente'           => $credito->cliente,
-                'credito'           => $credito,
-                'poliza'           => $credito->seguro,
-            ];
-            $pdf = Pdf::loadView('pdfs/seguro', $data);
-        }elseif($tipo=='Propuesta'){
-            $credito = Credito::with([
-                'cliente:id,persona_id,estado',
-                'cliente.persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,genero,fecha_nac,nacionalidad,grado_instr,estado_civil,tipo_trabajador,ubicacion_domicilio_id',
-                'propuesta:credito_id,unidad_familiar,experiencia_cred,destino_prest,referencias'
-
-            ])
-            ->where('id', $id)->first();
-            $data = [
-                'cliente'           => $credito->cliente,
-                'credito'           => $credito,
-            ];
-            $pdf = Pdf::loadView('pdfs/propuestacredito', $data);
         }
+
+
+
+
+        $pdf = Pdf::loadView('pdfs/vistacalendario', $data)->setPaper('a4', 'landscape');;
+        // return $pdf->stream('documento.pdf');
         return Response::make($pdf->output(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="documento.pdf"',
+            'Content-Disposition' => 'inline; filename="calendario.pdf"',
         ]);
 
     }

@@ -218,6 +218,11 @@ const { agencia, role, usuario } = toRefs(props);
                             <i class="fas fa-plus"></i> Nuevo
                         </button>                        
                     </div>
+                    <div class="col">
+                        <button  type="button" class="btn btn-info" @click.prevent="nuevo">
+                            <i class="fas fa-store"></i> Negocio
+                        </button>                          
+                    </div>
                     <div class="col-md-2 mb-1">
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Mostrar</span>
@@ -231,14 +236,14 @@ const { agencia, role, usuario } = toRefs(props);
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Buscar</span>
                             <input class="form-control" placeholder="Ingrese nombre, código ciiu" type="text" v-model="dato.buscar"
                                 @change="buscar" />
                         </div>
                     </div>
-                    <div class="col-md-4 mb-1">
+                    <div class="col-md-3 mb-1">
                         <nav>
                             <ul class="pagination">
                                 <li v-if="clientes.current_page >= 2" class="page-item">

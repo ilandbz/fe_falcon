@@ -255,6 +255,16 @@ const form = ref({
         id:'',
         estado:'',
     })
+    const datoImpresiones=ref({
+        credito_id: '',
+        tipo: '',
+        url:'',
+    });
+    const limpiarDatosImpresiones = () => {
+        datoImpresiones.value.credito_id = '';
+        datoImpresiones.value.tipo = '';
+        datoImpresiones.value.url = '';
+    }
     const enviar=(id)=>{
         validarEnvio(id)
     };
@@ -455,10 +465,11 @@ const form = ref({
     }
     const archivos=async(id)=>{
        await validarEvaluacionAsesor(id)
-       if(respuesta.value.ok==1){
-           buscarCredito(id)
-           openModal('#modalimpresiones')
-           document.getElementById("modalimpresionesLabel").innerHTML = 'Evaluacion Credito';        
+        if(respuesta.value.ok==1){
+            limpiarDatosImpresiones();
+            datoImpresiones.value.credito_id = id;
+            openModal('#modalimpresiones')
+            document.getElementById("modalimpresionesLabel").innerHTML = 'Evaluacion Credito';        
        }else{
             Swal.fire("Falta evaluar");
         }  
@@ -695,5 +706,5 @@ const form = ref({
     :formPerdidas="formPerdidas"
     :formPropuesta="formPropuesta"
     @buscarCredito="buscarCredito"></EvaluacionForm>
-    <FormImpresiones :credito="credito"></FormImpresiones>
+    <FormImpresiones :form="datoImpresiones"></FormImpresiones>
 </template>

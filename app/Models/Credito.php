@@ -47,6 +47,10 @@ class Credito extends Model
     {
         return $this->hasOne(AnalisisCualitativo::class, 'credito_id');
     }
+    public function desembolso(): HasOne
+    {
+        return $this->hasOne(Desembolso::class, 'credito_id');
+    }
     public function balance(): HasOne
     {
         return $this->hasOne(Balance::class, 'credito_id');

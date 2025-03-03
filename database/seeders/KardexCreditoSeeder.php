@@ -38,16 +38,26 @@ class KardexCreditoSeeder extends Seeder
                 extract($data);
             }
             $credito = Credito::where('id', $idsolicitud)->first();
+            
             if($credito){
-                $fechahora = Carbon::parse($fecha_hora_reg);
+                if ($fecha_hora_reg == '0000-00-00 00:00:00' || empty($fecha_hora_reg)) {
+                    // Si la fecha es inválida, usa '2000-01-01 00:00:00'
+                    $fecha = '2000-01-01';
+                    $hora = '00:00:00';
+                } else {
+                    // Si la fecha es válida, conviértela correctamente
+                    $fechahora = Carbon::parse($fecha_hora_reg);
+                    $fecha = $fechahora->toDateString();
+                    $hora = $fechahora->toTimeString();
+                }
                 $kardex = KardexCredito::firstOrCreate(
                     [
                         'credito_id' => $idsolicitud,
                         'nro'        => $nro,
                     ],
                     [
-                        'fecha'         => $fechahora->toDateString(),
-                        'hora'          => $fechahora->toTimeString(),
+                        'fecha'         => $fecha,
+                        'hora'          =>  $hora,
                         'montopagado'   => $montopagado,
                         'user_id'       => User::where('name', $idusuario)->value('id'),
                         'mediopago'     => $mediopago
