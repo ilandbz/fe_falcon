@@ -138,6 +138,8 @@ Route::group(['prefix' => 'analisis-cualitativo', 'middleware' => 'auth'], funct
     Route::post('guardar', [AnalisisCualitativoController::class, 'store']);
     Route::get('mostrar-analisis-cualitativo', [AnalisisCualitativoController::class, 'show']);
 });
+
+
 //evaluacion gerente
 Route::group(['prefix' => 'evaluacion-gerente', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [EvaluacionController::class, 'update']);

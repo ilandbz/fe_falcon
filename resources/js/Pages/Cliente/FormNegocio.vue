@@ -7,7 +7,7 @@ import ClientesSearch from '@/Components/ClientesSearch.vue'
 import useUsuario from '@/Composables/Usuario.js';
 import useTipoActividad from '@/Composables/TipoActividad.js';
 import { onlyNumbers } from '@/Helpers'
-const { hideModal, Toast, openModal, Swal } = useHelper();
+const { hideModal, Toast, openModal, Swal, buscarEntidad, entidad } = useHelper();
 
 const props = defineProps({
     form: Object,
@@ -81,11 +81,6 @@ const examinarClientes = ()=>{
     document.getElementById("modalClienteLabel").innerHTML = 'Buscar Cliente';
     openModal('#modalCliente')
 }
-const cambiarTipo=()=>{
-    if(form.value.tipo=='Paralelo'){
-        form.value.creditos_seleccionados=[]
-    }
-}
 const guardar = () => {
     crud[form.value.estadoCrud]();
 };
@@ -99,32 +94,14 @@ const buscarCliente = async(dni) =>{
     form.value.cliente_id=cliente.value.id
     vigentes.value = cliente.value.creditos
 }
-const listaAsesores = async()=>{
-    await obtenerUsuariosTipoAgencia(5, 0)
-}
-const cambiarFuente = () =>{
-    if(form.value.fuenterecursos=='PROPIO'){
-        form.value.producto='CAPITAL'
-    }else{
-        form.value.producto='CREDI-INVERSION'
-    }
-}
-const activoFrecuencia = ref(true);
-const activoPlazo = ref(true);
 
-const cambiarProducto=()=>{
-    if(form.value.producto=='CREDI-6' || form.value.producto=='CREDI-6/CREDI-INVERSION'){
-        activoPlazo.value=false
-        activoFrecuencia.value=false
-        form.value.frecuencia = 'DIARIO'
-        form.value.plazo = 20
-	}else{
-        if(form.value.producto=='CONFIO EN TI'){
-            form.value.plazo = 30
-        }
-		activoPlazo.value=true
-        activoFrecuencia.value=true
-	}
+
+const busarRuc= async(ruc)=>{
+    let formData = new FormData();
+    formData.append('tipo', 'ruc');
+    formData.append('numero', ruc);
+    await buscarEntidad(formData)
+    form.value.razonsocial=entidad.value.razonSocial
 }
 onMounted(() => {
     listaTipoActividades()
@@ -164,7 +141,7 @@ onMounted(() => {
                         <div class="mb-3 d-flex gap-3">
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <input type="text" class="form-control form-control-sm" v-model="form.ruc" @keypress="onlyNumbers">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.ruc" @keypress="onlyNumbers" placeholder="RUC" @change="busarRuc(form.ruc)">
                                     <label for="ruc">RUC</label>
                                 </div>
                                 <div class="invalid-feedback" v-for="error in form.errors.ruc" :key="error">
@@ -194,11 +171,11 @@ onMounted(() => {
                         <div class="mb-3 d-flex gap-3">
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <select class="form-select" id="usuario" aria-label="Floating" v-model="form.tipo_actividad_id">
+                                    <select class="form-select" aria-label="Floating" v-model="form.tipo_actividad_id">
                                         <option selected disabled value="">Seleccione</option>
                                         <option v-for="tipoactividad in tiposActividades" :value="tipoactividad.id" :key="tipoactividad.id">{{ tipoactividad.nombre }}</option>
                                     </select>
-                                    <label for="usuario">Tipo Actividad</label>
+                                    <label for="tipoactividad">Tipo Actividad</label>
                                 </div>
                                 <div class="invalid-feedback" v-for="error in form.errors.tipo_actividad_id" :key="error">
                                     {{ error }}
