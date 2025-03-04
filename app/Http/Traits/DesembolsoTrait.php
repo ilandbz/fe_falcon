@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 
 trait DesembolsoTrait
 {
-
-
     function generarCalendarioPagos(Request $request)
     {
         setlocale(LC_TIME, 'es_ES.UTF-8');

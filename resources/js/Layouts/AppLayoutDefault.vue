@@ -46,8 +46,6 @@ onUnmounted(() => {
     window.removeEventListener('click', resetearTemporizador);
 });
 
-
-
 </script>
 <template>
     <nav-bar :menus="menus"></nav-bar>
