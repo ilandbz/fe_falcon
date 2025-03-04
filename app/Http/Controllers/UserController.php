@@ -155,38 +155,57 @@ class UserController extends Controller
     }
 
     public function mostrarDatoUsuario(Request $request) {
-        $usuario=User::with(
-            'roles' ,
-            'agencias'
-            )->where('id',$request->id)->first();
+        $usuario = User::with([
+            'roles',
+            'agencias',
+            'persona',
+        ])->where('id', $request->id)->first();
+    
+        if (!$usuario) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
+    
         $menu = [];
-        $roles = $usuario->roles;
+        $roles = $usuario->roles->makeHidden('pivot'); // Oculta pivot de roles
         $agencia = $usuario->agencias->first();
+    
+        // Ocultar created_at, updated_at y pivot del usuario
         $usuario->setAttribute('agencia', $agencia);
-        if($roles->count()==1){
+        $usuario->makeHidden(['created_at', 'updated_at', 'pivot']);
+    
+        if ($agencia) {
+            $agencia->makeHidden(['created_at', 'updated_at', 'pivot']);
+        }
+    
+        if ($roles->count() == 1) {
             $role = $roles->first();
             $usuario->setAttribute('role', $role);
+            $role->makeHidden(['created_at', 'updated_at', 'pivot']);
+    
             $menusPorRol = GrupoMenu::with(['menus' => function ($query) use ($role) {
                 $query->select('id', 'nombre', 'slug', 'icono', 'grupo_id')
-                      ->whereHas('roles', function ($roleQuery) use ($role) {
-                          $roleQuery->where('roles.id', $role->id);
-                      });
+                    ->whereHas('roles', function ($roleQuery) use ($role) {
+                        $roleQuery->where('roles.id', $role->id);
+                    });
             }])
             ->whereHas('menus.roles', function ($query) use ($role) {
                 $query->where('roles.id', $role->id);
             })
             ->get();
+    
             $menu = array_merge($menu, $menusPorRol->toArray());
+    
             return response()->json([
                 'usuario' => $usuario,
                 'menus' => $menu,
-            ],200);           
-        }else{
+            ], 200);
+        } else {
             return response()->json([
                 'usuario' => $usuario,
-            ],200);     
+            ], 200);
         }
     }
+    
     public function obtenerMenusPorRole(Request $request){
         $menu = [];
         $role = Role::where('id',$request->role_id)->first();

@@ -27,6 +27,7 @@ class Credito extends Model
         'tasainteres',
         'total',
         'costomora',
+        'mencion',
     ];
     public function cliente(): BelongsTo
     {

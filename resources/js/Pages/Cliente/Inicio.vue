@@ -4,6 +4,7 @@
   import useHelper from '@/Helpers';  
   import useCliente from '@/Composables/Cliente.js';
   import ClienteForm from './Form.vue'
+  import FormNegocio from './FormNegocio.vue';
   const props = defineProps({
     agencia: Object,
     role: Object,
@@ -67,6 +68,35 @@ const { agencia, role, usuario } = toRefs(props);
         estadoCrud: '',
         errors: []
     });
+    const formNegocio=ref({
+        cliente_id : '',
+        razonsocial : '',
+        dni_cliente : '',
+        ruc : '',
+        tel_cel : '',
+        tipo_actividad_id : '',
+        descripcion : '',
+        inicioactividad : '',
+        ubicacion_id : '',
+        errors:[],
+    });
+    const limpiarFormNegocio=()=>{
+        formNegocio.value.cliente_id = '';
+        formNegocio.value.razonsocial = '';
+        formNegocio.value.ruc = '';
+        formNegocio.value.dni_cliente = '';
+        formNegocio.value.tel_cel = '';
+        formNegocio.value.tipo_actividad_id = '';
+        formNegocio.value.descripcion = '';
+        formNegocio.value.inicioactividad = '';
+        formNegocio.value.ubicacion_id = '';
+        formNegocio.value.errors =[];
+    };
+    const negocio=()=>{
+        limpiarFormNegocio()
+        document.getElementById("modalNegocioLabel").innerHTML = 'Editar Negocio';
+        openModal('#modalNegocio')
+    }
     const limpiar = () => {
         form.value.id = '';
         form.value.dni = '';
@@ -110,7 +140,6 @@ const { agencia, role, usuario } = toRefs(props);
             form.value.tipo_trabajador=cliente.value.persona.tipo_trabajador;
             form.value.ocupacion=cliente.value.persona.ocupacion;
             form.value.institucion_lab=cliente.value.persona.institucion_lab;
-            
             form.value.agencia_id = cliente.value.agencia_id;
             form.value.usuario_id = cliente.value.usuario_id;
             form.value.usuario_name = cliente.value.usuario.name;
@@ -139,6 +168,7 @@ const { agencia, role, usuario } = toRefs(props);
         dato.value.page= page
         await obtenerClientes(dato.value)
     }
+
     const eliminar = (id) => {
         Swal.fire({
             title: '¿Estás seguro de Eliminar?',
@@ -219,7 +249,7 @@ const { agencia, role, usuario } = toRefs(props);
                         </button>                        
                     </div>
                     <div class="col">
-                        <button  type="button" class="btn btn-info" @click.prevent="nuevo">
+                        <button  type="button" class="btn btn-info" @click.prevent="negocio()">
                             <i class="fas fa-store"></i> Negocio
                         </button>                          
                     </div>
@@ -382,4 +412,5 @@ const { agencia, role, usuario } = toRefs(props);
       </div>
     </div>
     <ClienteForm :form="form" @onListar="listarClientes" :currentPage="clientes.current_page"></ClienteForm>
+    <FormNegocio :form="formNegocio"></FormNegocio>
 </template>

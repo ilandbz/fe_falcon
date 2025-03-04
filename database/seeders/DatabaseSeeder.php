@@ -19,23 +19,22 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // FeriadoSeeder::class,
-            // RoleSeeder::class,
-            // AgenciaSeeder::class,
-            // GrupoMenuSeeder::class,
-            // MenuSeeder::class,
-            // UbigeoSeeder::class,
-            // UbicacionSeeder::class,
-            // PersonaSeeder::class,
-            //ConyugueSeeder::class,
-            //UserSeeder::class,
-            // TipoEntidadSeeder::class,
-            // TipoGerenteSeeder::class,
-            // TipoActivoSeeder::class,
-            // TipoActividadSeeder::class,
-            // ProfesionSeeder::class,
-            //ClienteSeeder::class,
-
+            FeriadoSeeder::class,
+            RoleSeeder::class,
+            AgenciaSeeder::class,
+            GrupoMenuSeeder::class,
+            MenuSeeder::class,
+            UbigeoSeeder::class,
+            UbicacionSeeder::class,
+            PersonaSeeder::class,
+            ConyugueSeeder::class,
+            UserSeeder::class,
+            TipoEntidadSeeder::class,
+            TipoGerenteSeeder::class,
+            TipoActivoSeeder::class,
+            TipoActividadSeeder::class,
+            ProfesionSeeder::class,
+            ClienteSeeder::class,
             CreditoSeeder::class,
             DesembolsoSeeder::class,
             DetCalendarioPagosSeeder::class,
@@ -46,9 +45,7 @@ class DatabaseSeeder extends Seeder
             PerdidaGananciaSeeder::class,
             PropuestaCreditoSeeder::class,
             DetBalanceSeeder::class,
-            //CostoMoraSeeder::class,
-
-            
+            CostoMoraSeeder::class,           
             SeguroDesgravamenSeeder::class,
         ]);
     }

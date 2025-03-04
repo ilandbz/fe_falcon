@@ -29,7 +29,7 @@ return new class extends Migration
             $table->decimal('tasainteres', 5, 2)->default(0.00);
             $table->decimal('total', 9, 2)->default(0.00);
             $table->decimal('costomora', 5, 2)->default(0.00);
-            $table->string('mencion')->comment('PRINCIPAL, PARALELO, CREDI-INVERSION');
+            $table->string('mencion')->default('PRINCIPAL')->comment('PRINCIPAL, PARALELO, CREDI-INVERSION');
             $table->timestamps();
         });
     }

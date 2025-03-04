@@ -17,6 +17,8 @@ use App\Http\Controllers\ProfesionController;
 use App\Http\Controllers\PropuestaCreditoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TesoreriaController;
+use App\Http\Controllers\TipoActividadController;
+use App\Http\Controllers\TipoActivoController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaPGController;
@@ -161,7 +163,12 @@ Route::group(['prefix' => 'desembolso', 'middleware' => 'auth'], function () {
     Route::post('cancelar-credito', [DesembolsoController::class, 'cancelarCredito']);
     Route::post('generar-pdf', [DesembolsoController::class, 'generarPDF']);
 });
-
+//tipoactividades
+Route::group(['prefix' => 'tipo-actividad', 'middleware' => 'auth'], function () {
+    Route::post('eliminar', [TipoActividadController::class, 'destroy']);
+    Route::get('mostrar', [TipoActividadController::class, 'show']);
+    Route::get('todos', [TipoActividadController::class, 'todos']);
+});
 //tesoreria
 Route::group(['prefix' => 'tesoreria', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [TesoreriaController::class, 'update']);

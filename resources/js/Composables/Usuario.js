@@ -5,7 +5,7 @@ export default function useUsuario() {
     const usuarios = ref([])
     const errors = ref('')
     const usuario = ref({})
-    const carpetaFotos =  '/storage/fotos/';
+    const carpetaFotos =  '/storage/fotos/usuarios';
     const respuesta = ref([])
 
     const obtenerUsuario = async(id) => {

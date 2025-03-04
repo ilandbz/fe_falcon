@@ -15,7 +15,7 @@ class Negocio extends Model
         'tipo_actividad_id',
         'descripcion',
         'inicioactividad',
-        'ubicacion_id'
+        'ubicacion_id',
     ];
     public function cliente(): BelongsTo
     {

@@ -1,0 +1,238 @@
+<script setup>
+import { toRefs, onMounted, ref } from 'vue';
+import useCredito from '@/Composables/Credito.js';
+import useCliente from '@/Composables/Cliente.js';
+import useHelper from '@/Helpers';  
+import ClientesSearch from '@/Components/ClientesSearch.vue'
+import useUsuario from '@/Composables/Usuario.js';
+import useTipoActividad from '@/Composables/TipoActividad.js';
+import { onlyNumbers } from '@/Helpers'
+const { hideModal, Toast, openModal, Swal } = useHelper();
+
+const props = defineProps({
+    form: Object,
+    currentPage: Number,
+});
+const vigentes = ref([]);
+const { form, currentPage } = toRefs(props);
+const {
+    usuarios, obtenerUsuariosTipoAgencia
+} = useUsuario();
+
+const {
+    tiposActividades, listaTipoActividades
+} = useTipoActividad();
+const {
+    errors, respuesta, agregarCredito, actualizarCredito,
+    listaTiposCreditos, tiposCreditos
+} = useCredito();
+const {
+    obtenerClientePorDni, cliente
+} = useCliente();
+const emit = defineEmits(['onListar', 'evaluar']);
+const crud = {
+    'nuevo': async () => {
+        await agregarCredito(form.value);
+        form.value.errors = [];
+        if (errors.value) {
+            form.value.errors = errors.value;
+        }
+        if (respuesta.value.ok == 1) {
+            form.value.errors = [];
+            hideModal('#modalcredito');
+            Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
+            Swal.fire({
+                title: "<strong>CREDITO</strong>",
+                icon: "info",
+                html: `¿DESEA REALIZAR LA EVALUACION?`,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: `<i class="fa fa-thumbs-up"></i> SI!`,
+                confirmButtonAriaLabel: "SI!",
+                cancelButtonText: `<i class="fa fa-thumbs-down"></i> NO!`,
+                cancelButtonAriaLabel: "NO!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    emit('evaluar', respuesta.value.credito_id);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    console.log("Usuario canceló la evaluación.");
+                }
+            });
+            emit('onListar', currentPage.value);
+        }
+    },
+    'editar': async () => {
+        await actualizarCredito(form.value);
+        form.value.errors = [];
+        if (errors.value) {
+            form.value.errors = errors.value;
+        }
+        if (respuesta.value.ok == 1) {
+            form.value.errors = [];
+            hideModal('#modalcredito');
+            Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
+            emit('onListar', currentPage.value);
+        }
+    }
+};
+const examinarClientes = ()=>{
+    document.getElementById("modalClienteLabel").innerHTML = 'Buscar Cliente';
+    openModal('#modalCliente')
+}
+const cambiarTipo=()=>{
+    if(form.value.tipo=='Paralelo'){
+        form.value.creditos_seleccionados=[]
+    }
+}
+const guardar = () => {
+    crud[form.value.estadoCrud]();
+};
+const buscarCliente = async(dni) =>{
+    vigentes.value=[]
+    form.value.dni_cliente=dni
+    await obtenerClientePorDni(dni)
+    form.value.apenom = cliente.value.persona.apenom
+    await listaTiposCreditos(cliente.value.id)
+    form.value.tipo = tiposCreditos.value[0]
+    form.value.cliente_id=cliente.value.id
+    vigentes.value = cliente.value.creditos
+}
+const listaAsesores = async()=>{
+    await obtenerUsuariosTipoAgencia(5, 0)
+}
+const cambiarFuente = () =>{
+    if(form.value.fuenterecursos=='PROPIO'){
+        form.value.producto='CAPITAL'
+    }else{
+        form.value.producto='CREDI-INVERSION'
+    }
+}
+const activoFrecuencia = ref(true);
+const activoPlazo = ref(true);
+
+const cambiarProducto=()=>{
+    if(form.value.producto=='CREDI-6' || form.value.producto=='CREDI-6/CREDI-INVERSION'){
+        activoPlazo.value=false
+        activoFrecuencia.value=false
+        form.value.frecuencia = 'DIARIO'
+        form.value.plazo = 20
+	}else{
+        if(form.value.producto=='CONFIO EN TI'){
+            form.value.plazo = 30
+        }
+		activoPlazo.value=true
+        activoFrecuencia.value=true
+	}
+}
+onMounted(() => {
+    listaTipoActividades()
+});
+</script>
+
+<template>
+    <form @submit.prevent="guardar">
+        <div class="modal fade" id="modalNegocio" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-1" id="modalNegocioLabel">Registrar Crédito</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="examinarClientes">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.dni_cliente" @keypress="onlyNumbers"
+                                    @change="buscarCliente(form.dni_cliente)"
+                                    @keyup.enter="buscarCliente(form.dni_cliente)" placeholder="DNI Cliente">
+                                    <label for="floatingInputGroup1">DNI Cliente</label>
+                                </div>
+                                <span class="input-group-text">{{ form.apenom }}</span>
+                                <div class="invalid-feedback" v-for="error in form.errors.dni_cliente" :key="error">
+                                    {{ error }}
+                                </div>  
+                                <div class="invalid-feedback" v-for="error in form.errors.cliente_id" :key="error">
+                                    {{ error }}
+                                </div>                                                                    
+                            </div>  
+                        </div>
+                        <div class="mb-3 d-flex gap-3">
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.ruc" @keypress="onlyNumbers">
+                                    <label for="ruc">RUC</label>
+                                </div>
+                                <div class="invalid-feedback" v-for="error in form.errors.ruc" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.razonsocial">
+                                    <label for="razonsocial">Razon Social</label>
+                                </div>
+                                <div class="invalid-feedback" v-for="error in form.errors.razonsocial" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.tel_cel" @keypress="onlyNumbers">
+                                    <label for="tel_cel">Telefono</label>
+                                </div>
+                                <div class="invalid-feedback" v-for="error in form.errors.tel_cel" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="mb-3 d-flex gap-3">
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <select class="form-select" id="usuario" aria-label="Floating" v-model="form.tipo_actividad_id">
+                                        <option selected disabled value="">Seleccione</option>
+                                        <option v-for="tipoactividad in tiposActividades" :value="tipoactividad.id" :key="tipoactividad.id">{{ tipoactividad.nombre }}</option>
+                                    </select>
+                                    <label for="usuario">Tipo Actividad</label>
+                                </div>
+                                <div class="invalid-feedback" v-for="error in form.errors.tipo_actividad_id" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.descripcion">
+                                    <label for="descripcion">Descripcion</label>
+                                </div>
+                                <div class="invalid-feedback" v-for="error in form.errors.descripcion" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                            <div class="input-group has-validation input-group-sm pb-1">
+                                <div class="form-floating is-invalid">
+                                    <input type="date" class="form-control form-control-sm" v-model="form.inicioactividad">
+                                    <label for="inicioactividad">Inicio Actividad</label>
+                                </div>
+                                <div class="invalid-feedback" v-for="error in form.errors.inicioactividad" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>
+                                             
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <ClientesSearch @cargarPersona="buscarCliente"></ClientesSearch>
+
+</template>
