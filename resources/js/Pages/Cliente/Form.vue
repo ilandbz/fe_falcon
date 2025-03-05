@@ -209,7 +209,7 @@ const crud = {
         }
         if(respuesta.value.ok==1){
             form.value.errors = []
-            hideModal('#modalCliente')
+            hideModal('#modalClienteForm')
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
             emit('onListar', currentPage.value)
         }
@@ -264,7 +264,7 @@ const crud = {
         }
         if(respuesta.value.ok==1){
             form.value.errors = []
-            hideModal('#modalCliente')
+            hideModal('#modalClienteForm')
             Toast.fire({icon:'success', title:respuesta.value.mensaje})
             emit('onListar', currentPage.value)
         }
@@ -372,12 +372,12 @@ onMounted(() => {
 </script>
 <template>
     <form @submit.prevent="guardar">
-        <div class="modal fade" id="modalCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="modalClienteLabel">
+        <div class="modal fade" id="modalClienteForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="modalClienteFormLabel">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-1" id="modalClienteLabel">Modal title</h1>
+                        <h1 class="modal-title fs-1" id="modalClienteFormLabel">Modal title</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

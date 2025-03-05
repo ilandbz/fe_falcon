@@ -3,6 +3,7 @@
   import { defineTitle } from '@/Helpers';
   import useHelper from '@/Helpers';  
   import useCliente from '@/Composables/Cliente.js';
+  import useNegocio from '@/Composables/Negocio.js';
   import ClienteForm from './Form.vue'
   import FormNegocio from './FormNegocio.vue';
   const props = defineProps({
@@ -12,12 +13,17 @@
 });
 
 const { agencia, role, usuario } = toRefs(props);
-    const { openModal, Toast, Swal } = useHelper();
-    const {
-        clientes, errors, cliente, respuesta,
-        obtenerClientes, obtenerCliente, eliminarCliente
-        
-    } = useCliente();
+const { openModal, Toast, Swal } = useHelper();
+const {
+    clientes, errors, cliente, respuesta,
+    obtenerClientes, obtenerCliente, eliminarCliente
+} = useCliente();
+const {
+    negocios, listaNegociosPorCliente
+} = useNegocio();
+
+
+
     const dato = ref({
         page:'',
         buscar:'',
@@ -154,14 +160,14 @@ const { agencia, role, usuario } = toRefs(props);
         limpiar();
         obtenerDatos(id)
         form.value.estadoCrud = 'editar'
-        document.getElementById("modalClienteLabel").innerHTML = 'Editar Cliente';
-        openModal('#modalCliente')
+        document.getElementById("modalClienteFormLabel").innerHTML = 'Editar Cliente';
+        openModal('#modalClienteForm')
     }
     const nuevo = () => {
         limpiar()
         form.value.estadoCrud = 'nuevo'
-        openModal('#modalCliente')
-        document.getElementById("modalClienteLabel").innerHTML = 'Nuevo Cliente';
+        openModal('#modalClienteForm')
+        document.getElementById("modalClienteFormLabel").innerHTML = 'Nuevo Cliente';
         //titulo.textContent = 'Editar Datos Personales';
     }
     const listarClientes = async(page=1) => {

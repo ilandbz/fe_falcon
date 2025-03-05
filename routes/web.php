@@ -1,10 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgenciaController;
-use App\Http\Controllers\CreditoController;
-use App\Http\Controllers\DesembolsoController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +12,6 @@ use Inertia\Inertia;
 
 
 Route::get('/', function () {
-
     return view('app');
 });
 Route::post('/login',[LoginController::class,'login']);

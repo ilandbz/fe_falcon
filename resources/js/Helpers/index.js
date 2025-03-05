@@ -1,5 +1,4 @@
-import { inject, ref } from 'vue';
-import axios from 'axios'
+import { inject } from 'vue';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone  from 'dayjs/plugin/timezone';
@@ -139,11 +138,7 @@ export default function useHelper() {
         .replace(/\-\-+/g, '-')
     }
 
-    const entidad = ref({})
-    const buscarEntidad = async(data)=>{
-        let respuesta = await axios.post('api/consulta', data)
-        entidad.value = respuesta.data   
-    }
+
 
     return {
         Swal, Toast, openModal, hideModal, soloNumeros, calcularEdad, formatoFecha, meses, slugify, buscarEntidad, entidad

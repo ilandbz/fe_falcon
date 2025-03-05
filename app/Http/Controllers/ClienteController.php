@@ -113,7 +113,8 @@ class ClienteController extends Controller
             'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
             'creditos' => function ($query) {
                 $query->where('estado', 'DESEMBOLSADO');
-            }
+            },
+            'negocios',
         ])->first();
     }
     public function update(UpdateClienteRequest $request)

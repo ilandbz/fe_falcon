@@ -1,96 +1,83 @@
 <script setup>
 import { toRefs, onMounted, ref } from 'vue';
-import useCredito from '@/Composables/Credito.js';
 import useCliente from '@/Composables/Cliente.js';
 import useHelper from '@/Helpers';  
 import ClientesSearch from '@/Components/ClientesSearch.vue'
 import useUsuario from '@/Composables/Usuario.js';
+import useNegocio from '@/Composables/Negocio.js';
+import useEntidad from '@/Composables/Entidad.js';
 import useTipoActividad from '@/Composables/TipoActividad.js';
 import { onlyNumbers } from '@/Helpers'
-const { hideModal, Toast, openModal, Swal, buscarEntidad, entidad } = useHelper();
+const { hideModal, Toast, openModal, Swal } = useHelper();
 
 const props = defineProps({
     form: Object,
     currentPage: Number,
 });
-const vigentes = ref([]);
+const negociosPosee = ref([]);
 const { form, currentPage } = toRefs(props);
 const {
     usuarios, obtenerUsuariosTipoAgencia
 } = useUsuario();
 
 const {
+    buscarEntidad, entidad
+} = useEntidad();
+
+const {
+    negocios, listaNegociosPorCliente
+} = useNegocio();
+const {
     tiposActividades, listaTipoActividades
 } = useTipoActividad();
-const {
-    errors, respuesta, agregarCredito, actualizarCredito,
-    listaTiposCreditos, tiposCreditos
-} = useCredito();
+
 const {
     obtenerClientePorDni, cliente
 } = useCliente();
 const emit = defineEmits(['onListar', 'evaluar']);
-const crud = {
-    'nuevo': async () => {
-        await agregarCredito(form.value);
-        form.value.errors = [];
-        if (errors.value) {
-            form.value.errors = errors.value;
-        }
-        if (respuesta.value.ok == 1) {
-            form.value.errors = [];
-            hideModal('#modalcredito');
-            Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
-            Swal.fire({
-                title: "<strong>CREDITO</strong>",
-                icon: "info",
-                html: `¿DESEA REALIZAR LA EVALUACION?`,
-                showCloseButton: true,
-                showCancelButton: true,
-                focusConfirm: false,
-                confirmButtonText: `<i class="fa fa-thumbs-up"></i> SI!`,
-                confirmButtonAriaLabel: "SI!",
-                cancelButtonText: `<i class="fa fa-thumbs-down"></i> NO!`,
-                cancelButtonAriaLabel: "NO!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    
-                    emit('evaluar', respuesta.value.credito_id);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    console.log("Usuario canceló la evaluación.");
-                }
-            });
-            emit('onListar', currentPage.value);
-        }
-    },
-    'editar': async () => {
-        await actualizarCredito(form.value);
-        form.value.errors = [];
-        if (errors.value) {
-            form.value.errors = errors.value;
-        }
-        if (respuesta.value.ok == 1) {
-            form.value.errors = [];
-            hideModal('#modalcredito');
-            Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
-            emit('onListar', currentPage.value);
-        }
-    }
-};
 const examinarClientes = ()=>{
     document.getElementById("modalClienteLabel").innerHTML = 'Buscar Cliente';
     openModal('#modalCliente')
 }
-const guardar = () => {
-    crud[form.value.estadoCrud]();
+const guardar = async () => {
+    await agregarCredito(form.value);
+    form.value.errors = [];
+    if (errors.value) {
+        form.value.errors = errors.value;
+    }
+    if (respuesta.value.ok == 1) {
+        form.value.errors = [];
+        hideModal('#modalcredito');
+        Toast.fire({ icon: 'success', title: respuesta.value.mensaje });
+        Swal.fire({
+            title: "<strong>CREDITO</strong>",
+            icon: "info",
+            html: `¿DESEA REALIZAR LA EVALUACION?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: `<i class="fa fa-thumbs-up"></i> SI!`,
+            confirmButtonAriaLabel: "SI!",
+            cancelButtonText: `<i class="fa fa-thumbs-down"></i> NO!`,
+            cancelButtonAriaLabel: "NO!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                emit('evaluar', respuesta.value.credito_id);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                console.log("Usuario canceló la evaluación.");
+            }
+        });
+        emit('onListar', currentPage.value);
+    }
 };
 const buscarCliente = async(dni) =>{
     vigentes.value=[]
     form.value.dni_cliente=dni
     await obtenerClientePorDni(dni)
+    //await listaNegociosPorCliente()
     form.value.apenom = cliente.value.persona.apenom
-    await listaTiposCreditos(cliente.value.id)
-    form.value.tipo = tiposCreditos.value[0]
+
     form.value.cliente_id=cliente.value.id
     vigentes.value = cliente.value.creditos
 }
@@ -150,7 +137,7 @@ onMounted(() => {
                             </div>
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <input type="text" class="form-control form-control-sm" v-model="form.razonsocial">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.razonsocial" placeholder="Razon Social">
                                     <label for="razonsocial">Razon Social</label>
                                 </div>
                                 <div class="invalid-feedback" v-for="error in form.errors.razonsocial" :key="error">
@@ -159,7 +146,7 @@ onMounted(() => {
                             </div>
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <input type="text" class="form-control form-control-sm" v-model="form.tel_cel" @keypress="onlyNumbers">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.tel_cel" @keypress="onlyNumbers" placeholder="Telefono">
                                     <label for="tel_cel">Telefono</label>
                                 </div>
                                 <div class="invalid-feedback" v-for="error in form.errors.tel_cel" :key="error">
@@ -183,7 +170,7 @@ onMounted(() => {
                             </div>
                             <div class="input-group has-validation input-group-sm pb-1">
                                 <div class="form-floating is-invalid">
-                                    <input type="text" class="form-control form-control-sm" v-model="form.descripcion">
+                                    <input type="text" class="form-control form-control-sm" v-model="form.descripcion" placeholder="Descripcion">
                                     <label for="descripcion">Descripcion</label>
                                 </div>
                                 <div class="invalid-feedback" v-for="error in form.errors.descripcion" :key="error">

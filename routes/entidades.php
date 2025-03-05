@@ -11,6 +11,7 @@ use App\Http\Controllers\GastoFamiliarPGController;
 use App\Http\Controllers\GastoNegocioPGController;
 use App\Http\Controllers\GrupoMenuController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\PerdidaGananciaController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ProfesionController;
@@ -218,5 +219,12 @@ Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
 });
 
 
-
+//NEGOCIO
+Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
+    Route::post('actualizar', [NegocioController::class, 'update']);
+    Route::post('eliminar', [NegocioController::class, 'destroy']);
+    Route::post('guardar', [NegocioController::class, 'store']);
+    Route::get('mostrar', [NegocioController::class, 'show']);
+    Route::get('por-cliente', [NegocioController::class, 'porCliente']);
+});
 
