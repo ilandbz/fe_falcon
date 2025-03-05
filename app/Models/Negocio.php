@@ -25,4 +25,8 @@ class Negocio extends Model
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
     }
+    public function tipo_actividad(): BelongsTo
+    {
+        return $this->belongsTo(TipoActividad::class, 'tipo_actividad_id');
+    }
 }

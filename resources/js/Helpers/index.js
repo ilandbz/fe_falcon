@@ -141,7 +141,7 @@ export default function useHelper() {
 
 
     return {
-        Swal, Toast, openModal, hideModal, soloNumeros, calcularEdad, formatoFecha, meses, slugify, buscarEntidad, entidad
+        Swal, Toast, openModal, hideModal, soloNumeros, calcularEdad, formatoFecha, meses, slugify,
     }
 
 }

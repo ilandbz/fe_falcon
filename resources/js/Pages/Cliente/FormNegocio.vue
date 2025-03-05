@@ -71,15 +71,14 @@ const guardar = async () => {
         emit('onListar', currentPage.value);
     }
 };
+
 const buscarCliente = async(dni) =>{
-    vigentes.value=[]
     form.value.dni_cliente=dni
     await obtenerClientePorDni(dni)
     //await listaNegociosPorCliente()
     form.value.apenom = cliente.value.persona.apenom
-
     form.value.cliente_id=cliente.value.id
-    vigentes.value = cliente.value.creditos
+    negociosPosee.value = cliente.value.negocios
 }
 
 
@@ -187,7 +186,48 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                                             
+                                     
+                        
+                        <div class="card" v-if="negociosPosee.length>0">
+                            <div class="card-header">Negocios que Posee</div>
+                            <div class="card-body">
+                                <div class="table-responsive small">
+                                    <table class="table table-sm small table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>NRO</th>
+                                                <th>RUC</th>
+                                                <th>RAZON SOCIAL</th>
+                                                <th>Telefono</th>
+                                                <th>Tipo Activ.</th>
+                                                <th>Descripcion</th>
+                                                <th>Inicio</th>
+                                                <th>Accion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(negocio, index) in negociosPosee" :key="negocio.id">
+                                                <td>{{ index+1 }}</td>
+                                                <td>{{ negocio.ruc }}</td>
+                                                <td>{{ negocio.razonsocial }}</td>
+                                                <td>{{ negocio.tel_cel }}</td>
+                                                <td>{{ negocio.tipo_actividad.nombre }}</td>
+                                                <td>{{ negocio.descripcion }}</td>
+                                                <td>{{ negocio.inicio_actividad }}</td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm" title="Enviar a Papelera" @click.prevent="eliminar(negocio.id)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="alert alert-danger" v-for="error in form.errors.creditos_seleccionados" :key="error">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>  
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

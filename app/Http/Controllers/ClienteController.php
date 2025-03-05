@@ -115,6 +115,7 @@ class ClienteController extends Controller
                 $query->where('estado', 'DESEMBOLSADO');
             },
             'negocios',
+            'negocios.tipo_actividad:id,nombre'
         ])->first();
     }
     public function update(UpdateClienteRequest $request)
