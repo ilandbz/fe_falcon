@@ -93,6 +93,14 @@ class MenuSeeder extends Seeder
                 'orden' => 6,
             ],
             [
+                'nombre' => 'Credito',
+                'slug' => 'gestion-creditos-asesor',
+                'icono' => 'fas fa-hand-holding-usd',
+                'padre_id' => null,
+                'grupo_id'  => GrupoMenu::where('titulo', 'Asesor')->value('id'),
+                'orden' => 6,
+            ],            
+            [
                 'nombre' => 'Habilitar Asesor',
                 'slug' => 'habilitar-asesor',
                 'icono' => 'fas fa-user-check',

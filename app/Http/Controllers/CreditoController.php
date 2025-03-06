@@ -48,7 +48,7 @@ class CreditoController extends Controller
                 CreditosCancelar::create([
                     'credito_id'            => $credito->id,
                     'credito_pagar_id'      => $fila['id'],
-                    // 'saldopagar'            => $fila['Saldo'],
+                    'saldopagar'            => $fila['Saldo'],
 
                 ]);
             }

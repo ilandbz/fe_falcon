@@ -15,6 +15,7 @@ class GrupoMenuSeeder extends Seeder
     {
         $grupos = [
             ['titulo' => 'Creditos'],
+            ['titulo' => 'Asesor'],
             ['titulo' => 'Junta'],
             ['titulo' => 'Configuracion'],
             ['titulo' => 'Caja'],

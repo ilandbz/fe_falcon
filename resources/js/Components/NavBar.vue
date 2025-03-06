@@ -36,8 +36,10 @@ const { menus } = toRefs(props);
             </div>
             <!-- parent pages--><a v-for="menu in item.menus" class="nav-link" :class="{ 'active': $route.path === '/'+menu.slug }" :href="menu.slug" role="button">
               <div class="d-flex align-items-center"><span class="nav-link-icon"><span :class="menu.icono"></span></span><span class="nav-link-text ps-1">{{ menu.nombre }} </span></div>
-            </a>            
+            </a> 
+         
           </div>
+          <br>&nbsp;<br>
         </ul>
       </div>
     </div>

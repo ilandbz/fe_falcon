@@ -8,6 +8,7 @@
   import useBalance from '@/Composables/Balance.js'; 
   import usePropuesta from '@/Composables/Propuesta.js'; 
   import CreditoForm from './Form.vue'
+  import EvaluacionForm from './FormEvaluacion.vue'
   import FormImpresiones from './FormImpresiones.vue';
   const props = defineProps({
     agencia: Object,
@@ -19,7 +20,7 @@ const { agencia, role } = toRefs(props);
 const { openModal, Toast, Swal, formatoFecha } = useHelper();
 const {
     creditos, errors, credito, respuesta,
-    obtenerCreditos, obtenerCredito, eliminarCredito,
+    obtenerCreditosEstadoAgencia, obtenerCredito, eliminarCredito,
     validarEvaluacionAsesor, cambiarEstado,
 } = useCredito();
 const {
@@ -201,8 +202,14 @@ const form = ref({
         document.getElementById("modalcreditoLabel").innerHTML = 'Nuevo credito';
         //titulo.textContent = 'Editar Datos Personales';
     }
+    const dato2=ref({
+        'estado' : '',
+        'agencia_id' : '',
+    })
     const listarCreditos = async(page=1) => {
-        await obtenerCreditos(dato.value)
+        dato.value.page= page
+        dato2.value.estado='DESEMBOLSADO'
+        await obtenerCreditosEstadoAgencia(dato.value, dato2.value)
     }
     const eliminar = (id) => {
         Swal.fire({
@@ -368,6 +375,11 @@ const form = ref({
         await obtenerPropuesta(id)
         cargarDatosEvaluacion(id)
     }
+    const evaluacion = (id)=>{
+        buscarCredito(id)
+        openModal('#modalevaluacion')
+        document.getElementById("modalevaluacionLabel").innerHTML = 'Evaluacion Credito';
+    }
     const archivos=async(id)=>{
        await validarEvaluacionAsesor(id)
         if(respuesta.value.ok==1){
@@ -422,6 +434,7 @@ const form = ref({
                         <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">Mostrar</span>
                             <select class="form-select"  v-model="dato.paginacion" @change="cambiarPaginacion">
+                                <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="20">20</option>
                                 <option value="25">25</option>
@@ -524,13 +537,21 @@ const form = ref({
                                         <td>{{ credito.agencia.nombre }}</td>
                                         <td>{{ credito.estado }}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm btn-custom" title="Editar" @click.prevent="editar(credito.id)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-danger btn-sm btn-custom" title="Eliminar" @click.prevent="eliminar(credito.id)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                            <button v-if="['PENDIENTE', 'EVALUACION', 'DESEMBOLSADO'].includes(credito.estado)" class="btn btn-success btn-sm btn-custom" title="Archivos" @click.prevent="archivos(credito.id)">
+                                            <template v-if="credito.estado === 'PENDIENTE' || credito.estado === 'OBSERVADO'">
+                                                <button class="btn btn-warning btn-sm btn-custom" title="Editar" @click.prevent="editar(credito.id)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-danger btn-sm btn-custom" title="Enviar a Papelera" @click.prevent="eliminar(credito.id, 'Temporal')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <button class="btn btn-info btn-sm btn-custom" title="Evaluar" @click.prevent="evaluacion(credito.id)">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-primary btn-sm btn-custom" title="Enviar a Gerencia" @click.prevent="enviar(credito.id)">
+                                                    <i class="fa-solid fa-paper-plane"></i>
+                                                </button>
+                                            </template>
+                                            <button v-if="credito.estado === 'PENDIENTE' || credito.estado === 'EVALUACION'" class="btn btn-success btn-sm btn-custom" title="Archivos" @click.prevent="archivos(credito.id)">
                                                 <i class="fa-solid fa-file-pdf"></i>
                                             </button>
                                         </td>
@@ -596,5 +617,12 @@ const form = ref({
     @onListar="listarCreditos"
     :currentPage="creditos.current_page"
     @evaluar="evaluacion"></CreditoForm>
+    <EvaluacionForm :formAnalisis="formAnalisis"
+    :credito="credito"
+    :analisis="analisis"
+    :formBalance="formBalance"
+    :formPerdidas="formPerdidas"
+    :formPropuesta="formPropuesta"
+    @buscarCredito="buscarCredito"></EvaluacionForm>
     <FormImpresiones :form="datoImpresiones"></FormImpresiones>
 </template>

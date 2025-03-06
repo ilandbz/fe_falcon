@@ -24,6 +24,7 @@ import Devolucion from '@/Pages/Devolucion/Inicio.vue';
 import Evaluacion from '@/Pages/Evaluacion/Inicio.vue';
 import Evaluacion2 from '@/Pages/Evaluacion2/Inicio.vue';
 import Extornar from '@/Pages/Extornar/Inicio.vue';
+import CreditosAsesor from '@/Pages/GrupoAsesor/Credito/Inicio.vue';
 const routes = [
     {
         path: '/', name:'Principal', component: Principal ,
@@ -123,6 +124,18 @@ const routes = [
         path: '/extornar-desembolso',
         name: 'Extornar',
         component: Extornar,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/extornar-desembolso',
+        name: 'Extornar',
+        component: Extornar,
+        meta: { layout: LayoutDefault }
+    },
+    {
+        path: '/gestion-creditos-asesor',
+        name: 'creditosAsesor',
+        component: CreditosAsesor,
         meta: { layout: LayoutDefault }
     },    
 ]
