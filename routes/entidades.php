@@ -220,7 +220,7 @@ Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
 
 
 //NEGOCIO
-Route::group(['prefix' => 'propuesta', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'negocio', 'middleware' => 'auth'], function () {
     Route::post('actualizar', [NegocioController::class, 'update']);
     Route::post('eliminar', [NegocioController::class, 'destroy']);
     Route::post('guardar', [NegocioController::class, 'store']);

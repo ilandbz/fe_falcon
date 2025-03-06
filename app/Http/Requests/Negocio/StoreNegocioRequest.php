@@ -26,11 +26,11 @@ class StoreNegocioRequest extends FormRequest
         return [
             'cliente_id' => 'required|integer|exists:clientes,id',
             'razonsocial' => 'required|string|max:80',
-            'ruc' => 'required|string|size:11|unique:tabla_nombre,ruc',
-            'tel_cel' => 'nullable|string|size:11',
-            'tipo_actividad_id' => 'required|integer|exists:tipo_actividades,id',
+            'tel_cel' => 'nullable|integer|digits:9',
+            'tipo_actividad_id' => 'required|integer|exists:tipo_actividads,id',
             'descripcion' => 'nullable|string|max:90',
             'inicioactividad' => 'required|date',
+            'ubicacion_id' => 'required',            
         ];
     }
 
@@ -41,7 +41,8 @@ class StoreNegocioRequest extends FormRequest
             'max' => 'Ingrese Máximo :max caracteres',
             'string' => 'Ingrese caracteres alfanuméricos',
             'number' => 'Ingrese solo numeros',
-            'unique' => 'El valor ya existe'
+            'unique' => 'El valor ya existe',
+            'digits' => 'Debe ser 9 digitos'
         ];
     }
 

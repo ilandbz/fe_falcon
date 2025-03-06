@@ -50,6 +50,10 @@
         border-color: white white white white;
       }
     } 
+    .btn-xs {
+    padding: 0.2rem 0.3rem;
+    font-size: 0.65rem;
+}
   </style>
     <script src="falcon316/assets/js/config.js"></script>
     <script src="falcon316/simplebar/simplebar.min.js"></script>

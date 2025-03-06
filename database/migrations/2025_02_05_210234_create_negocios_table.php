@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cliente_id')->constrained('clientes','id')->onDelete('cascade')->onUpdate('cascade');
             $table->string('razonsocial', 80);
-            $table->string('ruc', 11);
+            $table->string('ruc', 11)->nullable();
             $table->char('tel_cel', 11);
             $table->foreignId('tipo_actividad_id')->nullable()->constrained('tipo_actividads','id')->onDelete('set null')->onUpdate('set null');
             $table->string('descripcion', 90);

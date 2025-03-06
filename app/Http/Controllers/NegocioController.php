@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class NegocioController extends Controller
 {
     public function store(StoreNegocioRequest $request){
-        Negocio::where('id', $request->credito_id)->update([
+        Negocio::create([
             'cliente_id' => $request->cliente_id,
             'razonsocial' => $request->razonsocial,
             'ruc' => $request->ruc,
