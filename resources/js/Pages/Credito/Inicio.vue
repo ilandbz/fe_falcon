@@ -20,7 +20,7 @@ const { agencia, role } = toRefs(props);
 const { openModal, Toast, Swal, formatoFecha } = useHelper();
 const {
     creditos, errors, credito, respuesta,
-    obtenerCreditos, obtenerCredito, eliminarCredito,
+    obtenerCreditosEstadoAgencia, obtenerCredito, eliminarCredito,
     validarEvaluacionAsesor, cambiarEstado,
 } = useCredito();
 const {
@@ -202,9 +202,14 @@ const form = ref({
         document.getElementById("modalcreditoLabel").innerHTML = 'Nuevo credito';
         //titulo.textContent = 'Editar Datos Personales';
     }
+    const dato2=ref({
+        'estado' : '',
+        'agencia_id' : '',
+    })
     const listarCreditos = async(page=1) => {
         dato.value.page= page
-        await obtenerCreditos(dato.value)
+        dato2.value.estado='DESEMBOLSADO'
+        await obtenerCreditosEstadoAgencia(dato.value, dato2.value)
     }
     const eliminar = (id) => {
         Swal.fire({
@@ -295,94 +300,6 @@ const form = ref({
         }        
     }
     const cargarDatosEvaluacion = (id) => {
-        // if(analisis.value){
-        //     formAnalisis.value.credito_id = analisis.value.credito_id;
-        //     formAnalisis.value.tipogarantia = analisis.value.tipogarantia;
-        //     formAnalisis.value.cargafamiliar = analisis.value.cargafamiliar;
-        //     formAnalisis.value.riesgoedadmax = analisis.value.riesgoedadmax;
-        //     formAnalisis.value.antecedentescred = analisis.value.antecedentescred;
-        //     formAnalisis.value.recorpagoult = analisis.value.recorpagoult;
-        //     formAnalisis.value.niveldesarr = analisis.value.niveldesarr;
-        //     formAnalisis.value.tiempo_neg = analisis.value.tiempo_neg;
-        //     formAnalisis.value.control_ingegre = analisis.value.control_ingegre;
-        //     formAnalisis.value.vent_totdec = analisis.value.vent_totdec;
-        //     formAnalisis.value.compsubsector = analisis.value.compsubsector;
-        //     formAnalisis.value.totunidfamiliar = analisis.value.totunidfamiliar;
-        //     formAnalisis.value.totunidempresa = analisis.value.totunidempresa;
-        //     formAnalisis.value.total = analisis.value.total;
-        //     formAnalisis.value.estadoCrud = 'editar';
-        // }else{
-        //     formAnalisis.value.credito_id = id,
-        //     formAnalisis.value.tipogarantia = '',
-        //     formAnalisis.value.cargafamiliar = '',
-        //     formAnalisis.value.riesgoedadmax = '',
-        //     formAnalisis.value.antecedentescred = '',
-        //     formAnalisis.value.recorpagoult = '',
-        //     formAnalisis.value.niveldesarr = '',
-        //     formAnalisis.value.tiempo_neg = '',
-        //     formAnalisis.value.control_ingegre = '',
-        //     formAnalisis.value.vent_totdec = '',
-        //     formAnalisis.value.compsubsector = '',
-        //     formAnalisis.value.totunidfamiliar = '',
-        //     formAnalisis.value.totunidempresa = '',
-        //     formAnalisis.value.total = '',
-        //     formAnalisis.value.estadoCrud = 'nuevo';
-        // }
-        // if(balance.value){
-        //     formBalance.value.credito_id = balance.value.credito_id;
-        //     formBalance.value.total_activo = balance.value.total_activo;
-        //     formBalance.value.total_pasivo = balance.value.total_pasivo;
-        //     formBalance.value.patrimonio = balance.value.patrimonio;
-        //     formBalance.value.fecha = balance.value.fecha;
-        //     formBalance.value.estadoCrud = 'editar';
-        // }else{
-        //     formBalance.value.credito_id = id;
-        //     formBalance.value.total_activo = '';
-        //     formBalance.value.total_pasivo = '';
-        //     formBalance.value.patrimonio = '';
-        //     formBalance.value.fecha = '';
-        //     formBalance.value.estadoCrud = 'nuevo';
-        // }
-        // if(perdidas.value){
-        //     formPerdidas.value.credito_id = perdidas.value.credito_id;
-        //     formPerdidas.value.ventas = perdidas.value.ventas;
-        //     formPerdidas.value.costo = perdidas.value.costo;
-        //     formPerdidas.value.utilidad = perdidas.value.utilidad;
-        //     formPerdidas.value.costonegocio = perdidas.value.costonegocio;
-        //     formPerdidas.value.utiloperativa = perdidas.value.utiloperativa;
-        //     formPerdidas.value.otrosing = perdidas.value.otrosing;
-        //     formPerdidas.value.gast_fam = perdidas.value.gast_fam;
-        //     formPerdidas.value.utilidadneta = perdidas.value.utilidadneta;
-        //     formPerdidas.value.utilnetdiaria = perdidas.value.utilnetdiaria;
-        //     formPerdidas.value.estadoCrud = 'editar';
-        // }else{
-        //     formPerdidas.value.credito_id = id;
-        //     formPerdidas.value.ventas = '';
-        //     formPerdidas.value.costo = '';
-        //     formPerdidas.value.utilidad = '';
-        //     formPerdidas.value.costonegocio = '';
-        //     formPerdidas.value.utiloperativa = '';
-        //     formPerdidas.value.otrosing = '';
-        //     formPerdidas.value.gast_fam = '';
-        //     formPerdidas.value.utilidadneta = '';
-        //     formPerdidas.value.utilnetdiaria = '';
-        //     formPerdidas.value.estadoCrud = 'nuevo';
-        // }
-        // if(propuesta.value){
-        //     formPropuesta.value.credito_id = propuesta.value.credito_id;
-        //     formPropuesta.value.unidad_familiar = propuesta.value.unidad_familiar;
-        //     formPropuesta.value.experiencia_cred = propuesta.value.experiencia_cred;
-        //     formPropuesta.value.destino_prest = propuesta.value.destino_prest;
-        //     formPropuesta.value.referencias = propuesta.value.referencias;
-        //     formPropuesta.value.estadoCrud = 'editar';
-        // }else{
-        //     formPropuesta.value.credito_id = id;
-        //     formPropuesta.value.unidad_familiar = '';
-        //     formPropuesta.value.experiencia_cred = '';
-        //     formPropuesta.value.destino_prest = '';
-        //     formPropuesta.value.referencias = '';
-        //     formPropuesta.value.estadoCrud = 'nuevo';
-        // }
         asignarValores(formAnalisis, analisis.value, {
             credito_id: id,
             tipogarantia: '',
@@ -503,7 +420,7 @@ const form = ref({
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h6 class="card-title">
-                    Listado de Creditos
+                    Listado de Creditos Asesor
                 </h6>
             </div>
             <div class="card-body">
@@ -523,6 +440,7 @@ const form = ref({
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
+                                <option value="1000">1000</option>
                             </select>
                         </div>
                     </div>
@@ -589,7 +507,7 @@ const form = ref({
                                         <th>DNI</th>
                                         <th>Apellidos y Nombres</th>
                                         <th>Monto</th>
-                                        <th>Plazo</th>
+                                        <th>Mencion</th>
                                         <th>Tipo</th>
                                         <th>Fecha</th>
                                         <th>Frecuencia</th>
@@ -611,7 +529,7 @@ const form = ref({
                                         <td>{{ credito.cliente.persona.dni }}</td>
                                         <td>{{ credito.cliente.persona.apenom }}</td>
                                         <td>{{ 'S/. ' + credito.monto }}</td>
-                                        <td>{{ credito.plazo }}</td>
+                                        <td>{{ credito.mencion }}</td>
                                         <td>{{ credito.tipo }}</td>
                                         <td>{{ credito.fecha_reg }}</td>
                                         <td>{{ credito.frecuencia }}</td>

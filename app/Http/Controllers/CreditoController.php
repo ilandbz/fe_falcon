@@ -193,7 +193,7 @@ class CreditoController extends Controller
             $query->where('agencia_id', $agencia_id);
         }
     
-        return $query->orderBy('fecha_reg', 'Desc')->paginate($paginacion);
+        return $query->orderBY('cliente_id', 'ASC')->paginate($paginacion);
     }
     public function cargarEvaluacionAnterior(Request $request)
     {
