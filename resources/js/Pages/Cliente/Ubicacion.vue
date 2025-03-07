@@ -46,6 +46,7 @@ const limpiar = () => {
     form.value.id = '';
     form.value.tipovia = '';
     form.value.nombrevia = '';
+    form.value.ubigeo = '';
     form.value.nro = '';
     form.value.interior = '';
     form.value.mz = '';
@@ -75,20 +76,23 @@ const guardar = () => {
 }
 
 
-const buscarPorUbigeo=async()=>{
-    await obtenerUbigeo(form.value.ubigeo)
-    if(regUbigeo.value){
-        let distrito = registro.value
-        regUbigeo.value.distrito=distrito.nombre
-        regUbigeo.value.provincia=distrito.provincia?.nombre
-        regUbigeo.value.departamento=distrito.provincia?.departamento.nombre
-    }
+const buscarPorUbigeo=(ubigeo)=>{
+    console.log(ubigeo)
+    // await obtenerUbigeo(ubigeo)
+    // if(regUbigeo.value){
+    //     let distrito = registro.value
+    //     form.value.ubigeo=ubigeo
+    //     regUbigeo.value.distrito=distrito.nombre
+    //     regUbigeo.value.provincia=distrito.provincia?.nombre
+    //     regUbigeo.value.departamento=distrito.provincia?.departamento.nombre
+    // }
 }
 
 const buscarUbigeo = ()=>{
     document.getElementById("modalUbigeoLabel").innerHTML = 'Buscar Ubigeo';
     openModal('#modalUbigeo')
 }
+
 onMounted(() => {
 
 })
@@ -221,5 +225,5 @@ onMounted(() => {
             </div>
         </div>
     </form>
-    <UbigeoForm :form="form" :regUbigeo2="regUbigeo2"></UbigeoForm>
+    <UbigeoForm @seleccionarUbigeo="buscarPorUbigeo()"></UbigeoForm>
 </template>

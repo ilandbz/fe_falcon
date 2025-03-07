@@ -3,11 +3,12 @@ import { ref, onMounted, toRefs } from 'vue';
 import useHelper from '@/Helpers'; 
 import useUbigeo from '@/Composables/Ubigeo.js';
 const { hideModal } = useHelper();
-const props = defineProps({
-    form: Object,
-    regUbigeo2: Object
-});
-const { form, regUbigeo2 } = toRefs(props)
+// const props = defineProps({
+//     form: Object,
+//     regUbigeo2: Object
+// });
+// const { form, regUbigeo2 } = toRefs(props)
+const emit = defineEmits(['seleccionarUbigeo']);
     const {
         obtenerDistritos, distritos, errors, respuesta
     } = useUbigeo();
@@ -36,10 +37,11 @@ const { form, regUbigeo2 } = toRefs(props)
         listarDistritos(pagina)
     }
     const seleccionar=(fila)=>{
-        form.value.ubigeodomicilio=fila.ubigeo
-        regUbigeo2.value.distrito=fila.distrito
-        regUbigeo2.value.provincia=fila.provincia
-        regUbigeo2.value.departamento=fila.departamento
+        //form.value.ubigeodomicilio=fila.ubigeo
+        emit('seleccionarUbigeo', fila.ubigeo);
+        // regUbigeo2.value.distrito=fila.distrito
+        // regUbigeo2.value.provincia=fila.provincia
+        // regUbigeo2.value.departamento=fila.departamento
         hideModal('#modalUbigeo')
     }
     const pagesNumber = () => {
