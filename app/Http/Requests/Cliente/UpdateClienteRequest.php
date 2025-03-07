@@ -24,7 +24,14 @@ class UpdateClienteRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'     => 'required|max:25|string|unique:cargos,nombre,'.$this->id,
+            'dni'               => 'required|max:25|digits:8',
+            'ape_pat'           => 'required',
+            'ape_mat'           => 'required',
+            'primernombre'      => 'required',
+            'otrosnombres'      => 'required',
+            'ubigeo'            => 'digits:6',
+            'celular'           => 'required|digits:9',
+            'ubigeodomicilio'   => 'digits:6',
         ];
     }
 

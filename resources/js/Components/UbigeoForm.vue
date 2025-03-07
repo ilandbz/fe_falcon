@@ -61,6 +61,12 @@ const { form, regUbigeo2 } = toRefs(props)
         listarDistritos()
     })
 </script>
+<style>
+
+#modalUbigeo {
+  z-index: 1060 !important; /* Asegura que esté por encima */
+}
+</style>
 <template>
     <div class="modal fade" id="modalUbigeo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="modalUbigeoLabel">

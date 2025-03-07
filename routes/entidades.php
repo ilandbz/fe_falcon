@@ -111,11 +111,14 @@ Route::group(['prefix' => 'profesion', 'middleware' => 'auth'], function () {
     Route::post('guardar', [ProfesionController::class, 'store']);
     Route::get('listar', [ProfesionController::class, 'listar']);
 });
-//UBIGEO
+//UBIGEO y ubicacion
 Route::group(['prefix' => 'ubigeo', 'middleware' => 'auth'], function () {
     Route::get('obtener', [UbicacionController::class, 'obtenerPorUbigeo']);
     Route::get('lista-distritos', [UbicacionController::class, 'listarDistritos']);
+    Route::post('guardar', [UbicacionController::class, 'store']);
+    Route::post('eliminar', [UbicacionController::class, 'destroy']);
 });
+
 //Credito
 Route::group(['prefix' => 'credito', 'middleware' => 'auth'], function () {
     Route::get('todos', [CreditoController::class, 'todos']);

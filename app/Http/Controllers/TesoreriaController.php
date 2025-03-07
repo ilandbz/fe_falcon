@@ -62,10 +62,9 @@ class TesoreriaController extends Controller
         $registro->delete();
         return response()->json([
             'ok' => 1,
-            'mensaje' => 'Rol eliminado satisfactoriamente'
+            'mensaje' => 'Registro eliminado satisfactoriamente'
         ],200);
     }
-
     public function listar(Request $request){
         $buscar = mb_strtoupper($request->buscar);
         $paginacion = $request->paginacion;

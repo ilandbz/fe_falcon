@@ -19,9 +19,24 @@ export default function useUbigeo() {
         } catch (error) {
             errors.value = error.response.data
         }
-    }    
+    }
+    const agregarUbicacion = async(data) => {
+        errors.value = ''
+        try {
+            let respond = await axios.post('ubigeo/guardar', data, getConfigHeader())
+            errors.value = ''
+            if (respond.data.ok == 1) {
+                respuesta.value = respond.data
+            }
+        } catch (error) {
+            errors.value = ""
+            if (error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
     return {
-        errors, distritos, obtenerDistritos,
+        errors, distritos, obtenerDistritos, agregarUbicacion,
         respuesta, obtenerUbigeo, registro
     }
 }

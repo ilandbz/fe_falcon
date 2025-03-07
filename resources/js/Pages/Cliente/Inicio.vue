@@ -84,6 +84,7 @@ const {
         descripcion : '',
         inicioactividad : '',
         ubicacion_id : '',
+        direccion: '',
         errors:[],
     });
     const limpiarFormNegocio=()=>{
@@ -96,6 +97,7 @@ const {
         formNegocio.value.descripcion = '';
         formNegocio.value.inicioactividad = '';
         formNegocio.value.ubicacion_id = '';
+        formNegocio.value.direccion = '';        
         formNegocio.value.errors =[];
     };
     const negocio=()=>{

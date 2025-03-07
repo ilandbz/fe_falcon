@@ -3,13 +3,12 @@ import { toRefs, onMounted, ref } from 'vue';
 import useCliente from '@/Composables/Cliente.js';
 import useHelper from '@/Helpers';  
 import ClientesSearch from '@/Components/ClientesSearch.vue'
-import useUsuario from '@/Composables/Usuario.js';
+import UbicacionForm from './Ubicacion.vue'
 import useNegocio from '@/Composables/Negocio.js';
 import useEntidad from '@/Composables/Entidad.js';
 import useTipoActividad from '@/Composables/TipoActividad.js';
 import { onlyNumbers } from '@/Helpers'
 const { hideModal, Toast, openModal, Swal } = useHelper();
-
 const props = defineProps({
     form: Object,
     currentPage: Number,
@@ -20,7 +19,6 @@ const esCasa = ref(false);
 const {
     buscarEntidad, entidad
 } = useEntidad();
-
 const {
     errors, respuesta, agregarNegocio
 } = useNegocio();
@@ -48,7 +46,13 @@ const guardar = async () => {
         cargarDatosPorCliente(form.value.dni_cliente)
     }
 };
-
+const activarCasaNegocio=()=>{
+    if(esCasa.value){
+        form.value.ubicacion_id=cliente.value.persona.ubicacion_domicilio_id
+    }else{
+        form.value.ubicacion_id = ''
+    }
+}
 const buscarCliente = async(dni) =>{
     form.value.dni_cliente=dni
     cargarDatosPorCliente(dni)
@@ -59,8 +63,12 @@ const cargarDatosPorCliente = async(dni)=>{
     form.value.apenom = cliente.value.persona.apenom
     form.value.cliente_id=cliente.value.id
     negociosPosee.value = cliente.value.negocios
+    form.value.direccion=cliente.value.persona?.ubicacion.direccion
 }
-
+const nuevaUbicacion=()=>{
+    document.getElementById("modalUbicacionFormLabel").innerHTML = 'Ubicacion';
+    openModal('#modalUbicacionForm')
+}
 const busarRuc= async(ruc)=>{
     let formData = new FormData();
     formData.append('tipo', 'ruc');
@@ -118,7 +126,9 @@ onMounted(() => {
                                 <div class="mb-3 d-flex gap-3">
                                     <div class="input-group has-validation input-group-sm pb-1">
                                         <div class="form-floating is-invalid">
-                                            <input type="text" class="form-control form-control-sm" v-model="form.ruc" @keypress="onlyNumbers" placeholder="RUC" @change="busarRuc(form.ruc)">
+                                            <input type="text" class="form-control form-control-sm" v-model="form.ruc" @keypress="onlyNumbers" placeholder="RUC"
+                                            @change=""
+                                            >
                                             <label for="ruc">RUC</label>
                                         </div>
                                         <div class="invalid-feedback" v-for="error in form.errors.ruc" :key="error">
@@ -136,7 +146,7 @@ onMounted(() => {
                                     </div>
                                     <div class="input-group has-validation input-group-sm pb-1">
                                         <div class="form-floating is-invalid">
-                                            <input type="text" class="form-control form-control-sm" v-model="form.tel_cel" @keypress="onlyNumbers" placeholder="Telefono">
+                                            <input type="text" class="form-control form-control-sm" v-model="form.tel_cel" @keypress="onlyNumbers" maxlength="9" placeholder="Telefono">
                                             <label for="tel_cel">Telefono</label>
                                         </div>
                                         <div class="invalid-feedback" v-for="error in form.errors.tel_cel" :key="error">
@@ -179,8 +189,8 @@ onMounted(() => {
                                 </div>
                                 <div class="mb-3">
                                     <div class="input-group has-validation input-group-sm pb-1">
-                                        <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="buscarUbigeo">
-                                            <i class="fas fa-search"></i>
+                                        <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="nuevaUbicacion">
+                                            <i class="fas fa-plus"></i>
                                         </button>
                                         <div class="form-floating is-invalid">
                                             <input type="text" class="form-control form-control-sm" v-model="form.ubicacion_id"
@@ -191,14 +201,16 @@ onMounted(() => {
                                         </div>
                                         
                                         <span class="input-group-text">
-                                            <input type="checkbox" v-model="esCasa">
+                                            <input type="checkbox" v-model="esCasa" @change="activarCasaNegocio()">
                                         </span>
                                         <span class="input-group-text">Casa / Negocio</span>
-
                                         <div class="invalid-feedback" v-for="error in form.errors.ubicacion_id" :key="error">
                                             {{ error }}
                                         </div>
                                     </div>  
+                                </div>
+                                <div class="mb-3" v-if="esCasa">
+                                    {{ form.direccion }}
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -256,5 +268,5 @@ onMounted(() => {
         </div>
     </form>
     <ClientesSearch @cargarPersona="buscarCliente"></ClientesSearch>
-
+    <UbicacionForm :formNegocio="form"></UbicacionForm>
 </template>

@@ -104,13 +104,17 @@ class ClienteController extends Controller
         )->where('id', $request->id)->first();
         return $persona;
     }
+    public function showAvanzado(){
+
+    }
     public function mostrarPorDni(Request $request){
         $dni = $request->dni;
 
         return Cliente::whereHas('persona', function ($q) use ($dni) {
             $q->where('dni', $dni);
         })->with([
-            'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres',
+            'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,ubicacion_domicilio_id',
+            'persona.ubicacion:id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
             'creditos' => function ($query) {
                 $query->where('estado', 'DESEMBOLSADO');
             },
