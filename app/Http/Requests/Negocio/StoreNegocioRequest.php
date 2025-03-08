@@ -28,7 +28,7 @@ class StoreNegocioRequest extends FormRequest
             'razonsocial' => 'required|string|max:80',
             'tel_cel' => 'nullable|integer|digits:9',
             'tipo_actividad_id' => 'required|integer|exists:tipo_actividads,id',
-            'descripcion' => 'nullable|string|max:90',
+            'descripcion' => 'required|string|max:90',
             'inicioactividad' => 'required|date',
             'ubicacion_id' => 'required',            
         ];

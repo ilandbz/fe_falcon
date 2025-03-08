@@ -26,6 +26,7 @@ class RoleSeeder extends Seeder
             'Invitado',
         ];
         
+        
         foreach ($roles as $role) {
             Role::firstOrCreate(['nombre' => mb_strtoupper($role)]);
         }

@@ -3,12 +3,9 @@ import { ref, onMounted, toRefs } from 'vue';
 import useHelper from '@/Helpers'; 
 import useUbigeo from '@/Composables/Ubigeo.js';
 const { hideModal } = useHelper();
-// const props = defineProps({
-//     form: Object,
-//     regUbigeo2: Object
-// });
-// const { form, regUbigeo2 } = toRefs(props)
-const emit = defineEmits(['seleccionarUbigeo']);
+
+
+const emit = defineEmits(['seleccionar']);
     const {
         obtenerDistritos, distritos, errors, respuesta
     } = useUbigeo();
@@ -37,11 +34,7 @@ const emit = defineEmits(['seleccionarUbigeo']);
         listarDistritos(pagina)
     }
     const seleccionar=(fila)=>{
-        //form.value.ubigeodomicilio=fila.ubigeo
-        emit('seleccionarUbigeo', fila.ubigeo);
-        // regUbigeo2.value.distrito=fila.distrito
-        // regUbigeo2.value.provincia=fila.provincia
-        // regUbigeo2.value.departamento=fila.departamento
+        emit('seleccionar', fila.ubigeo);
         hideModal('#modalUbigeo')
     }
     const pagesNumber = () => {
@@ -75,10 +68,10 @@ const emit = defineEmits(['seleccionarUbigeo']);
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-1" id="modalUbigeoLabel">Seleccione Distrito</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <h1 class="modal-title fs-1" id="modalUbigeoLabel">Seleccione Distrito</h1>
                     <div class="row">
                         <div class="col-md-3 mb-1">
                             <div class="input-group mb-1">
@@ -230,9 +223,8 @@ const emit = defineEmits(['seleccionarUbigeo']);
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-
-                </div>
+                 <div class="modal-footer">
+                </div> 
             </div>
         </div>
     </div>

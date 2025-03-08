@@ -28,7 +28,7 @@ class UpdateNegocioRequest extends FormRequest
             'razonsocial' => 'required|string|max:80',
             'tel_cel' => 'nullable|integer|digits:9',
             'tipo_actividad_id' => 'required|integer|exists:tipo_actividads,id',
-            'descripcion' => 'nullable|string|max:90',
+            'descripcion' => 'required|string|max:90',
             'inicioactividad' => 'required|date',
             'digits' => 'Debe ser 9 digitos',
             'ubicacion_id' => 'required',          

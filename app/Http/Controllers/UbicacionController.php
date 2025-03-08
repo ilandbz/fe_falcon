@@ -13,8 +13,8 @@ class UbicacionController extends Controller
     public function store(StoreUbicacionRequest $request)
     {
         $domicilio = Ubicacion::create([
-            'tipo'             => $request->tipodomicilio ?? 'NDF',
-            'ubigeo'           => $request->ubigeodomicilio,
+            'tipo'             => $request->tipo ?? 'NDF',
+            'ubigeo'           => $request->ubigeo,
             'tipovia'          => $request->tipovia ?? 'S/N',
             'nombrevia'        => $request->nombrevia,
             'nro'              => $request->nro ?? 'S/N',

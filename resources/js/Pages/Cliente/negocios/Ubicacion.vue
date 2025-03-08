@@ -3,25 +3,19 @@ import { toRefs, onMounted, ref } from 'vue';
 import useCliente from '@/Composables/Cliente.js';
 import useHelper from '@/Helpers';  
 import useUbigeo from '@/Composables/Ubigeo.js';
-import UbigeoForm from '@/Components/UbigeoForm.vue'
+import UbigeoFormNegocio from '@/Components/UbigeoForm.vue'
 import { onlyNumbers } from '@/Helpers'
 const { hideModal, Toast, openModal } = useHelper();
 const props = defineProps({
     formNegocio: Object,
 });
-
 const { formNegocio } = toRefs(props)
 
 
 const {
-    errors, respuesta, agregarUbicacion
+    errors, respuesta, agregarUbicacion, registro, obtenerUbigeo
 } = useUbigeo();
 const regUbigeo = ref({
-    distrito : 'Dist.',
-    provincia : 'Prov.',
-    departamento : 'Depart.',
-});
-const regUbigeo2 = ref({
     distrito : 'Dist.',
     provincia : 'Prov.',
     departamento : 'Depart.',
@@ -44,6 +38,7 @@ const form=ref({
 })
 const limpiar = () => {
     form.value.id = '';
+    form.value.tipo = '';
     form.value.tipovia = '';
     form.value.nombrevia = '';
     form.value.ubigeo = '';
@@ -67,35 +62,38 @@ const registrar = async() => {
     }
     if(respuesta.value.ok==1){
         form.value.errors = []
-        hideModal('#modalUbicacion')
+        hideModal('#modalUbicacionForm')
         Toast.fire({icon:'success', title:respuesta.value.mensaje})
+        formNegocio.value.ubicacion_id = respuesta.value.id
+        formNegocio.value.direccion = respuesta.value.direccion
     }
 }
 const guardar = () => {
-    crud[form.value.estadoCrud]()
+    registrar()
 }
 
+const buscarPorUbigeo = async (ubigeo, reg) => {
+    await obtenerUbigeo(ubigeo);
+    if (registro.value) {
+        reg.distrito = registro.value.nombre || '';
+        reg.provincia = registro.value.provincia?.nombre || '';
+        reg.departamento = registro.value.provincia?.departamento?.nombre || '';
+    } else {
+        reg.distrito = '';
+        reg.provincia = '';
+        reg.departamento = '';
+    }
+};
 
-const buscarPorUbigeo=(ubigeo)=>{
-    console.log(ubigeo)
-    // await obtenerUbigeo(ubigeo)
-    // if(regUbigeo.value){
-    //     let distrito = registro.value
-    //     form.value.ubigeo=ubigeo
-    //     regUbigeo.value.distrito=distrito.nombre
-    //     regUbigeo.value.provincia=distrito.provincia?.nombre
-    //     regUbigeo.value.departamento=distrito.provincia?.departamento.nombre
-    // }
+const ubigeoSeleccionado = (ubigeo) =>{
+    buscarPorUbigeo(ubigeo, regUbigeo.value)
+    form.value.ubigeo = ubigeo
 }
-
 const buscarUbigeo = ()=>{
     document.getElementById("modalUbigeoLabel").innerHTML = 'Buscar Ubigeo';
     openModal('#modalUbigeo')
 }
 
-onMounted(() => {
-
-})
 </script>
 <template>
     <form @submit.prevent="guardar">
@@ -113,20 +111,34 @@ onMounted(() => {
                                 <h6 class="card-subtitle mb-2 text-muted">Domicilio</h6>
                                 <div class="mb-3">
                                     <div class="row">
+                                        <div class="col-md-4 has-validation">
+                                            <div class="form-floating is-invalid">
+                                                <select class="form-select" aria-label="Floating" v-model="form.tipo">
+                                                    <option selected disabled value="">Seleccione</option>
+                                                    <option value="Familiar">Familiar</option>
+                                                    <option value="Propia">Propia</option>
+                                                    <option value="Alquilada">Alquilada</option>
+                                                </select>
+                                                <label for="tipo">Tipo</label>
+                                            </div>
+                                            <div class="invalid-feedback" v-for="error in form.errors.tipo" :key="error">
+                                                {{ error }}
+                                            </div>
+                                        </div>
                                         <div class="col-md-8">
                                             <div class="input-group has-validation input-group-sm pb-1">
                                                 <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="buscarUbigeo">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                                 <div class="form-floating is-invalid">
-                                                    <input type="text" class="form-control form-control-sm" v-model="form.ubigeodomicilio"
+                                                    <input type="text" class="form-control form-control-sm" v-model="form.ubigeo"
                                                     @keypress="onlyNumbers" placeholder="090101"
                                                     @change="buscarPorUbigeo"
                                                     >
                                                     <label for="floatingInputGroup1">UBIGEO</label>
                                                 </div>
-                                                <span class="input-group-text">{{ regUbigeo2.distrito }} - {{ regUbigeo2.provincia }} - {{ regUbigeo2.departamento }}</span>
-                                                <div class="invalid-feedback" v-for="error in form.errors.ubigeodomicilio" :key="error">
+                                                <span class="input-group-text">{{ regUbigeo.distrito }} - {{ regUbigeo.provincia }} - {{ regUbigeo.departamento }}</span>
+                                                <div class="invalid-feedback" v-for="error in form.errors.ubigeo" :key="error">
                                                     {{ error }}
                                                 </div>                                    
                                             </div>                                            
@@ -219,11 +231,11 @@ onMounted(() => {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">{{ (form.estadoCrud=='nuevo') ? 'Guardar' : 'Actualizar' }}</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <UbigeoForm @seleccionarUbigeo="buscarPorUbigeo()"></UbigeoForm>
+    <UbigeoFormNegocio @seleccionar="ubigeoSeleccionado"></UbigeoFormNegocio>
 </template>

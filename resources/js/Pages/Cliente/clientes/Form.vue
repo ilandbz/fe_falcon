@@ -273,6 +273,7 @@ const crud = {
 const guardar = () => {
     crud[form.value.estadoCrud]()
 }
+
 const buscarPersona= async(dni)=>{
     await obtenerPorDni(dni)
     if(persona.value){
@@ -346,22 +347,37 @@ const buscarPersonaConyugue=async(dni)=>{
         datosConyugue.value.fecha_nac = persona.value.fecha_nac
     }    
 }
-const buscarPorUbigeo=async()=>{
-    await obtenerUbigeo(form.value.ubigeo)
-    if(regUbigeo.value){
-        let distrito = registro.value
-        regUbigeo.value.distrito=distrito.nombre
-        regUbigeo.value.provincia=distrito.provincia?.nombre
-        regUbigeo.value.departamento=distrito.provincia?.departamento.nombre
+const buscarPorUbigeo = async (ubigeo, reg) => {
+    await obtenerUbigeo(ubigeo);
+    if (registro.value) {
+        reg.distrito = registro.value.nombre || '';
+        reg.provincia = registro.value.provincia?.nombre || '';
+        reg.departamento = registro.value.provincia?.departamento?.nombre || '';
+    } else {
+        reg.distrito = '';
+        reg.provincia = '';
+        reg.departamento = '';
     }
-}
+};
+const tipoubigeo = ref('');
+
+const ubigeoSeleccionado = (ubigeo) =>{
+    if(tipoubigeo.value=='nacimiento'){
+        buscarPorUbigeo(ubigeo, regUbigeo.value)
+        form.value.ubigeo = ubigeo
+    }else{
+        buscarPorUbigeo(ubigeo, regUbigeo2.value)
+        form.value.ubigeodomicilio = ubigeo
+    }
+} 
 const listarProfesiones=async()=>{
     await listaProfesiones()
 }
 const listaAsesores = async()=>{
     await obtenerUsuariosTipoAgencia(5, 0)
 }
-const buscarUbigeo = ()=>{
+const buscarUbigeo = (tipo)=>{
+    tipoubigeo.value=tipo;
     document.getElementById("modalUbigeoLabel").innerHTML = 'Buscar Ubigeo';
     openModal('#modalUbigeo')
 }
@@ -374,7 +390,7 @@ onMounted(() => {
     <form @submit.prevent="guardar">
         <div class="modal fade" id="modalClienteForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="modalClienteFormLabel">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-1" id="modalClienteFormLabel">Modal title</h1>
@@ -389,7 +405,10 @@ onMounted(() => {
                                         <div class="mb-3 has-validation">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" v-model="form.dni" 
-                                                maxlength="8" placeholder="00000000" @keypress="onlyNumbers" @change="buscarPersona(form.dni)"
+                                                maxlength="8" placeholder="00000000"
+                                                @keypress="onlyNumbers"
+                                                @change="buscarPersona(form.dni)"
+                                                @keyup.enter="buscarPersona(form.dni)"
                                                 :class="{ 'is-invalid': form.errors.dni }">
                                                 <label for="dni">DNI</label>
                                             </div>
@@ -453,10 +472,14 @@ onMounted(() => {
                                         </div>
                                         <div class="mb-3 has-validation">
                                             <div class="input-group input-group-sm pb-1">
+                                                <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="buscarUbigeo('nacimiento')">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
                                                 <div class="form-floating is-invalid">
                                                     <input type="text" class="form-control form-control-sm" v-model="form.ubigeo"
                                                     @keypress="onlyNumbers" placeholder="090101"
-                                                    @change="buscarPorUbigeo"
+                                                    @change="buscarPorUbigeo(form.ubigeo, regUbigeo)"
+                                                    @keyup.enter="buscarPorUbigeo(form.ubigeo, regUbigeo)"
                                                     >
                                                     <label for="floatingInputGroup1">UBIGEO</label>
                                                 </div>
@@ -549,7 +572,6 @@ onMounted(() => {
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -600,7 +622,7 @@ onMounted(() => {
                                                 {{ error }}
                                             </div>
                                         </div>
-                                        <div class="mb-3 has-validation" v-if="form.grado_instr=='Superior Completa'">
+                                        <div class="mb-3 has-validation" v-if="form.grado_instr=='Superior Completa' || form.grado_instr=='Superior Incompleta'">
                                             <div class="form-floating is-invalid">
                                                 <select class="form-select" id="profesion" aria-label="Floating" v-model="form.profesion">
                                                     <option selected disabled value="">Seleccione</option>
@@ -674,12 +696,20 @@ onMounted(() => {
                                                 {{ error }}
                                             </div>
                                         </div>
-                                        <div class="mb-3 has-validation" v-if="form.tipo_trabajador=='Dependiente'">
+                                        <div class="mb-3 has-validation" v-if="form.tipo_trabajador=='INDEPENDIENTE'">
                                             <div class="form-floating is-invalid">
                                                 <select class="form-select" aria-label="Floating" v-model="form.ocupacion">
-                                                    <option selected disabled value="">Seleccione</option>
-                                                    <option value="Independiente">Independiente</option>
-                                                    <option value="Dependiente">Dependiente</option>
+                                                    <option selected value="NINGUNO">NINGUNO</option>
+                                                    <option value="Administrativo">Administrativo</option>
+                                                    <option value="Analista">Analista</option>
+                                                    <option value="Asesor de Negocios">Asesor de Negocios</option>
+                                                    <option value="Chofer">Chofer</option>
+                                                    <option value="Contador Publico">Contador Publico</option>
+                                                    <option value="Ingeniero de Sistemas">Ingeniero de Sistemas</option>
+                                                    <option value="Obrero">Obrero</option>
+                                                    <option value="Profesor">Profesor</option>
+                                                    <option value="Vendedor">Vendedor</option>
+                                                    <option value="Otros">Otros</option>
                                                 </select>
                                                 <label for="ocupacion">Ocupacion</label>
                                             </div>
@@ -687,7 +717,7 @@ onMounted(() => {
                                                 {{ error }}
                                             </div>
                                         </div>
-                                        <div class="mb-3 has-validation" v-if="form.tipo_trabajador=='Dependiente'">
+                                        <div class="mb-3 has-validation" v-if="form.tipo_trabajador=='DEPENDIENTE'">
                                             <div class="form-floating is-invalid">
                                                 <input type="text" class="form-control form-control-sm" v-model="form.institucion_lab" 
                                                 placeholder="000000000"
@@ -704,15 +734,16 @@ onMounted(() => {
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-muted">Domicilio</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">Domicilio {{ form }}</h6>
                                 <div class="mb-3">
                                     <div class="row">
                                         <div class="col-md-4 has-validation">
                                             <div class="form-floating is-invalid">
                                                 <select class="form-select" aria-label="Floating" v-model="form.tipodomicilio">
                                                     <option selected disabled value="">Seleccione</option>
-                                                    <option value="Independiente">Independiente</option>
-                                                    <option value="Dependiente">Dependiente</option>
+                                                    <option value="Familiar">Familiar</option>
+                                                    <option value="Propia">Propia</option>
+                                                    <option value="Alquilada">Alquilada</option>
                                                 </select>
                                                 <label for="tipodomicilio">Tipo De Domicilio</label>
                                             </div>
@@ -722,13 +753,14 @@ onMounted(() => {
                                         </div>
                                         <div class="col-md-8">
                                             <div class="input-group has-validation input-group-sm pb-1">
-                                                <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="buscarUbigeo">
+                                                <button class="btn btn-outline-secondary" title="Seleccionar" type="button" @click="buscarUbigeo('domicilio')">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                                 <div class="form-floating is-invalid">
                                                     <input type="text" class="form-control form-control-sm" v-model="form.ubigeodomicilio"
                                                     @keypress="onlyNumbers" placeholder="090101"
-                                                    @change="buscarPorUbigeo"
+                                                    @change="buscarPorUbigeo(form.ubigeodomicilio, regUbigeo2)"
+                                                    @keyup.enter="buscarPorUbigeo(form.ubigeodomicilio, regUbigeo2)"
                                                     >
                                                     <label for="floatingInputGroup1">UBIGEO</label>
                                                 </div>
@@ -833,5 +865,5 @@ onMounted(() => {
         </div>
     </form>
     <PersonaForm :form="datosPersona" :profesiones="profesiones" @activarDni="activarPersonaRelacionado"></PersonaForm>
-    <UbigeoForm :form="form" :regUbigeo2="regUbigeo2"></UbigeoForm>
+    <UbigeoForm @seleccionar="ubigeoSeleccionado"></UbigeoForm>
 </template>

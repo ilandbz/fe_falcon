@@ -100,6 +100,7 @@ class ClienteController extends Controller
     {
         $persona = Cliente::with(
             'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,fecha_nac,ubigeo_nac,email,celular,genero,estado_civil,ruc,grado_instr,tipo_trabajador,ocupacion,institucion_lab,ubicacion_domicilio_id',
+            'persona.ubicacion:id,id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
             'usuario:id,name'
         )->where('id', $request->id)->first();
         return $persona;
