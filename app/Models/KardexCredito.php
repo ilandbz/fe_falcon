@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KardexCredito extends Model
 {
+    public $timestamps = false;
     protected $fillable = [
         'credito_id',
         'nro',

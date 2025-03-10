@@ -1,4 +1,5 @@
-obtener usuarios de cpanel
+/*USUARIOS*/
+
 SELECT usuario.*, 
        rol.nombre AS rol, 
        agencia.nombre AS agencia 
@@ -10,36 +11,52 @@ LEFT JOIN agencia ON agencia_usuario.idagencia = agencia.idagencia;
 
 
 
+obtener ubicaciones
+SELECT id,tipo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia,distrito.nombre AS distrito,provincia.nombre AS provincia FROM ubicacion
+JOIN distrito ON ubicacion.distrito=distrito.iddistrito
+JOIN provincia ON distrito.idprovincia = provincia.idprovincia
+
+SELECT ubicacion.*, distrito.nombre AS distrito, provincia.nombre AS provincia FROM `ubicacion` 
+JOIN distrito ON ubicacion.distrito=distrito.iddistrito 
+JOIN provincia ON distrito.idprovincia = provincia.idprovincia;
+
+obtener personas
+SELECT persona.*, distrito.nombre AS distrito, provincia.nombre AS provincia FROM `persona` JOIN distrito ON persona.distrito_nac=distrito.iddistrito JOIN provincia ON distrito.idprovincia=provincia.idprovincia
+
+
 
 JJARA02
 obtener clientes : 
-SELECT codcliente, dni, idasesor, dniaval, estado, date(fechareg) as fecha_reg, time(fechareg) as hora_reg, agencia.nombre as agencia FROM `cliente`
-join agencia on cliente.idagencia=agencia.idagencia;
+SELECT codcliente, dni, idasesor, dniaval, estado, DATE(fechareg) AS fecha_reg, TIME(fechareg) AS hora_reg, agencia.nombre AS agencia FROM `cliente`
+JOIN agencia ON cliente.idagencia=agencia.idagencia;
 
 
-obtener personas
-SELECT persona.*, distrito.nombre as distrito, provincia.nombre as provincia FROM `persona` join distrito on persona.distrito_nac=distrito.iddistrito join provincia on distrito.idprovincia=provincia.idprovincia
-
-
-obtener ubicaciones
-select id,tipo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia,distrito.nombre as distrito,provincia.nombre as provincia from ubicacion
-join distrito on ubicacion.distrito=distrito.iddistrito
-join provincia on distrito.idprovincia = provincia.idprovincia
-
-SELECT ubicacion.*, distrito.nombre as distrito, provincia.nombre as provincia FROM `ubicacion` 
-join distrito on ubicacion.distrito=distrito.iddistrito 
-join provincia on distrito.idprovincia = provincia.idprovincia;
 
 
 
 obtener solicitudes
-SELECT solicitud.*, agencia.nombre as agencia FROM `solicitud` join agencia on solicitud.idagencia=agencia.idagencia
+SELECT solicitud.*, agencia.nombre AS agencia FROM `solicitud` JOIN agencia ON solicitud.idagencia=agencia.idagencia
 
 
-analisis
-balance
-perdidas
-propuesta
+SELECT * FROM analisis_cual;
+SELECT * FROM balance;
+SELECT * FROM det_balance;
+SELECT * FROM perdidasyganancias;
+SELECT * FROM propuestacred;
+SELECT * FROM desembolso;
+SELECT * FROM detcalendariopagos;
+SELECT * FROM kardex;
+SELECT * FROM creditosacancelar;
+SELECT * FROM segurodesgravamen;
+SELECT * FROM pago;
+SELECT * FROM pagomora;
+SELECT * FROM junta;
 
 
-es de la misma tabla
+
+
+
+
+
+
+es de la misma tablaS

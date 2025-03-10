@@ -40,10 +40,8 @@ class ConyugueSeeder extends Seeder
             }
             $conyugue = Persona::where('dni', $dniconyugue)->first();
             if($conyugue){
-                //$this->command->getOutput()->writeln($dni);
-                Conyugue::firstOrCreate([
-                    'primer_persona_id' => Persona::where('dni', $dni)->first()->id,
-                    'segunda_persona_id' => $conyugue->id,
+                Persona::where('dni', $dni)->update([
+                    'conyugue' => Persona::where('dni', $dniconyugue)->first()->id,
                 ]);
             }
 

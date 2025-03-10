@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kardex_juntas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('junta_id');
+            $table->foreign('junta_id')->references('junta_id')->on('desembolsos')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedInteger('nro');
+            $table->date('fecha');
+            $table->time('hora');
+            $table->decimal('montopagado', 9, 2);
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('mediopago');
         });
     }
 

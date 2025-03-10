@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Credito;
+use App\Models\Desembolso;
 use App\Models\KardexCredito;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -37,9 +38,9 @@ class KardexCreditoSeeder extends Seeder
                 $data = array_combine($header, $fila);
                 extract($data);
             }
-            $credito = Credito::where('id', $idsolicitud)->first();
+            $desembolso = Desembolso::where('credito_id', $idsolicitud)->first();
             
-            if($credito){
+            if($desembolso){
                 if ($fecha_hora_reg == '0000-00-00 00:00:00' || empty($fecha_hora_reg)) {
                     // Si la fecha es inválida, usa '2000-01-01 00:00:00'
                     $fecha = '2000-01-01';

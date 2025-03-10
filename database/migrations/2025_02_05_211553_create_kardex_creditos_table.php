@@ -20,7 +20,6 @@ return new class extends Migration
             $table->decimal('montopagado', 9, 2);
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('mediopago', 35);
-            $table->timestamps();
             $table->primary(['credito_id', 'nro']);
         });
     }

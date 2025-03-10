@@ -45,4 +45,8 @@ class Cliente extends Model
     {
         return $this->HasMany(Credito::class, 'cliente_id');
     }
+    public function aval(): BelongsTo
+    {
+        return $this->hasOne(Persona::class, 'dniaval')->latest();
+    } 
 }

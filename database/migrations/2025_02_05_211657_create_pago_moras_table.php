@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pago_moras', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('credito_id');
+            $table->foreign('credito_id')->references('credito_id')->on('desembolsos')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedInteger('nro');
+            $table->integer('diasmora')->default(1);
+            $table->decimal('total',7,2);
+            $table->date('fecha');
+            $table->time('hora');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Persona extends Model
 {
@@ -29,9 +30,13 @@ class Persona extends Model
         'ocupacion',
         'institucion_lab',
         'ubicacion_domicilio_id',
+        'conyugue',
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     protected $appends = ['apenom'];
+
 
 
     public function ubicacion(): BelongsTo
@@ -56,5 +61,10 @@ class Persona extends Model
         return Carbon::parse($this->fecha_nac)->age;
     }
 
-    
+
+    public function conyugePersona() : BelongsTo
+    {
+        return $this->belongsTo(Persona::class, 'conyugue', 'id');
+    }
+
 }

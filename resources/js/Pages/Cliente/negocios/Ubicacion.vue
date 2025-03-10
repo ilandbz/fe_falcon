@@ -162,8 +162,8 @@ const buscarUbigeo = ()=>{
                                 </div>
                                 <div class="mb-3 has-validation">
                                     <div class="form-floating is-invalid">
-                                        <input type="text" class="form-control" v-model="form.nombre_via" placeholder="Nombre de la Vía">
-                                        <label for="nombre_via">Nombre de la Vía</label>
+                                        <input type="text" class="form-control" v-model="form.nombrevia" placeholder="Nombre de la Vía">
+                                        <label for="nombrevia">Nombre de la Vía</label>
                                     </div>
                                 </div>
                                 <div class="mb-3 has-validation d-flex gap-2">
@@ -201,8 +201,8 @@ const buscarUbigeo = ()=>{
                                         </div>
                                         <div class="col-md-8 has-validation">
                                             <div class="form-floating is-invalid">
-                                                <input type="text" class="form-control" v-model="form.nombre_zona" placeholder="Nombre de la Zona">
-                                                <label for="nombre_zona">Nombre de la Zona</label>
+                                                <input type="text" class="form-control" v-model="form.nombrezona" placeholder="Nombre de la Zona">
+                                                <label for="nombrezona">Nombre de la Zona</label>
                                             </div>
                                         </div>
                                     </div>

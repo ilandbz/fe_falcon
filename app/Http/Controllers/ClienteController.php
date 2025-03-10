@@ -33,7 +33,7 @@ class ClienteController extends Controller
             Storage::disk('fotos')->makeDirectory('clientes');
             Storage::disk('fotos')->put('clientes/' . $nombre_archivo, File::get($file));
         }
-        $esconyugue = $request->estado_civil=='Casado' || $request->estado_civil=='Conviviente';
+        $esconyugue = trim($request->estado_civil) === 'Casado' || trim($request->estado_civil) === 'Conviviente';
         if ($esconyugue && empty($request->conyugue_id)) {
             return response()->json([
                 'errors' => [
@@ -55,7 +55,7 @@ class ClienteController extends Controller
             'referencia'       => $request->referencia,
             'latitud_longitud' => $request->latitud_longitud,
         ]);
-        $persona = Persona::firstorCreate(['dni' => $request->dni],
+        $persona = Persona::firstOrCreate(['dni' => $request->dni],
         [
             'ape_pat' => $request->ape_pat,
             'ape_mat' => $request->ape_mat,
@@ -74,14 +74,9 @@ class ClienteController extends Controller
             'tipo_trabajador' => $request->tipo_trabajador,
             'ocupacion' => $request->ocupacion,
             'institucion_lab' => $request->institucion_lab,
-            'ubicacion_domicilio_id' => $domicilio->id
+            'ubicacion_domicilio_id' => $domicilio->id,
+            'conyugue'  => $esconyugue ? $request->conyugue_id : null
         ]);
-        if($esconyugue){
-            Conyugue::Create([
-                'primer_persona_id' => $persona->id,
-                'segunda_persona_id' => $request->conyugue_id,
-            ]);
-        }
         $cliente = Cliente::create([
             'id'          => $request->id,
             'agencia_id'  => $request->agencia_id,
@@ -99,10 +94,12 @@ class ClienteController extends Controller
     public function show(Request $request)
     {
         $persona = Cliente::with(
-            'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,fecha_nac,ubigeo_nac,email,celular,genero,estado_civil,ruc,grado_instr,tipo_trabajador,ocupacion,institucion_lab,ubicacion_domicilio_id',
+            'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,fecha_nac,ubigeo_nac,email,celular,genero,estado_civil,ruc,grado_instr,tipo_trabajador,ocupacion,institucion_lab,ubicacion_domicilio_id,conyugue',
             'persona.ubicacion:id,id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
+            'persona.conyugePersona',
             'usuario:id,name'
         )->where('id', $request->id)->first();
+        
         return $persona;
     }
     public function showAvanzado(){
@@ -111,7 +108,7 @@ class ClienteController extends Controller
     public function mostrarPorDni(Request $request){
         $dni = $request->dni;
 
-        return Cliente::whereHas('persona', function ($q) use ($dni) {
+        $cliente = Cliente::whereHas('persona', function ($q) use ($dni) {
             $q->where('dni', $dni);
         })->with([
             'persona:id,dni,ape_pat,ape_mat,primernombre,otrosnombres,ubicacion_domicilio_id',
@@ -122,6 +119,9 @@ class ClienteController extends Controller
             'negocios',
             'negocios.tipo_actividad:id,nombre'
         ])->first();
+
+        return $cliente;
+
     }
     public function update(UpdateClienteRequest $request)
     {

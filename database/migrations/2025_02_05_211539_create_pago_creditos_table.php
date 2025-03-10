@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pago_creditos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('credito_id');
+            $table->foreign('credito_id')->references('credito_id')->on('desembolsos')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedInteger('nro');
+            $table->date('fecha');
+            $table->decimal('montopagado', 9, 2);
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('mediopago', 35);
+            $table->integer('moradias')->default(0);
+            $table->primary(['credito_id', 'nro']);
         });
     }
 

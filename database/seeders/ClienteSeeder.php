@@ -45,7 +45,7 @@ class ClienteSeeder extends Seeder
                     'persona_id' => Persona::where('dni', $dni)->value('id'),
                     'usuario_id' => User::where('name', $idasesor)->value('id'),
                     'agencia_id' => Agencia::where('nombre',$agencia)->value('id'),
-                    'dniaval' => $dniaval,
+                    'dniaval' => $dniaval=='NULL' ? null : $dniaval,
                     'estado' => $estado,
                     'fecha_reg' => $fecha_reg,
                     'hora_reg' => $hora_reg,

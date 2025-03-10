@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Desembolso;
 use App\Models\DetCalendarioPagos;
 use App\Models\KardexCredito;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -34,19 +35,22 @@ class DetCalendarioPagosSeeder extends Seeder
                 $data = array_combine($header, $fila);
                 extract($data);
             }
-
-            $kardex = DetCalendarioPagos::firstOrCreate(
-                [
-                    'credito_id' => $idsolicitud,
-                    'nrocuota'        => $nrocuota,
-                ],
-                [
-                    'fecha_prog'         => $fecha_prog,
-                    'nombredia'   => $nombredia,
-                    'cuota'       => $cuota,
-                    'saldo'     => $saldo
-                ]
-            );                   
+            $desembolso = Desembolso::where('credito_id', $idsolicitud)->first();
+            if($desembolso){
+                $kardex = DetCalendarioPagos::firstOrCreate(
+                    [
+                        'credito_id' => $idsolicitud,
+                        'nrocuota'        => $nrocuota,
+                    ],
+                    [
+                        'fecha_prog'         => $fecha_prog,
+                        'nombredia'   => $nombredia,
+                        'cuota'       => $cuota,
+                        'saldo'     => $saldo
+                    ]
+                );                     
+            }
+              
             //usleep(1000);
             $progressBar->advance();
         }

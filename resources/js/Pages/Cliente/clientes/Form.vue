@@ -14,6 +14,7 @@ const props = defineProps({
     form: Object,
     currentPage : Number
 });
+const { form, currentPage } = toRefs(props)
 const {
     persona, obtenerPorDni
 } = usePersona();
@@ -26,7 +27,7 @@ const {
 const {
     registro, obtenerUbigeo
 } = useUbigeo();
-const { form, currentPage } = toRefs(props)
+
 const {
     errors, respuesta, agregarCliente, actualizarCliente
 } = useCliente();
@@ -315,7 +316,6 @@ const nuevoPersona = (tipo) => {
 
 const activarPersonaRelacionado = () =>{
     if(tipoRelacionPersona.value=='Conyugue'){
-
         buscarPersonaConyugue(datosPersona.value.dni)
         form.value.dniconyugue=datosPersona.value.dni
     }else{
@@ -502,7 +502,7 @@ onMounted(() => {
                                         </div>
                                         <div class="mb-3 has-validation">
                                             <div class="form-floating is-invalid">
-                                                <input type="text" class="form-control form-control-sm" v-model="form.celular" 
+                                                <input type="text" class="form-control form-control-sm" maxlength="9" v-model="form.celular" 
                                                 placeholder="000000000"
                                                  @keypress="onlyNumbers"
                                                 :class="{ 'is-invalid': form.errors.celular }">

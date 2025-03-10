@@ -40,13 +40,15 @@ class DatabaseSeeder extends Seeder
             // DetCalendarioPagosSeeder::class,
             // CreditosCancelarSeeder::class,
             // KardexCreditoSeeder::class,
-            AnalisisCualitativoSeeder::class,
-            BalanceSeeder::class,
-            PerdidaGananciaSeeder::class,
-            PropuestaCreditoSeeder::class,
-            DetBalanceSeeder::class,
+            // AnalisisCualitativoSeeder::class,
+            // BalanceSeeder::class,
+            // PerdidaGananciaSeeder::class,
+            // PropuestaCreditoSeeder::class,
+            // DetBalanceSeeder::class,
             // CostoMoraSeeder::class,           
             // SeguroDesgravamenSeeder::class,
+            // PagoCreditoSeeder::class,
+            // PagoMoraSeeder::class,
         ]);
     }
 }

@@ -26,7 +26,13 @@ class NegocioController extends Controller
         ], 200);
     }
     public function show(Request $request){
-        $registro = Negocio::where('id', $request->id)->first();
+        $registro = Negocio::with([
+            'tipo_actividad:id,nombre',
+            'ubicacion:id,tipo,ubigeo,tipovia,nombrevia,nro,interior,mz,lote,tipozona,nombrezona,referencia',
+            'ubicacion.distrito:id,ubigeo,nombre,provincia_id',
+            'ubicacion.distrito.provincia:id,nombre,departamento_id',
+            'ubicacion.distrito.provincia.departamento:id,nombre',
+            ])->where('id', $request->id)->first();
         return $registro;
     }
 

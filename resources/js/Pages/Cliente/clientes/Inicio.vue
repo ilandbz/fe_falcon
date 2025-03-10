@@ -42,12 +42,12 @@ const {
         agencia_id: agencia.value?.id,
         foto : '/storage/fotos/default.png',
         conyugue_id: '',
+        dniconyugue: '',
         aval_id: '',
         grado_instr: '',
         profesion:'',
         usuario_id: '',
         usuario_name:'',
-        dniconyugue: '',
         dniaval:'',
         tipo_trabajador: '',
         ocupacion: 'NINGUNO',
@@ -85,11 +85,11 @@ const {
         form.value.usuario_id = '';
         form.value.usuario_name = '';
         form.value.conyugue_id = '';
+        form.value.dniconyugue = '';        
         form.value.aval_id = '';
         form.value.dniaval = '';
         form.value.tipo_trabajador = '';
         form.value.ocupacion = 'NINGUNO';
-        form.value.dniconyugue = '';
         form.value.estado = 'REGISTRADO';
         form.value.fecha_reg = '';
         form.value.hora_reg = '';
@@ -111,7 +111,6 @@ const {
     };
     const obtenerDatos = async (id) => {
     await obtenerCliente(id);
-    
     if (cliente.value) {
         form.value.id = cliente.value.id;
         form.value.dni = cliente.value.persona.dni;
@@ -125,6 +124,8 @@ const {
         form.value.celular=cliente.value.persona.celular;
         form.value.genero=cliente.value.persona.genero;
         form.value.estado_civil=cliente.value.persona.estado_civil;
+        form.value.conyugue_id=cliente.value.persona.conyugue;
+        form.value.dniconyugue=cliente.value.persona.conyuge_persona.dni;
         form.value.ruc=cliente.value.persona.ruc;
         form.value.grado_instr=cliente.value.persona.grado_instr;
         form.value.tipo_trabajador=cliente.value.persona.tipo_trabajador;

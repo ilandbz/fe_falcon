@@ -4,6 +4,7 @@ import useCliente from '@/Composables/Cliente.js';
 import useHelper from '@/Helpers';  
 import ClientesSearch from '@/Components/ClientesSearch.vue'
 import UbicacionForm from './Ubicacion.vue'
+import FormView from './FormView.vue'
 import useNegocio from '@/Composables/Negocio.js';
 import useEntidad from '@/Composables/Entidad.js';
 import useTipoActividad from '@/Composables/TipoActividad.js';
@@ -13,6 +14,7 @@ const { hideModal, Toast, openModal, Swal } = useHelper();
 const negociosPosee = ref([]);
 
 const form=ref({
+    id:'',
     cliente_id : '',
     razonsocial : '',
     dni_cliente : '',
@@ -26,7 +28,26 @@ const form=ref({
     direccion: '',
     errors:[],
 });
+const formNegocioView=ref({
+    id:'',
+    cliente_id : '',
+    razonsocial : '',
+    dni_cliente : '',
+    apenom:'',
+    ruc : '',
+    tel_cel : '',
+    distrito: '',
+    provincia: '',
+    departamento: '',
+    tipoActividadNombre : '',
+    descripcion : '',
+    inicioactividad : '',
+    ubicacion_id : '',
+    direccion: '',
+    errors:[],
+});
 const limpiar=()=>{
+    form.value.id = '';
     form.value.cliente_id = '';
     form.value.razonsocial = '';
     form.value.ruc = '';
@@ -41,6 +62,7 @@ const limpiar=()=>{
     form.value.errors =[];
 };
 const limpiarNegocio=()=>{
+    form.value.id = '';
     form.value.razonsocial = '';
     form.value.ruc = '';
     form.value.tel_cel = '';
@@ -57,7 +79,7 @@ const {
     buscarEntidad, entidad
 } = useEntidad();
 const {
-    errors, respuesta, agregarNegocio
+    errors, respuesta, agregarNegocio, eliminarNegocio, obtenerNegocio, negocio
 } = useNegocio();
 const {
     tiposActividades, listaTipoActividades
@@ -114,7 +136,55 @@ const busarRuc= async(ruc)=>{
     await buscarEntidad(formData)
     form.value.razonsocial=entidad.value.razonSocial
 }
+const ver = async(id)=>{
+    await obtenerNegocio(id)
+    if(negocio.value){
+        formNegocioView.value.id = negocio.value.id;
+        formNegocioView.value.ruc = negocio.value.ruc;
+        formNegocioView.value.apenom = form.value.apenom;
+        formNegocioView.value.razonsocial = negocio.value.razonsocial;
+        formNegocioView.value.ruc = negocio.value.ruc;
+        formNegocioView.value.tel_cel = negocio.value.tel_cel;
+        formNegocioView.value.tipoActividadNombre  = negocio.value.tipo_actividad.nombre;
+        formNegocioView.value.descripcion = negocio.value.descripcion;
+        formNegocioView.value.inicioactividad = negocio.value.inicioactividad;
+        formNegocioView.value.ubicacion_id = negocio.value.ubicacion_id;
+        formNegocioView.value.distrito = negocio.value.ubicacion.distrito.nombre;
+        formNegocioView.value.provincia = negocio.value.ubicacion.distrito.provincia.nombre;
+        formNegocioView.value.direccion = negocio.value.ubicacion.direccion;
+        document.getElementById("verModalLabel").innerHTML = 'Negocio';
+        openModal('#verModal')        
+    }
 
+}
+const eliminar = (id) => {
+    Swal.fire({
+        title: '¿Estás seguro de Eliminar?',
+        text: "Negocio",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Eliminalo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            elimina(id)
+        }
+    })
+}
+const elimina = async(id) => {
+    await eliminarNegocio(id)
+    form.value.errors = []
+    if(errors.value)
+    {
+        form.value.errors = errors.value
+    }
+    if(respuesta.value.ok==1){
+        form.value.errors = []
+        Toast.fire({icon:'success', title:respuesta.value.mensaje})
+        cargarDatosPorCliente(form.value.dni_cliente)
+    }
+}
 onMounted(() => {
     listaTipoActividades()
 });
@@ -272,11 +342,14 @@ onMounted(() => {
                                 <td>{{ negocio.tel_cel }}</td>
                                 <td>{{ negocio.tipo_actividad.nombre }}</td>
                                 <td>{{ negocio.descripcion }}</td>
-                                <td>{{ negocio.inicio_actividad }}</td>
+                                <td>{{ negocio.inicioactividad }}</td>
                                 <td>
-                                    <button class="btn btn-danger btn-xs" title="Enviar a Papelera" @click.prevent="eliminar(negocio.id)">
+                                    <button class="btn btn-danger btn-xs" title="Eliminar" @click.prevent="eliminar(negocio.id)">
                                         <i class="fas fa-trash"></i>
-                                    </button>
+                                    </button>&nbsp;
+                                    <button class="btn btn-info btn-xs" title="Ver" @click.prevent="ver(negocio.id)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>&nbsp;
                                 </td>
                             </tr>
                         </tbody>
@@ -290,4 +363,5 @@ onMounted(() => {
     </form>
     <ClientesSearch @cargarPersona="buscarCliente"></ClientesSearch>
     <UbicacionForm :formNegocio="form"></UbicacionForm>
+    <FormView :form="formNegocioView"></FormView>
 </template>

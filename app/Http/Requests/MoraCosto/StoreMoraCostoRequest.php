@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Cargo;
+namespace App\Http\Requests\MoraCosto;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCargoRequest extends FormRequest
+class StoreMoraCostoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
