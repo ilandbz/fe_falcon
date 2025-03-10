@@ -125,7 +125,7 @@ const {
         form.value.genero=cliente.value.persona.genero;
         form.value.estado_civil=cliente.value.persona.estado_civil;
         form.value.conyugue_id=cliente.value.persona.conyugue;
-        form.value.dniconyugue=cliente.value.persona.conyuge_persona.dni;
+        form.value.dniconyugue=cliente.value.persona.conyuge_persona?.dni;
         form.value.ruc=cliente.value.persona.ruc;
         form.value.grado_instr=cliente.value.persona.grado_instr;
         form.value.tipo_trabajador=cliente.value.persona.tipo_trabajador;

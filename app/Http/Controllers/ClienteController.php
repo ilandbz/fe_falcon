@@ -16,80 +16,93 @@ class ClienteController extends Controller
 {
     public function store(StoreClienteRequest $request)
     {
-        $request->validated();
-        $existeDni = Cliente::whereHas('persona', function ($query) use ($request) {
-            $query->where('dni', $request->dni);
-        })->exists(); 
-        if ($existeDni) {
+        DB::beginTransaction(); // Inicia la transacción
+        try {
+            $existeDni = Cliente::whereHas('persona', function ($query) use ($request) {
+                $query->where('dni', $request->dni);
+            })->exists(); 
+            if ($existeDni) {
+                return response()->json([
+                    'errors' => [
+                        'dni' => 'El DNI ya está registrado'
+                    ]
+                ], 422);
+            }
+            $file = $request->file('foto');
+            if ($file) {
+                $nombre_archivo = $request->dni . ".webp";
+                Storage::disk('fotos')->makeDirectory('clientes');
+                Storage::disk('fotos')->put('clientes/' . $nombre_archivo, File::get($file));
+            }
+            $esconyugue = trim($request->estado_civil) === 'Casado' || trim($request->estado_civil) === 'Conviviente';
+            if ($esconyugue && empty($request->conyugue_id)) {
+                return response()->json([
+                    'errors' => [
+                        'dniconyugue' => ['DNI conyugue es necesario']
+                    ]
+                ], 422);
+            }        
+            $domicilio = Ubicacion::create([
+                'tipo'             => $request->tipodomicilio ?? 'NDF',
+                'ubigeo'           => $request->ubigeodomicilio,
+                'tipovia'          => $request->tipovia ?? 'S/N',
+                'nombrevia'        => $request->nombrevia,
+                'nro'              => $request->nro ?? 'S/N',
+                'interior'         => $request->interior ?? 'S/N',
+                'mz'               => $request->mz ?? 'S/N',
+                'lote'             => $request->lote ?? 'S/N',
+                'tipozona'         => $request->tipozona,
+                'nombrezona'       => $request->nombrezona,
+                'referencia'       => $request->referencia,
+                'latitud_longitud' => $request->latitud_longitud,
+            ]);
+            $persona = Persona::firstOrCreate(['dni' => $request->dni],
+            [
+                'ape_pat' => $request->ape_pat,
+                'ape_mat' => $request->ape_mat,
+                'primernombre' => $request->primernombre,
+                'otrosnombres' => $request->otrosnombres,
+                'fecha_nac' => $request->fecha_nac,
+                'ubigeo_nac' => $request->ubigeo_nac,
+                'genero' => $request->genero,
+                'celular' => $request->celular,
+                'email' => $request->email,
+                'ruc' => $request->ruc,
+                'estado_civil' => $request->estado_civil,
+                'profesion' => $request->profesion,
+                'nacionalidad' => $request->nacionalidad,
+                'grado_instr' => $request->grado_instr,
+                'tipo_trabajador' => $request->tipo_trabajador,
+                'ocupacion' => $request->ocupacion,
+                'institucion_lab' => $request->institucion_lab,
+                'ubicacion_domicilio_id' => $domicilio->id,
+                'conyugue'  => $esconyugue ? $request->conyugue_id : null
+            ]);
+            $cliente = Cliente::create([
+                'id'          => $request->id,
+                'agencia_id'  => $request->agencia_id,
+                'usuario_id'  => $request->usuario_id,
+                'persona_id'  => $persona->id,
+                'dniaval'     => $request->dniaval,
+                'fecha_reg'   => now()->toDateString(), // Asigna la fecha actual
+                'hora_reg'    => now()->toTimeString(), // Asigna la hora actual
+            ]);
             return response()->json([
-                'errors' => [
-                    'dni' => 'El DNI ya está registrado'
-                ]
-            ], 422);
-        }
-        $file = $request->file('foto');
-        if ($file) {
-            $nombre_archivo = $request->dni . ".webp";
-            Storage::disk('fotos')->makeDirectory('clientes');
-            Storage::disk('fotos')->put('clientes/' . $nombre_archivo, File::get($file));
-        }
-        $esconyugue = trim($request->estado_civil) === 'Casado' || trim($request->estado_civil) === 'Conviviente';
-        if ($esconyugue && empty($request->conyugue_id)) {
+                'ok' => 1,
+                'mensaje' => 'Cliente Registrado satisfactoriamente'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revertir la transacción si hubo un error
+
             return response()->json([
-                'errors' => [
-                    'dniconyugue' => ['DNI conyugue es necesario']
-                ]
-            ], 422);
-        }        
-        $domicilio = Ubicacion::create([
-            'tipo'             => $request->tipodomicilio ?? 'NDF',
-            'ubigeo'           => $request->ubigeodomicilio,
-            'tipovia'          => $request->tipovia ?? 'S/N',
-            'nombrevia'        => $request->nombrevia,
-            'nro'              => $request->nro ?? 'S/N',
-            'interior'         => $request->interior ?? 'S/N',
-            'mz'               => $request->mz ?? 'S/N',
-            'lote'             => $request->lote ?? 'S/N',
-            'tipozona'         => $request->tipozona,
-            'nombrezona'       => $request->nombrezona,
-            'referencia'       => $request->referencia,
-            'latitud_longitud' => $request->latitud_longitud,
-        ]);
-        $persona = Persona::firstOrCreate(['dni' => $request->dni],
-        [
-            'ape_pat' => $request->ape_pat,
-            'ape_mat' => $request->ape_mat,
-            'primernombre' => $request->primernombre,
-            'otrosnombres' => $request->otrosnombres,
-            'fecha_nac' => $request->fecha_nac,
-            'ubigeo_nac' => $request->ubigeo_nac,
-            'genero' => $request->genero,
-            'celular' => $request->celular,
-            'email' => $request->email,
-            'ruc' => $request->ruc,
-            'estado_civil' => $request->estado_civil,
-            'profesion' => $request->profesion,
-            'nacionalidad' => $request->nacionalidad,
-            'grado_instr' => $request->grado_instr,
-            'tipo_trabajador' => $request->tipo_trabajador,
-            'ocupacion' => $request->ocupacion,
-            'institucion_lab' => $request->institucion_lab,
-            'ubicacion_domicilio_id' => $domicilio->id,
-            'conyugue'  => $esconyugue ? $request->conyugue_id : null
-        ]);
-        $cliente = Cliente::create([
-            'id'          => $request->id,
-            'agencia_id'  => $request->agencia_id,
-            'usuario_id'  => $request->usuario_id,
-            'persona_id'  => $persona->id,
-            'dniaval'     => $request->dniaval,
-            'fecha_reg'   => now()->toDateString(), // Asigna la fecha actual
-            'hora_reg'    => now()->toTimeString(), // Asigna la hora actual
-        ]);
-        return response()->json([
-            'ok' => 1,
-            'mensaje' => 'Cliente Registrado satisfactoriamente'
-        ],200);
+                'ok' => 0,
+                'mensaje' => 'Error al registrar cliente',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+
     }
     public function show(Request $request)
     {

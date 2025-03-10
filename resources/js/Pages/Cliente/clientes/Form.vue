@@ -657,7 +657,7 @@ onMounted(() => {
                                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @change="cambiarAval">
                                                 </span>
                                                 <div class="form-floating is-invalid">
-                                                    <input type="text" class="form-control form-control-sm" :disabled="!aval" v-model="form.dniaval" 
+                                                    <input type="text" class="form-control form-control-sm" :disabled="!aval && (form.estadoCrud=='editar' && form.dniaval=='')" v-model="form.dniaval" 
                                                     maxlength="8" placeholder="00000000"
                                                     @keypress="onlyNumbers"
                                                     @change="buscarPersonaAval(form.dniaval)"
@@ -667,7 +667,7 @@ onMounted(() => {
                                                 <div class="invalid-feedback" v-for="error in form.errors.dniaval" :key="error">
                                                     {{ error }}
                                                 </div>
-                                                <button class="btn btn-secondary" type="button" @click="realizarAccion" :disabled="!aval" @click.prevent="buscarPersonaAval(form.dniaval)">
+                                                <button class="btn btn-secondary" type="button" @click="realizarAccion" :disabled="!aval && (form.estadoCrud=='editar' && form.dniaval=='')" @click.prevent="buscarPersonaAval(form.dniaval)">
                                                     <i class="fa-solid fa-magnifying-glass"></i>
                                                 </button>
                                             </div>
@@ -734,7 +734,7 @@ onMounted(() => {
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-muted">Domicilio {{ form }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">Domicilio</h6>
                                 <div class="mb-3">
                                     <div class="row">
                                         <div class="col-md-4 has-validation">
